@@ -1,408 +1,309 @@
 import '../../loadFonts';
 import {AbsoluteFill, Img, staticFile} from 'remotion';
 
-// Six-slide Instagram carousel (1080×1350): "What Gisele, David, Steph & Serena
-// know about aging well". Editorial template: cream page, hairline inner frame,
-// handle and site above it, share/save below, tall serif headlines with a script accent.
+// Five-slide magazine carousel (1080×1350): "What Gisele, David, Steph & Serena know
+// about ageing well". White page, one grid for every slide: running head and rule at
+// the top, numbered headline, photo and text columns that swap sides slide to slide,
+// a research stat pinned to the photo's baseline, and the wordmark as the footer.
 export const SLIDE_W = 1080;
 export const SLIDE_H = 1350;
 
 const c = {
-  page: '#F7F4EF',
-  panel: '#EDE7DE',
-  line: '#CBC2B6',
-  ink: '#2A2521',
-  muted: '#8B8279',
+  page: '#FFFFFF',
+  ink: '#1F1B18',
+  body: '#5E5852',
+  muted: '#9A938B',
+  rule: '#E4DFD8',
 };
 
-const f = {
-  display: '"Antic Didone", "Playfair Display", Georgia, serif',
-  script: '"Herr Von Muellerhoff", cursive',
-  sans: 'Inter, -apple-system, "Helvetica Neue", Arial, sans-serif',
+const sans = '"DM Sans", Inter, -apple-system, "Helvetica Neue", Arial, sans-serif';
+
+const M = 72; // outer margin
+const COL_GAP = 40;
+const PHOTO_W = 470;
+const TEXT_W = SLIDE_W - M * 2 - PHOTO_W - COL_GAP;
+const BODY_TOP = 430;
+const PHOTO_H = 700;
+
+const img = (f: string) => staticFile(`posts/aging2/${f}`);
+
+type Story = {
+  n: string;
+  headline: string;
+  name: string;
+  photo: string;
+  pos: string;
+  body: string;
+  figure?: string;
+  stat: string;
+  source: string;
 };
 
-const handle = '@thewellness';
-const site = 'thewellness.com';
+const stories: Story[] = [
+  {
+    n: '01',
+    headline: 'Eat for the long game.',
+    name: 'Gisele Bündchen, 46',
+    photo: 'gisele.jpg',
+    pos: '55% 20%',
+    body: 'A plant-forward, Mediterranean-style diet for over a decade. Vegetables, good fats, almost no processed food. She’s called food her medicine.',
+    figure: '~30%',
+    stat: 'fewer major cardiovascular events on a Mediterranean diet with olive oil or nuts, in the PREDIMED trial of about 7,400 people.',
+    source: 'New England Journal of Medicine, 2018',
+  },
+  {
+    n: '02',
+    headline: 'Choose consistency over intensity.',
+    name: 'David Beckham, 51',
+    photo: 'david.jpg',
+    pos: '47% 20%',
+    body: 'Strength sessions, ice baths, daily discipline. He’s said staying in shape stopped being about football a long time ago. Now it’s about being healthy for his family.',
+    figure: '10–17%',
+    stat: 'lower risk of early death with regular muscle-strengthening activity.',
+    source: 'British Journal of Sports Medicine, 2022',
+  },
+  {
+    n: '03',
+    headline: 'Recover smarter than you train.',
+    name: 'Stephen Curry, 38',
+    photo: 'steph.jpg',
+    pos: '55% 20%',
+    body: 'His edge isn’t talent anymore, it’s recovery. Float tanks, mobility work, strict sleep, and a training staff that treats his body like a long-term investment.',
+    figure: '199',
+    stat: 'cohort studies (20.9 million observations) found cardiorespiratory fitness is one of the strongest predictors of living longer.',
+    source: 'British Journal of Sports Medicine, 2024',
+  },
+  {
+    n: '04',
+    headline: 'Build strength you can retire on.',
+    name: 'Serena Williams, 44',
+    photo: 'serena.jpg',
+    pos: '50% 15%',
+    body: 'She won a Grand Slam at 35, while pregnant, on a foundation of strength training. Muscle isn’t aesthetics. It’s insurance.',
+    stat: 'In older adults, more muscle mass was linked to significantly lower mortality, independent of weight.',
+    source: 'American Journal of Medicine, 2014',
+  },
+];
 
-// Muted, warm near-monochrome so the four very different photos read as one shoot.
-const tone = 'grayscale(0.92) sepia(0.16) contrast(1.03) brightness(1.02)';
+/* ---------- Shared pieces ---------- */
 
-// Inner frame, in page coordinates. Slide content is laid out inside it.
-const FRAME = {x: 44, y: 76, w: SLIDE_W - 88, h: SLIDE_H - 152};
-
-/* ---------- Pieces ---------- */
-
-const Photo: React.FC<{file: string; w: number; h: number; pos?: string; style?: React.CSSProperties}> = ({
-  file,
-  w,
-  h,
-  pos = '50% 20%',
-  style,
-}) => (
-  <Img
-    src={staticFile(`posts/aging/${file}`)}
-    style={{width: w, height: h, objectFit: 'cover', objectPosition: pos, filter: tone, display: 'block', ...style}}
-  />
-);
-
-// Serif line(s) with a script word tucked underneath, as in the reference.
-const Title: React.FC<{
-  lines: string[];
-  script: string;
-  size?: number;
-  align?: 'center' | 'left';
-}> = ({lines, script, size = 88, align = 'center'}) => (
-  <div style={{textAlign: align, color: c.ink}}>
-    {lines.map((l) => (
-      <div key={l} style={{fontFamily: f.display, fontSize: size, lineHeight: 1.02, letterSpacing: -1}}>
-        {l}
-      </div>
-    ))}
-    <div
-      style={{
-        fontFamily: f.script,
-        fontSize: size * 1.25,
-        lineHeight: 0.9,
-        marginTop: -size * 0.08,
-        paddingLeft: align === 'center' ? size * 0.9 : size * 0.6,
-      }}
-    >
-      {script}
-    </div>
-  </div>
-);
-
-const Body: React.FC<{children: React.ReactNode; width: number; align?: 'center' | 'left'}> = ({
+const Caps: React.FC<{children: React.ReactNode; size?: number; color?: string; spacing?: number}> = ({
   children,
-  width,
-  align = 'center',
+  size = 13,
+  color = c.muted,
+  spacing = 3,
 }) => (
   <div
     style={{
-      width,
-      fontFamily: f.sans,
-      fontSize: 21,
-      lineHeight: 1.55,
-      color: c.muted,
-      textAlign: align,
-      margin: align === 'center' ? '0 auto' : 0,
+      fontFamily: sans,
+      fontSize: size,
+      fontWeight: 500,
+      letterSpacing: spacing,
+      textTransform: 'uppercase',
+      color,
     }}
   >
     {children}
   </div>
 );
 
-const Pill: React.FC<{label: string}> = ({label}) => (
-  <div
-    style={{
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: 28,
-      height: 54,
-      padding: '0 26px 0 30px',
-      borderRadius: 27,
-      border: `1.5px solid ${c.ink}`,
-      fontFamily: f.sans,
-      fontSize: 13,
-      fontWeight: 500,
-      letterSpacing: 2.4,
-      textTransform: 'uppercase',
-      color: c.ink,
-    }}
-  >
-    {label}
-    <svg width={34} height={12} viewBox="0 0 34 12" fill="none">
-      <path d="M0 6h32M27 1l5 5-5 5" stroke={c.ink} strokeWidth="1.5" />
-    </svg>
+const RunningHead: React.FC<{right: string}> = ({right}) => (
+  <>
+    <div style={{position: 'absolute', left: M, right: M, top: 52, display: 'flex', justifyContent: 'space-between'}}>
+      <Caps>The longevity issue</Caps>
+      <Caps>{right}</Caps>
+    </div>
+    <div style={{position: 'absolute', left: M, right: M, top: 88, height: 1, background: c.rule}} />
+  </>
+);
+
+const Wordmark: React.FC<{height: number; top?: number; bottom?: number}> = ({height, top, bottom}) => (
+  <div style={{position: 'absolute', left: 0, right: 0, top, bottom, display: 'flex', justifyContent: 'center'}}>
+    <Img src={img('wordmark.png')} style={{height, display: 'block'}} />
   </div>
 );
 
-const Eyebrow: React.FC<{children: React.ReactNode}> = ({children}) => (
-  <div
-    style={{
-      fontFamily: f.sans,
-      fontSize: 14,
-      fontWeight: 500,
-      letterSpacing: 3.5,
-      textTransform: 'uppercase',
-      color: c.muted,
-    }}
-  >
-    {children}
-  </div>
+const Page: React.FC<{children: React.ReactNode}> = ({children}) => (
+  <AbsoluteFill style={{background: c.page, fontFamily: sans, color: c.ink}}>{children}</AbsoluteFill>
 );
 
-const icon = {stroke: c.ink, strokeWidth: 1.5, fill: 'none', strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const};
+/* ---------- Cover ---------- */
 
-const ShareIcon: React.FC<{s?: number}> = ({s = 20}) => (
-  <svg width={s} height={s} viewBox="0 0 24 24">
-    <path d="M21 3L3 10.5l7 2.5 2.5 7L21 3zM10 13l5-5" {...icon} />
-  </svg>
-);
-const SaveIcon: React.FC<{s?: number}> = ({s = 20}) => (
-  <svg width={s} height={s} viewBox="0 0 24 24">
-    <path d="M6 3h12v18l-6-4.5L6 21V3z" {...icon} />
-  </svg>
-);
-const HeartIcon: React.FC<{s?: number}> = ({s = 20}) => (
-  <svg width={s} height={s} viewBox="0 0 24 24">
-    <path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0112 7.3 4.3 4.3 0 0119.5 10c0 5.4-7.5 10-7.5 10z" {...icon} />
-  </svg>
-);
-const CommentIcon: React.FC<{s?: number}> = ({s = 20}) => (
-  <svg width={s} height={s} viewBox="0 0 24 24">
-    <path d="M20 12a8 8 0 01-11.6 7.1L4 20l1-4.2A8 8 0 1120 12z" {...icon} />
-  </svg>
-);
+const coverPhotos = [
+  {f: 'gisele.jpg', name: 'Gisele', pos: '58% 0%'},
+  {f: 'david.jpg', name: 'David', pos: '47% 0%'},
+  {f: 'steph.jpg', name: 'Steph', pos: '52% 0%'},
+  {f: 'serena.jpg', name: 'Serena', pos: '50% 0%'},
+];
 
-const Page: React.FC<{children: React.ReactNode}> = ({children}) => {
-  const meta: React.CSSProperties = {
-    position: 'absolute',
-    fontFamily: f.sans,
-    fontSize: 15,
-    letterSpacing: 0.4,
-    color: c.muted,
-  };
-  const foot: React.CSSProperties = {
-    position: 'absolute',
-    bottom: 30,
-    display: 'flex',
-    alignItems: 'center',
-    gap: 10,
-    fontFamily: f.sans,
-    fontSize: 13,
-    fontWeight: 500,
-    letterSpacing: 2.4,
-    color: c.ink,
-  };
+const Cover: React.FC = () => {
+  const w = (SLIDE_W - M * 2 - 16 * 3) / 4;
   return (
-    <AbsoluteFill style={{background: c.page}}>
-      <div style={{...meta, top: 34, left: FRAME.x + 4}}>{handle}</div>
-      <div style={{...meta, top: 34, right: FRAME.x + 4}}>{site}</div>
+    <Page>
+      <Wordmark height={40} top={58} />
+      <div style={{position: 'absolute', left: M, right: M, top: 124, height: 1, background: c.rule}} />
+      <div style={{position: 'absolute', left: M, right: M, top: 144, display: 'flex', justifyContent: 'space-between'}}>
+        <Caps>The longevity issue</Caps>
+        <Caps>Four rules</Caps>
+      </div>
+
       <div
         style={{
           position: 'absolute',
-          left: FRAME.x,
-          top: FRAME.y,
-          width: FRAME.w,
-          height: FRAME.h,
-          border: `1.5px solid ${c.line}`,
-          boxSizing: 'border-box',
-          overflow: 'hidden',
+          left: M,
+          right: M,
+          top: 222,
+          textAlign: 'center',
+          fontSize: 86,
+          fontWeight: 300,
+          lineHeight: 1.04,
+          letterSpacing: -2.2,
         }}
       >
-        {children}
+        What Gisele, David,
+        <br />
+        Steph &amp; Serena know
+        <br />
+        about ageing well
       </div>
-      <div style={{...foot, left: FRAME.x + 4}}>
-        <ShareIcon /> SHARE
-      </div>
-      <div style={{...foot, right: FRAME.x + 4}}>
-        <SaveIcon /> SAVE
-      </div>
-    </AbsoluteFill>
-  );
-};
 
-// Absolute box inside the frame.
-const At: React.FC<{x?: number; y: number; w?: number; center?: boolean; children: React.ReactNode}> = ({
-  x = 0,
-  y,
-  w,
-  center,
-  children,
-}) => (
-  <div
-    style={{
-      position: 'absolute',
-      left: center ? 0 : x,
-      right: center ? 0 : undefined,
-      top: y,
-      width: center ? undefined : w,
-      display: center ? 'flex' : 'block',
-      flexDirection: 'column',
-      alignItems: 'center',
-    }}
-  >
-    {children}
-  </div>
-);
-
-const Rings: React.FC = () => (
-  <svg
-    width={FRAME.w}
-    height={FRAME.h}
-    style={{position: 'absolute', inset: 0}}
-    viewBox={`0 0 ${FRAME.w} ${FRAME.h}`}
-  >
-    <circle cx={FRAME.w / 2} cy={FRAME.h / 2 - 20} r={420} stroke={c.line} strokeWidth={1.5} fill="none" />
-    <circle cx={FRAME.w / 2 + 560} cy={FRAME.h / 2 - 20} r={420} stroke={c.line} strokeWidth={1.5} fill="none" />
-    <circle cx={FRAME.w / 2 - 560} cy={FRAME.h / 2 - 20} r={420} stroke={c.line} strokeWidth={1.5} fill="none" />
-  </svg>
-);
-
-/* ---------- Slides ---------- */
-
-const people = [
-  {file: '1.jpg', name: 'Gisele'},
-  {file: '2.jpg', name: 'David'},
-  {file: '3.jpg', name: 'Steph'},
-  {file: '4.jpg', name: 'Serena'},
-];
-
-// 1. Cover: headline over a row of four portraits.
-const Cover: React.FC = () => (
-  <Page>
-    <At center y={124}>
-      <Eyebrow>The longevity issue</Eyebrow>
-    </At>
-    <At center y={182}>
-      <Title lines={['What Gisele, David,', 'Steph & Serena know']} script="about aging well" size={84} />
-    </At>
-    <At x={50} y={590} w={FRAME.w - 100}>
-      <div style={{display: 'flex', gap: 16}}>
-        {people.map((p) => (
-          <div key={p.name} style={{flex: 1}}>
-            <Photo file={p.file} w={211} h={360} pos="50% 15%" />
-            <div
-              style={{
-                marginTop: 14,
-                fontFamily: f.sans,
-                fontSize: 13,
-                letterSpacing: 3,
-                textTransform: 'uppercase',
-                color: c.muted,
-                textAlign: 'center',
-              }}
-            >
-              {p.name}
+      <div style={{position: 'absolute', left: M, top: 560, display: 'flex', gap: 16}}>
+        {coverPhotos.map((p) => (
+          <div key={p.name} style={{width: w}}>
+            <Img
+              src={img(p.f)}
+              style={{width: w, height: 470, objectFit: 'cover', objectPosition: p.pos, display: 'block'}}
+            />
+            <div style={{marginTop: 16, textAlign: 'center'}}>
+              <Caps>{p.name}</Caps>
             </div>
           </div>
         ))}
       </div>
-    </At>
-    <At center y={1072}>
-      <Pill label="Swipe to read" />
-    </At>
-  </Page>
-);
 
-// 2. Gisele: vertical title beside a tall portrait.
-const Gisele: React.FC = () => (
-  <Page>
-    <div
-      style={{
-        position: 'absolute',
-        left: 60,
-        top: 70,
-        width: 250,
-        height: 760,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <div style={{transform: 'rotate(-90deg)', whiteSpace: 'nowrap'}}>
-        <Title lines={['Rest is her']} script="ritual" size={96} align="left" />
+      <div
+        style={{
+          position: 'absolute',
+          left: M,
+          right: M,
+          top: 1128,
+          textAlign: 'center',
+          fontSize: 24,
+          fontWeight: 300,
+          lineHeight: 1.45,
+          color: c.body,
+        }}
+      >
+        Successful people optimise their businesses.
+        <br />
+        High performers optimise themselves.
       </div>
-    </div>
-    <At x={330} y={70} w={600}>
-      <Photo file="1.jpg" w={600} h={760} pos="44% 10%" />
-    </At>
-    <At x={330} y={880} w={600}>
-      <Eyebrow>01 · Gisele</Eyebrow>
-      <div style={{height: 18}} />
-      <Body width={600} align="left">
-        Yoga, meditation and early nights have long anchored her routine. Recovery isn’t the extra. It’s the plan.
-      </Body>
-    </At>
-  </Page>
-);
 
-// 3. David: headline on top, portrait centred, copy and button below.
-const David: React.FC = () => (
-  <Page>
-    <At center y={70}>
-      <Title lines={['Discipline,']} script="every day" size={96} />
-    </At>
-    <At center y={330}>
-      <Photo file="2.jpg" w={470} h={560} pos="50% 30%" />
-    </At>
-    <At center y={930}>
-      <Eyebrow>02 · David</Eyebrow>
-      <div style={{height: 18}} />
-      <Body width={640}>Training most days, for decades. Over a lifetime, consistency beats intensity.</Body>
-    </At>
-  </Page>
-);
-
-// 4. Steph: framed photo panel on top, headline underneath.
-const Steph: React.FC = () => (
-  <Page>
-    <div
-      style={{
-        position: 'absolute',
-        left: 60,
-        right: 60,
-        top: 60,
-        height: 600,
-        background: c.panel,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-end',
-        overflow: 'hidden',
-      }}
-    >
-      <Photo file="3.jpg" w={420} h={560} pos="55% 20%" />
-    </div>
-    <At center y={700}>
-      <Title lines={['Sleep is the']} script="secret" size={92} />
-    </At>
-    <At center y={960}>
-      <Eyebrow>03 · Steph</Eyebrow>
-      <div style={{height: 18}} />
-      <Body width={640}>He treats sleep as part of training. Deep rest is when the body repairs, and it compounds.</Body>
-    </At>
-  </Page>
-);
-
-// 5. Serena: portrait inside the ring motif, headline below.
-const Serena: React.FC = () => (
-  <Page>
-    <Rings />
-    <At center y={90}>
-      <Photo file="4.jpg" w={440} h={620} pos="50% 10%" />
-    </At>
-    <At center y={740}>
-      <Title lines={['Strength']} script="that lasts" size={96} />
-    </At>
-    <At center y={990}>
-      <Eyebrow>04 · Serena</Eyebrow>
-      <div style={{height: 18}} />
-      <Body width={640}>Strength work and recovery kept her winning well into her thirties. Muscle is a longevity asset.</Body>
-    </At>
-  </Page>
-);
-
-// 6. Closing: save/share prompt inside the rings.
-const Outro: React.FC = () => (
-  <Page>
-    <Rings />
-    <At center y={420}>
-      <Title lines={['Was this post']} script="useful?" size={96} />
-    </At>
-    <At center y={720}>
-      <Eyebrow>Save it · Send it to a friend</Eyebrow>
-      <div style={{display: 'flex', gap: 22, marginTop: 26}}>
-        <HeartIcon s={26} />
-        <CommentIcon s={26} />
-        <ShareIcon s={26} />
-        <SaveIcon s={26} />
+      <div style={{position: 'absolute', right: M, bottom: 56}}>
+        <Caps color={c.ink}>Swipe →</Caps>
       </div>
-    </At>
-  </Page>
-);
+    </Page>
+  );
+};
 
-export const SLIDES = [Cover, Gisele, David, Steph, Serena, Outro];
+/* ---------- Story slides ---------- */
+
+const StorySlide: React.FC<{s: Story; flip: boolean}> = ({s, flip}) => {
+  const photoX = flip ? SLIDE_W - M - PHOTO_W : M;
+  const textX = flip ? M : M + PHOTO_W + COL_GAP;
+  return (
+    <Page>
+      <RunningHead right={`${s.n} / 04`} />
+
+      {/* Numbered headline, bottom-aligned so every slide's headline ends at the same height */}
+      <div
+        style={{
+          position: 'absolute',
+          left: M,
+          right: M,
+          top: 132,
+          height: BODY_TOP - 132 - 40,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <div style={{fontSize: 22, fontWeight: 400, letterSpacing: 1, color: c.muted}}>No. {s.n}</div>
+        <div
+          style={{
+            marginTop: 'auto',
+            fontSize: 84,
+            fontWeight: 300,
+            lineHeight: 1.02,
+            letterSpacing: -2.2,
+            maxWidth: 900,
+          }}
+        >
+          {s.headline}
+        </div>
+      </div>
+
+      {/* Photo */}
+      <Img
+        src={img(s.photo)}
+        style={{
+          position: 'absolute',
+          left: photoX,
+          top: BODY_TOP,
+          width: PHOTO_W,
+          height: PHOTO_H,
+          objectFit: 'cover',
+          objectPosition: s.pos,
+        }}
+      />
+
+      {/* Text column: name and story at the top, stat pinned to the photo's baseline */}
+      <div
+        style={{
+          position: 'absolute',
+          left: textX,
+          top: BODY_TOP,
+          width: TEXT_W,
+          height: PHOTO_H,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <Caps size={15} color={c.ink} spacing={3.5}>
+          {s.name}
+        </Caps>
+        <div style={{marginTop: 22, fontSize: 25, fontWeight: 300, lineHeight: 1.5, color: c.body}}>{s.body}</div>
+
+        <div style={{marginTop: 'auto', borderTop: `1px solid ${c.rule}`, paddingTop: 22}}>
+          {s.figure ? (
+            <div style={{fontSize: 68, fontWeight: 300, lineHeight: 1, letterSpacing: -1.5}}>{s.figure}</div>
+          ) : null}
+          <div
+            style={{
+              marginTop: s.figure ? 12 : 0,
+              fontSize: 18,
+              fontWeight: 400,
+              lineHeight: 1.45,
+              color: c.ink,
+            }}
+          >
+            {s.stat}
+          </div>
+          <div style={{marginTop: 12, fontSize: 13, color: c.muted}}>{s.source}</div>
+        </div>
+      </div>
+
+      <Wordmark height={24} bottom={58} />
+    </Page>
+  );
+};
+
+export const SLIDES: React.FC[] = [
+  Cover,
+  ...stories.map((s, i) => {
+    const Slide: React.FC = () => <StorySlide s={s} flip={i % 2 === 1} />;
+    return Slide;
+  }),
+];
 
 export const AgingWellSlide: React.FC<{index: number}> = ({index}) => {
   const Slide = SLIDES[index];
