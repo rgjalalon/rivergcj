@@ -7,7 +7,7 @@ const faces = [
   {family: 'Playfair Display', file: 'playfair-display-latin-600-normal.woff2', weight: '600', style: 'normal'},
   {family: 'Playfair Display', file: 'playfair-display-latin-400-italic.woff2', weight: '400', style: 'italic'},
   {family: 'Antic Didone', file: 'antic-didone-latin-400-normal.woff2', weight: '400', style: 'normal'},
-  {family: 'Mrs Saint Delafield', file: 'mrs-saint-delafield-latin-400-normal.woff2', weight: '400', style: 'normal'},
+  {family: 'Herr Von Muellerhoff', file: 'herr-von-muellerhoff-latin-400-normal.woff2', weight: '400', style: 'normal'},
   {family: 'Inter', file: 'inter-latin-400-normal.woff2', weight: '400', style: 'normal'},
   {family: 'Inter', file: 'inter-latin-500-normal.woff2', weight: '500', style: 'normal'},
   {family: 'Inter', file: 'inter-latin-600-normal.woff2', weight: '600', style: 'normal'},

@@ -17,7 +17,7 @@ const c = {
 
 const f = {
   display: '"Antic Didone", "Playfair Display", Georgia, serif',
-  script: '"Mrs Saint Delafield", cursive',
+  script: '"Herr Von Muellerhoff", cursive',
   sans: 'Inter, -apple-system, "Helvetica Neue", Arial, sans-serif',
 };
 
