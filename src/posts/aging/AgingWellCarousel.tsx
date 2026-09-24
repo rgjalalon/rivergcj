@@ -297,12 +297,61 @@ const StorySlide: React.FC<{s: Story; flip: boolean}> = ({s, flip}) => {
   );
 };
 
+/* ---------- Closer ---------- */
+
+// Split page: the photo bleeds down the left half, the takeaway sits in the right column
+// on the same running head, rule and footer as the other slides.
+const Closer: React.FC = () => {
+  const half = SLIDE_W / 2;
+  const colX = half + 56;
+  const colW = SLIDE_W - M - colX;
+  return (
+    <Page>
+      <Img
+        src={img('closer.jpg')}
+        style={{
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          width: half,
+          height: SLIDE_H,
+          objectFit: 'cover',
+          objectPosition: '62% 50%',
+        }}
+      />
+      <div style={{position: 'absolute', left: colX, right: M, top: 52, display: 'flex', justifyContent: 'space-between'}}>
+        <Caps>The takeaway</Caps>
+        <Caps>Four rules</Caps>
+      </div>
+      <div style={{position: 'absolute', left: colX, right: M, top: 88, height: 1, background: c.rule}} />
+
+      <div style={{position: 'absolute', left: colX, width: colW, top: 430}}>
+        <div style={{fontSize: 22, fontWeight: 400, letterSpacing: 1, color: c.muted}}>In short</div>
+        <div style={{marginTop: 22, fontSize: 64, fontWeight: 300, lineHeight: 1.06, letterSpacing: -1.6}}>
+          Different routines, same playbook.
+        </div>
+        <div style={{marginTop: 34, fontSize: 26, fontWeight: 300, lineHeight: 1.5, color: c.body}}>
+          They measure what matters, and build their whole lives around it.
+        </div>
+        <div style={{marginTop: 48, borderTop: `1px solid ${c.rule}`, paddingTop: 22}}>
+          <Caps color={c.ink}>Save this for your next health check</Caps>
+        </div>
+      </div>
+
+      <div style={{position: 'absolute', left: colX, right: M, bottom: 58, display: 'flex', justifyContent: 'center'}}>
+        <Img src={img('wordmark.png')} style={{height: 24, display: 'block'}} />
+      </div>
+    </Page>
+  );
+};
+
 export const SLIDES: React.FC[] = [
   Cover,
   ...stories.map((s, i) => {
     const Slide: React.FC = () => <StorySlide s={s} flip={i % 2 === 1} />;
     return Slide;
   }),
+  Closer,
 ];
 
 export const AgingWellSlide: React.FC<{index: number}> = ({index}) => {
