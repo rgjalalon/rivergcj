@@ -27,6 +27,13 @@ export const RemotionRoot: React.FC = () => {
       />
       <Still id="InflammationPost" component={InflammationPost} width={POST_W} height={POST_H} />
       <Still id="CoverCollage" component={CoverCollage} width={COVER_W} height={COVER_H} />
+      <Still
+        id="CoverCollageMono"
+        component={CoverCollage}
+        defaultProps={{mono: true}}
+        width={COVER_W}
+        height={COVER_H}
+      />
     </>
   );
 };

@@ -1,40 +1,52 @@
 import {AbsoluteFill, Img, staticFile} from 'remotion';
 
-// Minimalist magazine cover (1080×1350) with no type: open space at the top for a
-// masthead and a four-photo grid below. Text is added afterwards.
+// Magazine cover (1080×1350) for "What Gisele, David, Steph and Serena know about
+// aging well". No type: four arched portraits rise left to right like a staircase,
+// leaving the top-left open for the masthead and cover lines.
 export const COVER_W = 1080;
 export const COVER_H = 1350;
 
-const MARGIN_X = 92;
-const TOP = 214;
+const MARGIN_X = 64;
 const GUTTER = 16;
-const CELL_W = (COVER_W - MARGIN_X * 2 - GUTTER) / 2;
-const CELL_H = 520;
+const BOTTOM = 1238;
+const CELL_W = (COVER_W - MARGIN_X * 2 - GUTTER * 3) / 4;
 
-// objectPosition keeps each face in frame when the photo is cropped to the cell.
+// `top` sets the step; `x` keeps each face centred in the narrow arch.
 const photos = [
-  {file: '1.jpg', position: '50% 20%'},
-  {file: '2.jpg', position: '50% 30%'},
-  {file: '3.jpg', position: '50% 25%'},
-  {file: '4.jpg', position: '50% 15%'},
+  {file: '1.jpg', top: 560, x: '44%'},
+  {file: '2.jpg', top: 460, x: '51%'},
+  {file: '3.jpg', top: 360, x: '56%'},
+  {file: '4.jpg', top: 260, x: '49%'},
 ];
 
-export const CoverCollage: React.FC = () => (
+// `mono` renders the portraits in warm black and white for a more unified, editorial look.
+export const CoverCollage: React.FC<{mono?: boolean}> = ({mono = false}) => (
   <AbsoluteFill style={{background: '#F8F8F8'}}>
     {photos.map((p, i) => (
-      <Img
+      <div
         key={p.file}
-        src={staticFile(`posts/cover/${p.file}`)}
         style={{
           position: 'absolute',
-          left: MARGIN_X + (i % 2) * (CELL_W + GUTTER),
-          top: TOP + Math.floor(i / 2) * (CELL_H + GUTTER),
+          left: MARGIN_X + i * (CELL_W + GUTTER),
+          top: p.top,
           width: CELL_W,
-          height: CELL_H,
-          objectFit: 'cover',
-          objectPosition: p.position,
+          height: BOTTOM - p.top,
+          borderRadius: `${CELL_W / 2}px ${CELL_W / 2}px 0 0`,
+          overflow: 'hidden',
+          background: '#E9E6E1',
         }}
-      />
+      >
+        <Img
+          src={staticFile(`posts/cover/${p.file}`)}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: `${p.x} 0%`,
+            filter: mono ? 'grayscale(1) sepia(0.12) contrast(1.06)' : undefined,
+          }}
+        />
+      </div>
     ))}
   </AbsoluteFill>
 );
