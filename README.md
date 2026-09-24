@@ -64,3 +64,26 @@ npm run render:wai   # writes out/wai-brand-film.mp4
 **Footage:** the real-life shots are placeholders until clips are added. See `public/wai/footage/README.md` for filenames and the shot list. The grade (warm highlights, espresso shadows, film grain, vignette) is applied automatically in `src/wai/Footage.tsx`.
 
 Shot timings and captions are in `src/wai/timeline.ts`. The logo is `public/wai/wai-logo-cream.png`.
+
+---
+
+# Wai: story film (vertical)
+
+A 33-second vertical film (1080×1920, 30fps) that follows the storytelling structure of the reference: letterboxed cinematic moments ask quiet questions, a phone close-up answers them, the same people appear again in lighter moments, and the film ends on the end card. Grain, grade and letterbox stay the same throughout so it feels like one film.
+
+**Rendered file:** [`renders/wai-story.mp4`](renders/wai-story.mp4)
+
+```bash
+npm run render:story   # writes out/wai-story.mp4
+```
+
+| Time | Act | Shot | Caption |
+|---|---|---|---|
+| 0.0–3.3s | Cinematic open | Lab results PDF on a laptop at night | you ever feel something’s off... |
+| 3.3–6.7s | | 2am desk lamp, rubbing temples | ...but every test says you’re ‘normal’? |
+| 6.7–10.0s | | Runner stopped at dusk, catching her breath | what is my body actually telling me? |
+| 10.0–18.0s | The turn | Hands holding a phone. The Wai chat (espresso, cream, caramel) gets the question with the lab PDF attached, types out the ferritin answer, then shows a range card | finally, an answer |
+| 18.0–27.0s | Payoff | Morning sunlight, a calm stretch, a laugh over coffee | when someone actually reads / the whole picture |
+| 27.0–33.0s | End card | Wai logo on espresso, letterbox opens | wai – medical intelligence, made personal |
+
+**Footage:** the live-action shots are animatic stand-ins (soft-focus silhouettes, bokeh, practical light) until real clips are added. See `public/wai/story/README.md` for filenames and the shot list. Timings, captions and chat copy are in `src/waiStory/timeline.ts`.
