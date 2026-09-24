@@ -16,12 +16,12 @@ export type FootageId =
   | 'hands'
   | 'shoes'
   | 'lacing'
-  | 'walk'
-  | 'water'
+  | 'entry'
+  | 'tennis'
+  | 'outdoors'
   | 'clinic'
-  | 'stretch'
-  | 'breakfast'
-  | 'outdoors';
+  | 'consult'
+  | 'lunch';
 
 /**
  * Real-life footage slots. Drop a clip at public/wai/footage/<id>.mp4 and it
@@ -34,12 +34,12 @@ export const footage: Record<FootageId, {brief: string; tones: [string, string, 
   hands: {brief: 'Hands: vitamins and a glass of water on a wooden counter', tones: ['#6E5441', '#C9A988', '#F1E2CC']},
   shoes: {brief: 'Still life: trainers on a sunlit floor, long shadows', tones: ['#7C6552', '#D5C2AA', '#FBF4EA']},
   lacing: {brief: 'Low angle: lacing trainers by a window', tones: ['#6E5441', '#C9A988', '#F1E2CC']},
-  walk: {brief: 'Shadows of two people walking on pavement', tones: ['#5F4A3A', '#C89B6D', '#EBD7BD']},
-  water: {brief: 'Pouring a glass of water, warm kitchen', tones: ['#7C6552', '#D5C2AA', '#FBF4EA']},
-  clinic: {brief: 'Clinician and client, bright clinic, relaxed smiles', tones: ['#7A6A5C', '#CFC0AE', '#F7F1E8']},
-  stretch: {brief: 'Morning stretch by a window, linen, warm light', tones: ['#8A6F59', '#DCC5A8', '#FFF5E6']},
-  breakfast: {brief: 'Overhead: breakfast bowl, berries, hands', tones: ['#5F4A3A', '#C89B6D', '#EBD7BD']},
-  outdoors: {brief: 'From behind: walking a park path at golden hour', tones: ['#4E3A2C', '#C08A58', '#F6D7AE']},
+  entry: {brief: 'Two people walking into a bright clinic', tones: ['#7A6A5C', '#CFC0AE', '#F7F1E8']},
+  tennis: {brief: 'Tennis high five, sunny court', tones: ['#5F4A3A', '#C89B6D', '#EBD7BD']},
+  outdoors: {brief: 'Stepping out into warm afternoon light', tones: ['#4E3A2C', '#C08A58', '#F6D7AE']},
+  clinic: {brief: 'Clinician at a desk, stethoscope, laptop', tones: ['#7A6A5C', '#CFC0AE', '#F7F1E8']},
+  consult: {brief: 'Doctor listening, video consult', tones: ['#8A6F59', '#DCC5A8', '#FFF5E6']},
+  lunch: {brief: 'Friends sharing lunch', tones: ['#5F4A3A', '#C89B6D', '#EBD7BD']},
 };
 
 /** `xfade` = frames of dissolve from the previous shot, centred on `from`. */
@@ -73,12 +73,12 @@ export const shots: Shot[] = [
  * in the 1080×1920 frame; photos stay square to the frame, no borders.
  */
 export const collagePhotos: {id: FootageId; at: number; x: number; y: number; w: number; h: number}[] = [
-  {id: 'walk', at: 416, x: 60, y: 430, w: 560, h: 420},
-  {id: 'water', at: 442, x: 470, y: 560, w: 540, h: 400},
+  {id: 'entry', at: 416, x: 60, y: 430, w: 560, h: 420},
+  {id: 'tennis', at: 442, x: 470, y: 560, w: 540, h: 400},
   {id: 'outdoors', at: 465, x: 520, y: 900, w: 500, h: 520},
   {id: 'clinic', at: 495, x: 110, y: 820, w: 520, h: 440},
-  {id: 'stretch', at: 525, x: 560, y: 1230, w: 440, h: 330},
-  {id: 'breakfast', at: 547, x: 90, y: 1180, w: 470, h: 350},
+  {id: 'consult', at: 525, x: 560, y: 1230, w: 440, h: 330},
+  {id: 'lunch', at: 547, x: 90, y: 1180, w: 470, h: 350},
 ];
 
 /** Lowercase white captions: one phrase at a time, hard on and off. */
