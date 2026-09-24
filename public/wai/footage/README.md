@@ -4,10 +4,20 @@ Drop real-life clips here using these exact filenames. Each one replaces its pla
 
 | File | Length | Shot |
 |---|---|---|
-| `lacing.mp4` | 2.4s | Close-up: lacing trainers, soft morning light |
-| `run.mp4` | 1.8s | Tracking shot: feet on a path at sunrise (also used in the collage) |
-| `water.mp4` | 1.8s | Macro: pouring a glass of water on a wooden counter |
-| `stretch.mp4` | 1.8s | Morning stretch by a window, linen, warm light |
-| `breakfast.mp4` | 1.8s | Overhead: breakfast bowl, berries, hands |
-| `clinic.mp4` | 2.0s | Clinician and client, bright clinic, relaxed smiles (also in the collage) |
-| `outdoors.mp4` | 4.2s | Walking outdoors at golden hour, easy smile (also in the collage) |
+| `feet.mp4` | 2.4s | Tight close-up: trainers mid-stride, motion blur |
+| `wide.mp4` | 1.0s | Wide: legs walking or running, morning window light |
+| `journal.mp4` | 1.9s | Overhead: pen ticking off a paper habit list |
+| `hands.mp4` | 1.9s | Hands: vitamins and a glass of water on a wooden counter |
+| `shoes.mp4` | 2.4s | Still life: trainers on a sunlit floor, long shadows |
+| `lacing.mp4` | 2.1s | Low angle: lacing trainers by a window |
+
+Collage photos (short clips, shown small, 1.5–5.5s each):
+
+| File | Shot |
+|---|---|
+| `walk.mp4` | Shadows of two people walking on pavement |
+| `water.mp4` | Pouring a glass of water, warm kitchen |
+| `outdoors.mp4` | From behind: walking a park path at golden hour |
+| `clinic.mp4` | Clinician and client, bright clinic, relaxed smiles |
+| `stretch.mp4` | Morning stretch by a window, linen, warm light |
+| `breakfast.mp4` | Overhead: breakfast bowl, berries, hands |

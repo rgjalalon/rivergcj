@@ -1,14 +1,12 @@
 import {useCurrentFrame} from 'remotion';
 import {fonts} from '../theme';
-import {progress} from '../timeline';
 import {captions} from './timeline';
 
-/** Centered lowercase white captions; each part fades in where it lands. */
+/** Small centred lowercase white captions that cut on and off with the edit. */
 export const Captions: React.FC = () => {
   const frame = useCurrentFrame();
   const c = captions.find((cap) => frame >= cap.from && frame < cap.to);
   if (!c) return null;
-  const out = 1 - progress(frame, c.to - 6, 6);
   return (
     <div
       style={{
@@ -23,23 +21,16 @@ export const Captions: React.FC = () => {
         textAlign: 'center',
         fontFamily: fonts.sans,
         fontWeight: 500,
-        fontSize: 58,
-        letterSpacing: -0.5,
+        fontSize: 46,
+        letterSpacing: -0.2,
         color: '#FFFFFF',
-        textShadow: '0 2px 24px rgba(40,28,20,0.35), 0 1px 3px rgba(40,28,20,0.25)',
-        opacity: out,
+        textShadow: '0 1px 18px rgba(40,28,20,0.45), 0 1px 3px rgba(40,28,20,0.35)',
         zIndex: 20,
       }}
     >
-      <div>
-        {c.parts.map((p) => {
-          const inP = progress(frame, p.at);
-          return (
-            <span key={p.at} style={{opacity: inP, whiteSpace: 'pre'}}>
-              {p.text}
-            </span>
-          );
-        })}
+      {/* Soft espresso glow keeps white type legible over light screens and paper. */}
+      <div style={{padding: '36px 72px', background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(46,33,24,0.42) 0%, rgba(46,33,24,0.18) 55%, rgba(46,33,24,0) 100%)'}}>
+        {c.text}
       </div>
     </div>
   );

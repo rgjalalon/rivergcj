@@ -40,7 +40,7 @@ Key moments live in `src/timeline.ts`. UI transitions are 300ms (9 frames) with 
 
 # Wai: brand film (vertical)
 
-A 30-second vertical video (1080×1920, 30fps) for Wai. It follows the structure and pacing of the reference edit: quick real-life cuts, then an app screen, more footage, a photo/card collage, a results screen, a hero shot, and the end card.
+A 30-second vertical video (1080×1920, 30fps) for Wai. Cut points, dissolves and caption rhythm follow the reference edit frame for frame: close-up → wide → paper checklist → phone, screen, hands and still life dissolving into each other → lacing → photo collage on a flat colour → the plan on a screen → the same plan printed and taped up → end card.
 
 **Rendered file:** [`renders/wai-brand-film.mp4`](renders/wai-brand-film.mp4)
 
@@ -50,17 +50,21 @@ npm run render:wai   # writes out/wai-brand-film.mp4
 
 | Time | Shot | Caption |
 |---|---|---|
-| 0.0–2.4s | Footage: lacing trainers | health isn't |
-| 2.4–4.2s | Footage: sunrise run | another app |
-| 4.2–6.0s | Footage: glass of water | it's the small things |
-| 6.0–8.4s | App: "Today" tracker, habits tick off | |
-| 8.4–12.0s | Footage: stretch, breakfast | |
-| 12.0–14.0s | Footage: clinic | tracked, |
-| 14.0–19.4s | Collage on caramel: photos and result cards | …understood, improved |
-| 19.4–21.6s | App: vitamin D result rising into optimal range | |
-| 21.6–25.8s | Footage: golden-hour walk | one place / that actually gets it |
-| 25.8–30.0s | End card: Wai logo on espresso | medical intelligence, made personal |
+| 0.00–2.37s | Footage: trainers mid-stride, close-up | health isn't (from 1.1s) |
+| 2.37–3.37s | Footage: wide, legs walking | another app |
+| 3.37–5.23s | Footage: pen ticking a habit list | it's the |
+| 5.23–6.27s | App: "Today" tracker, habits tick off | small things |
+| 6.27–8.00s | ⤫ App: vitamin D result rising into range | small things |
+| 8.00–9.53s | ⤫ Footage: hands, vitamins and water | small things |
+| 9.53–11.77s | ⤫ Footage: trainers on a sunlit floor | |
+| 11.77–13.87s | Footage: lacing trainers | |
+| 13.87–19.40s | Collage on caramel, six photos cut on one by one | tracked, / understood, / improved |
+| 19.40–21.20s | The plan on a laptop screen | one place |
+| 21.20–25.83s | The plan printed and taped to the wall | that actually gets it |
+| 25.83–30.00s | End card: Wai logo on espresso | medical intelligence, made personal |
+
+⤫ = dissolve. Everything else is a hard cut, and captions cut on and off with the picture.
 
 **Footage:** the real-life shots are placeholders until clips are added. See `public/wai/footage/README.md` for filenames and the shot list. The grade (warm highlights, espresso shadows, film grain, vignette) is applied automatically in `src/wai/Footage.tsx`.
 
-Shot timings and captions are in `src/wai/timeline.ts`. The logo is `public/wai/wai-logo-cream.png`.
+Shot timings, collage beats and captions are in `src/wai/timeline.ts`. The logo is `public/wai/wai-logo-cream.png`.

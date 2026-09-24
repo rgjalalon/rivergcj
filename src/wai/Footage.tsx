@@ -10,11 +10,12 @@ const hasClip = (id: FootageId) =>
  * blacks, brown undertones. Falls back to a graded placeholder when no clip is
  * provided yet.
  */
-export const Footage: React.FC<{id: FootageId; from: number; to: number; push?: number}> = ({
+export const Footage: React.FC<{id: FootageId; from: number; to: number; push?: number; compact?: boolean}> = ({
   id,
   from,
   to,
   push = 0.06,
+  compact = false,
 }) => {
   const frame = useCurrentFrame();
   const scale = interpolate(frame, [from, to], [1, 1 + push], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -30,7 +31,7 @@ export const Footage: React.FC<{id: FootageId; from: number; to: number; push?: 
         {hasClip(id) ? (
           <OffthreadVideo src={staticFile(`wai/footage/${id}.mp4`)} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
         ) : (
-          <Placeholder id={id} from={from} />
+          <Placeholder id={id} from={from} compact={compact} />
         )}
       </AbsoluteFill>
       {/* Grade: caramel warmth in the highlights, espresso in the shadows. */}
@@ -41,7 +42,7 @@ export const Footage: React.FC<{id: FootageId; from: number; to: number; push?: 
   );
 };
 
-const Placeholder: React.FC<{id: FootageId; from: number}> = ({id, from}) => {
+const Placeholder: React.FC<{id: FootageId; from: number; compact: boolean}> = ({id, from, compact}) => {
   const frame = useCurrentFrame() - from;
   const [dark, mid, light] = footage[id].tones;
   // Slow drifting light, so the slot reads as moving footage in the animatic.
@@ -72,19 +73,19 @@ const Placeholder: React.FC<{id: FootageId; from: number}> = ({id, from}) => {
       <div
         style={{
           position: 'absolute',
-          left: 64,
-          right: 64,
-          bottom: 150,
+          left: compact ? 24 : 64,
+          right: compact ? 24 : 64,
+          bottom: compact ? 20 : 150,
           fontFamily: fonts.sans,
           color: 'rgba(245,240,232,0.55)',
-          fontSize: 24,
-          letterSpacing: 3,
+          fontSize: compact ? 16 : 24,
+          letterSpacing: compact ? 2 : 3,
           textTransform: 'uppercase',
           lineHeight: 1.6,
         }}
       >
         <div style={{fontWeight: 600}}>Footage · {id}</div>
-        <div style={{textTransform: 'none', letterSpacing: 0.5, fontSize: 26}}>{footage[id].brief}</div>
+        {!compact && <div style={{textTransform: 'none', letterSpacing: 0.5, fontSize: 26}}>{footage[id].brief}</div>}
       </div>
     </AbsoluteFill>
   );

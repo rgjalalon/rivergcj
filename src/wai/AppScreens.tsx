@@ -59,7 +59,7 @@ const Dot: React.FC<{kind: string}> = ({kind}) => {
 
 export const TrackerScreen: React.FC<{from: number; to: number}> = ({from, to}) => {
   const frame = useCurrentFrame();
-  const checkAt = (i: number) => from + 10 + i * 9;
+  const checkAt = (i: number) => from + 4 + i * 6;
   const done = items.slice(0, 4).filter((_, i) => frame >= checkAt(i)).length;
   const ring = interpolate(frame, [from + 6, checkAt(3) + 9], [0.2, 0.8], {
     easing: easeOut,
