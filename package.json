@@ -9,8 +9,7 @@
     "still": "remotion still WellnessAppWalkthrough out/still.png",
     "render:wai": "remotion render WaiBrandFilm out/wai-brand-film.mp4",
     "still:inflammation": "remotion still InflammationPost out/inflammation-post.png",
-    "still:cover": "remotion still CoverCollage out/cover-collage.png",
-    "still:cover-mono": "remotion still CoverCollageMono out/cover-collage-mono.png"
+    "stills:aging": "for i in 1 2 3 4 5 6; do remotion still AgingWell-$i out/aging-well-$i.png; done"
   },
   "dependencies": {
     "@remotion/cli": "4.0.528",

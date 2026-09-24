@@ -1,5 +1,5 @@
 import {Composition, Still} from 'remotion';
-import {CoverCollage, COVER_H, COVER_W} from './posts/CoverCollage';
+import {AgingWellSlide, SLIDE_H, SLIDE_W, SLIDES} from './posts/aging/AgingWellCarousel';
 import {InflammationPost, POST_H, POST_W} from './posts/InflammationPost';
 import {WellnessAppWalkthrough} from './WellnessAppWalkthrough';
 import {DURATION, FPS} from './timeline';
@@ -26,14 +26,16 @@ export const RemotionRoot: React.FC = () => {
         height={WAI_H}
       />
       <Still id="InflammationPost" component={InflammationPost} width={POST_W} height={POST_H} />
-      <Still id="CoverCollage" component={CoverCollage} width={COVER_W} height={COVER_H} />
-      <Still
-        id="CoverCollageMono"
-        component={CoverCollage}
-        defaultProps={{mono: true}}
-        width={COVER_W}
-        height={COVER_H}
-      />
+      {SLIDES.map((_, i) => (
+        <Still
+          key={i}
+          id={`AgingWell-${i + 1}`}
+          component={AgingWellSlide}
+          defaultProps={{index: i}}
+          width={SLIDE_W}
+          height={SLIDE_H}
+        />
+      ))}
     </>
   );
 };
