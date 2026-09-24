@@ -3,6 +3,18 @@ const {chromium}=require('playwright');
 const BASE='https://raw.githubusercontent.com/rgjalalon/rivergcj/claude/eager-wozniak-lex3fo/carousels/inflammation-signal/canva/';
 (async()=>{
 let h=fs.readFileSync('carousel.html','utf8');
+
+h=h.replace('<h1>The inflammation signal your standard blood test <em>misses</em></h1>','<h1>The inflammation<br>signal your standard<br>blood test <em>misses</em></h1>')
+ .replace('.s1 h1{font-weight:300;font-size:104px;','.s1 h1{font-weight:300;font-size:92px;')
+ .replace(/<small>%<\/small>/g,'%')
+ .replace('.s2 .big{font-weight:300;font-size:128px;','.s2 .big{white-space:nowrap;font-weight:300;font-size:112px;')
+ .replace('.s4 .num{font-weight:300;font-size:150px;','.s4 .num{white-space:nowrap;font-weight:300;font-size:128px;')
+ .replace('<h2>You can&#8217;t feel low&#8209;grade <em>inflammation.</em></h2>','<h2>You can&#8217;t feel<br>low-grade <em>inflammation.</em></h2>')
+ .replace('.s5 .left{position:absolute;left:72px;top:150px;width:548px}','.s5 .left{position:absolute;left:72px;top:150px;width:560px}')
+ .replace('.s5 h2{font-weight:300;font-size:60px;','.s5 h2{font-weight:300;font-size:56px;')
+ .replace('<div class="tag">Three questions to ask</div>','')
+ .replace('.s5 .card{position:absolute;left:72px;top:452px;','.s5 .card{position:absolute;left:72px;top:490px;')
+ .replace('<p>So one high reading may not show your baseline.</p>','<p>So one high reading may not show your baseline.</p>');
 // icons -> png
 const svgs=[...h.matchAll(/<svg width=[\s\S]*?<\/svg>/g)].map(m=>m[0]);
 const names=['arrow','save','share'];
