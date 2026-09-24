@@ -35,3 +35,32 @@ Key moments live in `src/timeline.ts`. UI transitions are 300ms (9 frames) with 
 - **Logo**: `src/components/EndCard.tsx` currently shows a placeholder monogram and wordmark. Swap in the real logo asset there.
 - **Treatment image**: the placeholder is in `src/screens/DetailScreen.tsx`. Drop an image in `public/` and use `<Img src={staticFile(...)} />`.
 - **Film grain and vignette**: `src/components/Grain.tsx`
+
+---
+
+# Wai: brand film (vertical)
+
+A 30-second vertical video (1080×1920, 30fps) for Wai. It follows the structure and pacing of the reference edit: quick real-life cuts, then an app screen, more footage, a photo/card collage, a results screen, a hero shot, and the end card.
+
+**Rendered file:** [`renders/wai-brand-film.mp4`](renders/wai-brand-film.mp4)
+
+```bash
+npm run render:wai   # writes out/wai-brand-film.mp4
+```
+
+| Time | Shot | Caption |
+|---|---|---|
+| 0.0–2.4s | Footage: lacing trainers | health isn't |
+| 2.4–4.2s | Footage: sunrise run | another app |
+| 4.2–6.0s | Footage: glass of water | it's the small things |
+| 6.0–8.4s | App: "Today" tracker, habits tick off | |
+| 8.4–12.0s | Footage: stretch, breakfast | |
+| 12.0–14.0s | Footage: clinic | tracked, |
+| 14.0–19.4s | Collage on caramel: photos and result cards | …understood, improved |
+| 19.4–21.6s | App: vitamin D result rising into optimal range | |
+| 21.6–25.8s | Footage: golden-hour walk | one place / that actually gets it |
+| 25.8–30.0s | End card: Wai logo on espresso | medical intelligence, made personal |
+
+**Footage:** the real-life shots are placeholders until clips are added. See `public/wai/footage/README.md` for filenames and the shot list. The grade (warm highlights, espresso shadows, film grain, vignette) is applied automatically in `src/wai/Footage.tsx`.
+
+Shot timings and captions are in `src/wai/timeline.ts`. The logo is `public/wai/wai-logo-cream.png`.

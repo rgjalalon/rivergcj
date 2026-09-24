@@ -6,7 +6,8 @@
   "scripts": {
     "studio": "remotion studio",
     "render": "remotion render WellnessAppWalkthrough out/the-wellness-app.mp4",
-    "still": "remotion still WellnessAppWalkthrough out/still.png"
+    "still": "remotion still WellnessAppWalkthrough out/still.png",
+    "render:wai": "remotion render WaiBrandFilm out/wai-brand-film.mp4"
   },
   "dependencies": {
     "@remotion/cli": "4.0.528",

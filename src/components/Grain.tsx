@@ -1,12 +1,16 @@
 import {useCurrentFrame} from 'remotion';
 
 /** Animated film grain: fresh turbulence seed every frame. */
-export const Grain: React.FC<{opacity?: number}> = ({opacity = 0.09}) => {
+export const Grain: React.FC<{opacity?: number; width?: number; height?: number}> = ({
+  opacity = 0.09,
+  width = 1920,
+  height = 1080,
+}) => {
   const frame = useCurrentFrame();
   return (
     <svg
-      width="1920"
-      height="1080"
+      width={width}
+      height={height}
       style={{position: 'absolute', inset: 0, opacity, mixBlendMode: 'overlay', pointerEvents: 'none'}}
     >
       <filter id="grain">
