@@ -1,4 +1,5 @@
-import {Composition} from 'remotion';
+import {Composition, Still} from 'remotion';
+import {InflammationPost, POST_H, POST_W} from './posts/InflammationPost';
 import {WellnessAppWalkthrough} from './WellnessAppWalkthrough';
 import {DURATION, FPS} from './timeline';
 import {WaiFilm} from './wai/WaiFilm';
@@ -23,6 +24,7 @@ export const RemotionRoot: React.FC = () => {
         width={WAI_W}
         height={WAI_H}
       />
+      <Still id="InflammationPost" component={InflammationPost} width={POST_W} height={POST_H} />
     </>
   );
 };
