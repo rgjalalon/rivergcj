@@ -1,5 +1,6 @@
 import {Composition, Still} from 'remotion';
 import {AgingWellSlide, SLIDE_H, SLIDE_W, SLIDES} from './posts/aging/AgingWellCarousel';
+import {LpaPost, LPA_H, LPA_W} from './posts/LpaPost';
 import {InflammationPost, POST_H, POST_W} from './posts/InflammationPost';
 import {WellnessAppWalkthrough} from './WellnessAppWalkthrough';
 import {DURATION, FPS} from './timeline';
@@ -26,6 +27,7 @@ export const RemotionRoot: React.FC = () => {
         height={WAI_H}
       />
       <Still id="InflammationPost" component={InflammationPost} width={POST_W} height={POST_H} />
+      <Still id="LpaPost" component={LpaPost} width={LPA_W} height={LPA_H} />
       {SLIDES.map((_, i) => (
         <Still
           key={i}
