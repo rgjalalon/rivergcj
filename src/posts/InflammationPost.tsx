@@ -270,7 +270,7 @@ const ChecklistPage: React.FC = () => (
 );
 
 export const InflammationPost: React.FC = () => (
-  <AbsoluteFill style={{background: colors.paper, fontFamily: fonts.sans}}>
+  <AbsoluteFill style={{background: '#F8F8F8', fontFamily: fonts.sans}}>
     {/* Left panel */}
     <div style={{position: 'absolute', left: 0, top: 0, width: PANEL_W, height: POST_H}}>
       <div style={{position: 'absolute', left: 64, top: 84, width: 540}}>
