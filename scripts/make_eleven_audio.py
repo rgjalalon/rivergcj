@@ -376,13 +376,14 @@ music *= 0.9 / np.abs(music).max()
 # ================================================================ voice-over
 # Narrator (n*) and patient (p*) clips from public/eleven/vo, placed on the
 # picture (seconds). The music ducks under the voice.
+USE_VO = False  # the current cut is music only; set True to mix the voice-over back in
 VO_CUES = {
     'n1': 0.5, 'n2': 4.6, 'n3': 5.9, 'n4': 8.9, 'n5': 9.9, 'n6': 12.3, 'n7': 15.9,
     'p1': 25.3, 'p2': 28.6,
     'n8': 37.6,
 }
 vo = np.zeros((N, 2))
-for key, t in VO_CUES.items():
+for key, t in (VO_CUES.items() if USE_VO else []):
     path = f'public/eleven/vo/{key}.wav'
     if not os.path.exists(path):
         continue

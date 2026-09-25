@@ -105,9 +105,9 @@ All CC0. Credits are in [`public/eleven/CREDITS.md`](public/eleven/CREDITS.md).
 - `public/eleven/3d/`: 72-frame rotations of the alarm clock, pocket watch and laptop. I rendered these from Poly Haven's glTF models with three.js, with the clock hands set to 10:10:11 and a note on the laptop screen.
 - `scripts/eleven-assets/`: rebuilds all of the above (`fetch_assets.py`, `render.mjs`).
 
-## Voice-over
+## Voice-over (not in the current cut)
 
-Clips are in `public/eleven/vo/` and cued in `VO_CUES` in `scripts/make_eleven_audio.py`. The music ducks under them.
+The current render is music only. To bring the voice-over back, set `USE_VO = True` in `scripts/make_eleven_audio.py`. Clips are in `public/eleven/vo/` and cued in `VO_CUES` in `scripts/make_eleven_audio.py`. The music ducks under them.
 
 - **Narrator** (`n1`–`n8`): a light, natural male voice made with Chatterbox TTS, modelled on a public-domain LibriVox reader. It reads the lines from your recording, and each line is the better of two takes. "Eleven seconds" lands on each 0:11 timer, and "Stop losing minutes to paperwork. Start listening." plays over the black type.
 - **Patient** (`p1`, `p2`): your own recording of her lines, converted to a female voice with OpenVoice V2, so the natural hesitations are kept. The chat bubbles type along with her words, and the doctor's "Take all the time you need." follows.
