@@ -110,86 +110,28 @@ export const HalftoneBg: React.FC<{f: number; pal: Palette; seed?: number}> = ({
   );
 };
 
-// ---------------------------------------------------------------- block wipe
-const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3);
+// ---------------------------------------------------------------- transition
+const smoothstep = (x: number) => x * x * (3 - 2 * x);
 
 /**
- * Pixel-block transition on the background grid, softened: each block dissolves
- * in over a few frames, in a staggered wave, some with a brief tinted flash
- * growing from the block's centre. `p` runs 0→1. Children are the incoming scene, which
- * also settles from a slight zoom.
+ * Soft cinematic dissolve (the name is kept from the earlier block wipe).
+ * The incoming scene fades up out of a gentle blur while settling from a
+ * slight zoom. `p` runs 0→1.
  */
 export const BlockWipe: React.FC<{
   p: number;
-  id: string;
-  from?: 'left' | 'right' | 'center' | 'bottom';
+  id?: string;
+  from?: string;
   flash?: string[];
   seed?: number;
   children: React.ReactNode;
-}> = ({p, from = 'right', flash = ['#FFFFFF', '#F5F0E8'], seed = 3, children}) => {
+}> = ({p, children}) => {
   if (p <= 0) return null;
-  const settle = 1 + 0.04 * (1 - easeOutCubic(Math.min(1, p)));
   if (p >= 1) return <AbsoluteFill>{children}</AbsoluteFill>;
-  const cols = W / CELL;
-  const rows = Math.ceil(H / CELL);
-  const SPAN = 0.3; // how long a single block takes to open, in wipe progress
-  const rects: string[] = [];
-  const mids: React.ReactNode[] = [];
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const i = r * cols + c;
-      const pos =
-        from === 'right'
-          ? 1 - c / (cols - 1)
-          : from === 'left'
-            ? c / (cols - 1)
-            : from === 'bottom'
-              ? 1 - r / (rows - 1)
-              : Math.hypot(c - cols / 2, r - rows / 2) / Math.hypot(cols / 2, rows / 2);
-      const start = (0.55 * pos + 0.45 * rand(i, seed)) * (1 - SPAN);
-      const q = Math.max(0, Math.min(1, (p - start) / SPAN));
-      if (q <= 0) continue;
-      const e = easeOutCubic(q);
-      // pixel-snapped so neighbouring blocks meet without hairline seams
-      rects.push(`<rect x='${c * CELL}' y='${r * CELL}' width='${CELL}' height='${CELL}' fill='white' fill-opacity='${Math.min(1, e * 1.1).toFixed(3)}'/>`);
-      // the tinted flash grows from the block's centre
-      const sz = Math.round(CELL * (0.45 + 0.55 * e));
-      const x0 = c * CELL + Math.round((CELL - sz) / 2);
-      const y0 = r * CELL + Math.round((CELL - sz) / 2);
-      const fl = q < 0.6 ? Math.sin((Math.PI * q) / 0.6) * 0.6 : 0;
-      if (fl > 0.02 && rand(i, seed + 5) < 0.35) {
-        const k = Math.floor(rand(i, seed + 9) * (flash.length + 1));
-        mids.push(
-          <div
-            key={i}
-            style={{
-              position: 'absolute',
-              left: x0,
-              top: y0,
-              width: sz,
-              height: sz,
-              opacity: fl,
-              ...(k < flash.length
-                ? {background: flash[k]}
-                : {
-                    backgroundColor: '#EDE5D9',
-                    backgroundImage: 'radial-gradient(circle, rgba(62,47,35,0.45) 28%, transparent 32%)',
-                    backgroundSize: '9px 9px',
-                  }),
-            }}
-          />,
-        );
-      }
-    }
-  }
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}' viewBox='0 0 ${W} ${H}' shape-rendering='crispEdges'>${rects.join('')}</svg>`;
-  const mask = `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
+  const e = smoothstep(Math.min(1, p));
   return (
-    <AbsoluteFill>
-      <AbsoluteFill style={{maskImage: mask, WebkitMaskImage: mask, maskSize: '100% 100%', WebkitMaskSize: '100% 100%'}}>
-        <AbsoluteFill style={{transform: `scale(${settle})`}}>{children}</AbsoluteFill>
-      </AbsoluteFill>
-      {mids}
+    <AbsoluteFill style={{opacity: e, transform: `scale(${1.035 - 0.035 * e})`, filter: `blur(${(1 - e) * 12}px)`}}>
+      {children}
     </AbsoluteFill>
   );
 };

@@ -22,7 +22,7 @@ export const T = {
   outro: [1115, 1500],
 } as const;
 export const ELEVEN_DURATION = T.outro[1];
-const WIPE = 16;
+const WIPE = 16; // cross-dissolve length, equal to the scene overlap
 
 // Each scene's animation runs on a slightly slowed clock.
 const PACE = {collage: 0.8, hero: 0.8, bloom: 0.75, chat: 0.7, outro: 0.8};
@@ -30,13 +30,13 @@ const PACE = {collage: 0.8, hero: 0.8, bloom: 0.75, chat: 0.7, outro: 0.8};
 type Key = keyof typeof T;
 const on = (f: number, k: Key) => f >= T[k][0] && f < T[k][1];
 const local = (f: number, k: Key) => f - T[k][0];
-const inOutE = Easing.bezier(0.45, 0, 0.25, 1);
+const inOutE = Easing.bezier(0.4, 0, 0.2, 1);
 const wipeP = (f: number, k: Key) => interpolate(f, [T[k][0], T[k][0] + WIPE], [0, 1], {...clamp, easing: inOutE});
 
 /** Outgoing scenes drift forward and soften slightly while the next one wipes in. */
 const Exit: React.FC<{f: number; next: Key; children: React.ReactNode}> = ({f, next, children}) => {
   const x = interpolate(f, [T[next][0], T[next][0] + WIPE], [0, 1], {...clamp, easing: inOutE});
-  return <AbsoluteFill style={{transform: `scale(${1 + 0.05 * x})`, filter: x > 0 ? `brightness(${1 - 0.08 * x})` : undefined}}>{children}</AbsoluteFill>;
+  return <AbsoluteFill style={{transform: `scale(${1 + 0.03 * x})`, filter: x > 0 ? `blur(${x * 6}px)` : undefined}}>{children}</AbsoluteFill>;
 };
 
 export const ElevenSeconds: React.FC = () => {

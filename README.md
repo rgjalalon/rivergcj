@@ -89,7 +89,7 @@ A 43-second 16:9 film (1920×1080, 30fps, music only). It follows the reference 
 | 34.5–37.8s | Three glass cards | Clinical note: Drafted while you talk · Letters: Ready to sign · Coding: Done for you |
 | 37.8–43.3s | Cards merge to a line, logo glows up | Wai logo · "Care, uninterrupted." · wellnessa-i.com |
 
-The stat source ("J Gen Intern Med, 2018") sits as a footnote on the three halftone scenes. The palette is Wai's own: cream, espresso, caramel and taupe (from `src/theme.ts`), with sage as a fresh accent. The halftone scenes are sage, the statement is caramel and espresso, the orb is a pearl, and the chat and cards are warm neutrals. Transitions between scenes are soft pixel-block dissolves on the 120px background grid. The blocks open in a staggered wave with a brief tinted flash, the outgoing scene drifts forward, and the incoming one settles from a slight zoom.
+The stat source ("J Gen Intern Med, 2018") sits as a footnote on the three halftone scenes. The palette is Wai's own: cream, espresso, caramel and taupe (from `src/theme.ts`), with sage as a fresh accent. The halftone scenes are sage, the statement is caramel and espresso, the orb is a pearl, and the chat and cards are warm neutrals. Transitions between scenes are soft cinematic dissolves: the incoming scene fades up out of a gentle blur while settling from a slight zoom, and the outgoing scene drifts forward and softens.
 
 ## Code
 
@@ -109,7 +109,7 @@ All CC0. Credits are in [`public/eleven/CREDITS.md`](public/eleven/CREDITS.md).
 
 Clips are in `public/eleven/vo/` and cued in `VO_CUES` in `scripts/make_eleven_audio.py`. The music ducks under them.
 
-- **Narrator** (`n1`–`n8`): a male voice (Kokoro `am_michael`) reading the lines from your recording, with your phrasing and pauses. "Eleven seconds" lands on each 0:11 timer, and "Stop losing minutes to paperwork. Start listening." plays over the black type.
+- **Narrator** (`n1`–`n8`): a light, natural male voice made with Chatterbox TTS, modelled on a public-domain LibriVox reader. It reads the lines from your recording, and each line is the better of two takes. "Eleven seconds" lands on each 0:11 timer, and "Stop losing minutes to paperwork. Start listening." plays over the black type.
 - **Patient** (`p1`, `p2`): your own recording of her lines, converted to a female voice with OpenVoice V2, so the natural hesitations are kept. The chat bubbles type along with her words, and the doctor's "Take all the time you need." follows.
 
 The film now runs 50s, with a longer chat scene so her lines fit.

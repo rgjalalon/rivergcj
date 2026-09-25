@@ -391,12 +391,12 @@ for key, t in VO_CUES.items():
         v = v.mean(1)
     assert vsr == SR, path
     v = filt(v, 'high', 80)
-    v = v / (np.sqrt((v ** 2).mean()) + 1e-9) * 0.11
+    v = v / (np.sqrt((v ** 2).mean()) + 1e-9) * (0.14 if key.startswith('p') else 0.11)  # patient sits a touch forward
     place(vo, v, t, 1.0)
 if np.abs(vo).max() > 0:
     vo = reverb(vo, 0.6, 0.06)
     lvl = np.convolve(np.abs(vo).mean(1), np.ones(4800) / 4800, 'same')
-    duck = 1 - 0.55 * np.clip(lvl / 0.02, 0, 1)
+    duck = 1 - 0.68 * np.clip(lvl / 0.02, 0, 1)
     duck = np.convolve(duck, np.ones(9600) / 9600, 'same')[:, None]
     music = music * 0.75 * duck + vo
     music = np.tanh(music * 1.2) / 1.2
