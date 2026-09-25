@@ -1,0 +1,74 @@
+<!doctype html><html><body style="margin:0;background:transparent">
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {RGBELoader} from 'three/addons/loaders/RGBELoader.js';
+const SIZE = 900;
+const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true, preserveDrawingBuffer:true});
+renderer.setPixelRatio(1); renderer.setSize(SIZE, SIZE);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+const hdr = await new RGBELoader().loadAsync('./studio.hdr');
+scene.environment = pmrem.fromEquirectangular(hdr).texture;
+const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(3,5,4); scene.add(key);
+const rim = new THREE.DirectionalLight(0xdfe8ff, 0.8); rim.position.set(-4,2,-3); scene.add(rim);
+const camera = new THREE.PerspectiveCamera(28, 1, 0.01, 100);
+let pivot = null;
+window.load = async (id, elevDeg=14) => {
+  if (pivot) scene.remove(pivot);
+  const g = await new GLTFLoader().loadAsync(`./models/${id}/${id}.gltf`);
+  const obj = g.scene;
+  obj.traverse(o => { if (o.isMesh) { const ms = Array.isArray(o.material) ? o.material : [o.material];
+    ms.forEach(m => { if (/glass/i.test(m.name)) { m.map = null; m.transmission = 0; m.color = new THREE.Color(0xffffff);
+      m.transparent = true; m.opacity = 0.12; m.metalness = 0; m.roughness = 0.04; m.depthWrite = false; m.needsUpdate = true; } }); } });
+  const box = new THREE.Box3().setFromObject(obj);
+  const c = box.getCenter(new THREE.Vector3()); const s = box.getSize(new THREE.Vector3());
+  obj.position.sub(c);
+  pivot = new THREE.Group(); pivot.add(obj); scene.add(pivot);
+  obj.updateMatrixWorld(true);
+  // set clock hands: 10:10 with the second hand on 11 seconds
+  const targets = {hour: 305, hou: 305, minute: 60, second: 66, secondes: 66, minutes: 60, hours: 305};
+  const hands = [];
+  obj.traverse(o => { const m = /(hou[rd]s?|minutes?|seconde?s?)/i.exec(o.name || ''); if (m && o.isObject3D && /hand/i.test(o.name)) hands.push([o, m[1].toLowerCase()]); });
+  if (id === 'alarm_clock_01') for (const [o, kind] of hands) {
+    const key = kind.startsWith('hou') ? 'hour' : kind.startsWith('min') ? 'minute' : 'second';
+    const hb = new THREE.Box3().setFromObject(o); const hc = hb.getCenter(new THREE.Vector3());
+    const p0 = new THREE.Vector3(); o.getWorldPosition(p0);
+    const cur = THREE.MathUtils.radToDeg(Math.atan2(hc.x - p0.x, hc.y - p0.y));
+    const delta = {hour: 305, minute: 60, second: 66}[key] - cur;
+    o.rotateOnWorldAxis(new THREE.Vector3(0, 0, 1), -THREE.MathUtils.degToRad(delta));
+    console.log('hand', o.name, key, cur.toFixed(1), '->', delta.toFixed(1));
+  }
+  obj.traverse(o => { if (o.isMesh && /screen/i.test(o.material.name || '')) {
+    const gm = o.geometry; gm.computeBoundingBox(); const bb = gm.boundingBox; const sz = bb.getSize(new THREE.Vector3());
+    const ax = [['x', sz.x], ['y', sz.y], ['z', sz.z]].sort((a, b) => b[1] - a[1]);
+    const [ua, va] = [ax[0][0], ax[1][0]]; const pos = gm.attributes.position; const uv = new Float32Array(pos.count * 2);
+    for (let k = 0; k < pos.count; k++) { const v = new THREE.Vector3().fromBufferAttribute(pos, k);
+      uv[2 * k] = (v[ua] - bb.min[ua]) / sz[ua]; uv[2 * k + 1] = (v[va] - bb.min[va]) / sz[va]; }
+    gm.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); console.log('screen axes', ua, va, sz.x.toFixed(3), sz.y.toFixed(3), sz.z.toFixed(3));
+    const cv = document.createElement('canvas'); cv.width = 512; cv.height = 512; const x = cv.getContext('2d');
+    x.fillStyle = '#EEF2F5'; x.fillRect(0, 0, 512, 512);
+    x.fillStyle = '#1C1C1C'; x.fillRect(40, 44, 180, 22);
+    const w = [400, 360, 420, 300, 380, 250, 340, 200];
+    w.forEach((ww, i) => { x.fillStyle = i === 0 ? '#E0482F' : '#B9BEC4'; x.fillRect(40, 100 + i * 44, ww, 14); });
+    x.fillStyle = '#1C1C1C'; x.fillRect(244, 100 + 7 * 44 - 6, 4, 26);
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+    o.material = new THREE.MeshStandardMaterial({map: tex, emissive: new THREE.Color(0xffffff), emissiveMap: tex, emissiveIntensity: 0.55, roughness: 0.25, metalness: 0});
+  }});
+  const r = s.length()/2;
+  const d = r / Math.sin(THREE.MathUtils.degToRad(28/2)) * 1.02;
+  const e = THREE.MathUtils.degToRad(elevDeg);
+  camera.position.set(0, Math.sin(e)*d, Math.cos(e)*d); camera.lookAt(0,0,0);
+  return true;
+};
+window.frame = (yawDeg, rollDeg=0) => {
+  pivot.rotation.set(0, THREE.MathUtils.degToRad(yawDeg), THREE.MathUtils.degToRad(rollDeg));
+  renderer.render(scene, camera);
+  return renderer.domElement.toDataURL('image/png');
+};
+window.ready = true;
+</script></body></html>

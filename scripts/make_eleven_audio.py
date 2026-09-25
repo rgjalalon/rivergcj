@@ -1,10 +1,11 @@
 """Builds the "11 Seconds" music track (music only: no voiceover, no sound effects).
 
 A warm, upbeat groove at 104 BPM in F major, shaped like the reference edit:
-- Beats 1-2: light and bouncy (Rhodes comping, snaps, shaker, a filtered bass)
-- a snare build, a short cut, then the full groove drops on the gradient slide
-  (kick, clap, funky synth bass, a soft analogue-style lead hook, pad)
-- it breaks down gently under "Take all the time you need"
+- collage / halftone section: light and bouncy (Rhodes comping, snaps, shaker,
+  a filtered bass), building with a snare roll under "What if no one had to?"
+- a short cut, then the full groove drops as the orb appears (kick, clap, funky
+  synth bass, a soft analogue-style lead hook, pad) and carries the chat,
+  the type on black and the cards
 - a final chord rings out on the logo.
 
 Rhodes and pad are MIDI played through FluidSynth + the FluidR3 GM soundfont.
@@ -27,7 +28,8 @@ from scipy.signal import butter, sosfilt
 
 SR = 48000
 FPS = 30
-B1, B2, B3, B4, B5, B6, END = 0, 230, 440, 530, 800, 905, 1020
+# Frames: drop on the orb (440), final chord on the logo (870), end (1000)
+B1, B2, B3, B4, B5, B6, END = 0, 0, 440, 0, 870, 870, 1000
 DUR = END / FPS + 0.3
 N = int(DUR * SR)
 rng = np.random.default_rng(11)
@@ -36,7 +38,7 @@ SF2 = '/usr/share/sounds/sf2/FluidR3_GM.sf2'
 BPM = 104
 BEAT = 60 / BPM
 BAR = BEAT * 4
-DROP = B3 / FPS          # full groove lands on the gradient slide
+DROP = B3 / FPS          # full groove drops as the orb appears (like the reference)
 G0 = DROP - 6 * BAR      # six intro bars before it
 BREAK = B5 / FPS         # gentle breakdown
 FINAL = B6 / FPS         # last chord on the logo
@@ -123,8 +125,8 @@ for b in range(-1, NBARS):
         for m in [root + 12] + ch:
             n_(bar_t(b), PAD, m, 36 if b < 6 else 44, BAR)
 
-# breakdown: one open, warm chord
-for m in [41, 53, 57, 60, 64, 67]:
+# breakdown: one open, warm chord (only when there is room for one)
+for m in ([41, 53, 57, 60, 64, 67] if FINAL - BREAK > 0.5 else []):
     n_(BREAK + 0.02, EP, m, 46, 3.3)
     n_(BREAK + 0.02, PAD, m, 38, 3.4)
 # final chord, rolled
@@ -224,7 +226,8 @@ for b in range(2, NBARS):
             continue  # leave room for the build
         if t < BREAK - 0.05:
             place(bass, bass_note(r + off + 12, d, bright), t, 0.8 if b < 6 else 1.0)
-place(bass, bass_note(41, 4.0, 0.3) * np.exp(-np.arange(int(4 * BEAT * SR)) / SR / 1.4), BREAK, 0.6)
+if FINAL - BREAK > 0.5:
+    place(bass, bass_note(41, 4.0, 0.3) * np.exp(-np.arange(int(4 * BEAT * SR)) / SR / 1.4), BREAK, 0.6)
 place(bass, bass_note(41, 6.0, 0.6) * np.exp(-np.arange(int(6 * BEAT * SR)) / SR / 1.6), FINAL, 0.9)
 
 # lead hook over the drop (two-bar phrase, F major pentatonic)

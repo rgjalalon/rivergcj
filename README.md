@@ -69,21 +69,42 @@ Shot timings and captions are in `src/wai/timeline.ts`. The logo is `public/wai/
 
 # Wai: "11 Seconds" (landscape)
 
-A 34-second 16:9 film (1920×1080, 30fps) in an editorial collage style: grid backgrounds, halftone scraps, floating cutouts, kinetic scattered type, a gradient statement slide, a chat-bubble UI beat and a dark end card. No people and no voiceover. The soundtrack is music only.
+A 33-second 16:9 film (1920×1080, 30fps, music only). It follows the reference edit's structure and pacing beat for beat. [`renders/eleven-seconds-vs-reference.jpg`](renders/eleven-seconds-vs-reference.jpg) compares frames side by side.
 
 **Rendered file:** [`renders/eleven-seconds.mp4`](renders/eleven-seconds.mp4) · `npm run render:eleven`
 
-| Time | Beat | Music |
+| Time | Scene | On screen |
 |---|---|---|
-| 0.0–7.7s | Stopwatch ticks to 11, then the stat and its source (J Gen Intern Med, 2018) | Light, bouncy intro: Rhodes, snaps, shaker |
-| 7.7–14.7s | Consultation objects; the screen and keyboard drift between the speech bubbles | Bass and hats come in, then a snare build and a short cut |
-| 14.7–17.7s | Gradient slide: "What if no one had to?" | The drop: full groove |
-| 17.7–26.7s | Waveform bubble; the note, letter and coding cards draft themselves | Groove, with the lead hook |
-| 26.7–30.2s | The stopwatch returns, stopped: "Take all the time you need." | Drums drop out and the sound softens |
-| 30.2–34.0s | End card: logo, "Care, uninterrupted.", wellnessa-i.com | Final chord rings out |
+| 0.0–2.7s | Collage (grid, typed words, cutouts) | "A patient starts to explain why they can't sleep." |
+| 2.3–4.3s | Blue halftone: 3D alarm clock swings in | Glass pill counts 0:01 → 0:11, then "Interrupted" |
+| 3.9–5.7s | Collage | "Another tries to describe the pain." + a "Save note" button being clicked |
+| 5.4–7.3s | Blue halftone: 3D pocket watch | "0:11 Interrupted" |
+| 7.0–8.8s | Collage | "Another just wants to ask a question." |
+| 8.5–10.4s | Blue halftone: 3D laptop typing a note | "0:11 Interrupted" |
+| 10.1–13.3s | Collage, pulling back | "It's not rudeness. Someone has to write the note." |
+| 13.0–14.7s | Red halftone, shrinking to a circle | "What if no one had to?" |
+| 14.7–16.7s | Glowing orb with rings (Wai) | |
+| 16.7–23.3s | Orb opens into a green glass chat | Wai: "I've got the notes. Go ahead." · Patient: "It started last week…" · Doctor: "Take all the time you need." |
+| 23.0–26.5s | Type on black, outline draws around it | "Wai writes it all. You get heard." |
+| 26.5–29.0s | Three glass cards | Clinical note: Drafted while you talk · Letters: Ready to sign · Coding: Done for you |
+| 29.0–33.3s | Cards merge to a line, logo glows up | Wai logo · "Care, uninterrupted." · wellnessa-i.com |
 
-The visuals are in `src/eleven/ElevenSeconds.tsx`, with the beat timings at the top. The logo is `public/wai/wai-logo-white.webp`.
+The stat source ("J Gen Intern Med, 2018") sits as a footnote on the three halftone scenes. Transitions between scenes are pixel-block wipes on the 120px background grid.
+
+## Code
+
+- `src/eleven/ElevenSeconds.tsx`: the timeline (scene windows in frames) and transitions
+- `src/eleven/scenes.tsx`: the collages, halftone hero scenes, red-to-orb bloom, chat and outro
+- `src/eleven/parts.tsx`: shared pieces (grid, canvas halftone, block wipe, typed text, cutout tiles, glass pill)
+
+## Assets
+
+All CC0. Credits are in [`public/eleven/CREDITS.md`](public/eleven/CREDITS.md).
+
+- `public/eleven/obj/`: cutouts. Most are Poly Haven studio renders, plus two rawpixel photos with the background removed.
+- `public/eleven/3d/`: 72-frame rotations of the alarm clock, pocket watch and laptop. I rendered these from Poly Haven's glTF models with three.js, with the clock hands set to 10:10:11 and a note on the laptop screen.
+- `scripts/eleven-assets/`: rebuilds all of the above (`fetch_assets.py`, `render.mjs`).
 
 ## Music
 
-`scripts/make_eleven_audio.py` writes `public/eleven/soundtrack.wav`. It's a warm, upbeat groove at 104 BPM in F major: Rhodes comping and a warm pad played through FluidSynth with the FluidR3 GM soundfont, plus a funky octave synth bass, a soft analogue-style lead hook, swung drums and sidechain pump, all made in code. If you change the beat timings, update `B1`–`B6` and re-run it. To use a licensed track instead, replace the WAV.
+`scripts/make_eleven_audio.py` writes `public/eleven/soundtrack.wav`: a warm, upbeat groove at 104 BPM in F major. It stays light through the collages, cuts out for a moment, drops into the full groove when the orb appears (as the reference does), and ends on a chord under the logo. There's no voiceover and there are no sound effects. To use a licensed track instead, replace the WAV.

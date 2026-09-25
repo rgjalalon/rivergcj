@@ -1,3 +1,7 @@
 node_modules
 out
 .DS_Store
+scripts/eleven-assets/node_modules/
+scripts/eleven-assets/models/
+scripts/eleven-assets/out/
+scripts/eleven-assets/studio.hdr
