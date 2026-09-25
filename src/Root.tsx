@@ -6,7 +6,7 @@ import {WellnessAppWalkthrough} from './WellnessAppWalkthrough';
 import {DURATION, FPS} from './timeline';
 import {WaiFilm} from './wai/WaiFilm';
 import {BACKLOG_DURATION, BACKLOG_FPS, BACKLOG_H, BACKLOG_W, WaiBacklog} from './wai/Backlog';
-import {SHORT_DURATION, SHORT_FPS, SHORT_H, SHORT_W, WaiShortfall} from './wai/Shortfall';
+import {SHORT_DURATION, SHORT_FPS, SHORT_H, SHORT_W, verticalDuration, WaiShortfall, WaiShortfallVertical} from './wai/Shortfall';
 import {WAI_DURATION, WAI_FPS, WAI_H, WAI_W} from './wai/timeline';
 
 export const RemotionRoot: React.FC = () => {
@@ -44,6 +44,18 @@ export const RemotionRoot: React.FC = () => {
         width={SHORT_W}
         height={SHORT_H}
       />
+      {(['count', 'burnout', 'question'] as const).map((hook) => (
+        <Composition
+          key={hook}
+          id={`WaiShortfall-9x16-${hook}`}
+          component={WaiShortfallVertical}
+          defaultProps={{hook}}
+          durationInFrames={verticalDuration(hook)}
+          fps={SHORT_FPS}
+          width={1080}
+          height={1920}
+        />
+      ))}
       <Still id="InflammationPost" component={InflammationPost} width={POST_W} height={POST_H} />
       <Still id="LpaPost" component={LpaPost} width={LPA_W} height={LPA_H} />
       {SLIDES.map((_, i) => (
