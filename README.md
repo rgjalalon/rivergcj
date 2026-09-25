@@ -68,3 +68,22 @@ npm run render:wai   # writes out/wai-brand-film.mp4
 **Footage:** the real-life shots are placeholders until clips are added. See `public/wai/footage/README.md` for filenames and the shot list. The grade (warm highlights, espresso shadows, film grain, vignette) is applied automatically in `src/wai/Footage.tsx`.
 
 Shot timings, collage beats and captions are in `src/wai/timeline.ts`. The logo is `public/wai/wai-logo-cream.png`.
+
+---
+
+# Wai: "The 30 hours" (16:9)
+
+A 36-second landscape kinetic-type film (1920×1080, 30fps). Dark UI, one caramel accent, subtle grid, no voiceover.
+
+**Rendered file:** [`renders/wai-the-30-hours.mp4`](renders/wai-the-30-hours.mp4) · `npm run render:wai-30h`
+
+| Time | Beat |
+|---|---|
+| 0–5s | Weekly bar fills to 57.8 h (AMA, 2024, n=18,000) |
+| 5–10s | Split: 27.2 h patient care glows, 30.6 h "everything else" in gray |
+| 10–16s | Gray breaks into task cards that pile up and squeeze the care segment |
+| 16–20s | "Every hour spent on a form…" |
+| 20–27s | Wai assistant ticks off cards one by one; care segment floods the frame |
+| 27–36s | Closing line, then the Wai logo fades in bottom-centre |
+
+All timing and layout lives in `src/wai/Backlog.tsx`. Logo: `public/wai/wai-logo-white.webp`.
