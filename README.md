@@ -73,7 +73,7 @@ Shot timings, collage beats and captions are in `src/wai/timeline.ts`. The logo 
 
 # Wai: "The 30 hours" (16:9)
 
-A 29-second landscape kinetic-type film (1920×1080, 30fps). Dark UI, one caramel accent, subtle grid, no voiceover. Motion follows the reference edit: type at huge scale that pulls back, a camera that keeps drifting (push-ins, 3D tilt, depth blur, motion blur on fast moves), zoom-through transitions, and a glass prompt bar with a cursor click.
+A 29-second landscape kinetic-type film (1920×1080, 30fps). White UI with blue as the hero colour (patient care, flood, logo) and orange used sparingly (carets, ticks on cleared cards, the word "not"), soft drifting blue gradient, subtle grid, no voiceover. Motion follows the reference edit: type at huge scale that pulls back, a camera that keeps drifting (push-ins, 3D tilt, depth blur, motion blur on fast moves), zoom-through transitions, and a glass prompt bar with a cursor click.
 
 **Rendered file:** [`renders/wai-the-30-hours.mp4`](renders/wai-the-30-hours.mp4) · `npm run render:wai-30h`
 
