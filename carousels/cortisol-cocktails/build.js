@@ -1,6 +1,6 @@
 // builds canva/index.html (absolute image URLs, for Canva import) and canva/preview.html (local)
 const fs=require('fs');
-const BASE='https://raw.githubusercontent.com/rgjalalon/rivergcj/claude/eager-wozniak-lex3fo/carousels/cortisol-cocktails/canva/';
+const BASE='https://raw.githubusercontent.com/rgjalalon/rivergcj/7f2ed69cda389f77753e4d028c61d90600ec3cdc/carousels/cortisol-cocktails/canva/';
 const INK='#2B2019',MUTE='#8A7B6D',CREAM='#F3EDE4',PAPER='#FAF7F2',AMBER='#D98A2B',GOLD='#F2B45E';
 const page=(label,inner,bg=CREAM)=>`<div data-document-role="page" data-label="${label}" style="width:1080px;height:1350px;position:relative;overflow:hidden;background:${bg}">${inner}</div>\n`;
 const abs=(css,inner='')=>`<div style="position:absolute;${css}">${inner}</div>`;
