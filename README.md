@@ -89,7 +89,7 @@ A 43-second 16:9 film (1920×1080, 30fps, music only). It follows the reference 
 | 34.5–37.8s | Three glass cards | Clinical note: Drafted while you talk · Letters: Ready to sign · Coding: Done for you |
 | 37.8–43.3s | Cards merge to a line, logo glows up | Wai logo · "Care, uninterrupted." · wellnessa-i.com |
 
-The stat source ("J Gen Intern Med, 2018") sits as a footnote on the three halftone scenes. Transitions between scenes are soft pixel-block dissolves on the 120px background grid. The blocks open in a staggered wave with a brief tinted flash, the outgoing scene drifts forward, and the incoming one settles from a slight zoom.
+The stat source ("J Gen Intern Med, 2018") sits as a footnote on the three halftone scenes. The palette is Wai's own: cream, espresso, caramel and taupe (from `src/theme.ts`), with sage as a fresh accent. The halftone scenes are sage, the statement is caramel and espresso, the orb is a pearl, and the chat and cards are warm neutrals. Transitions between scenes are soft pixel-block dissolves on the 120px background grid. The blocks open in a staggered wave with a brief tinted flash, the outgoing scene drifts forward, and the incoming one settles from a slight zoom.
 
 ## Code
 

@@ -5,7 +5,7 @@ import {fonts} from '../theme';
 export const W = 1920;
 export const H = 1080;
 export const CELL = 120; // grid cell; block wipes use the same grid
-export const ink = '#111111';
+export const ink = '#2A1F17';
 export const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
 // Deterministic pseudo-random in [0, 1)
@@ -23,9 +23,9 @@ export const useSpr = (f: number, delay: number, damping = 13, stiffness = 170, 
 export const GridBg: React.FC = () => (
   <AbsoluteFill
     style={{
-      backgroundColor: '#EFEEEA',
+      backgroundColor: '#F5F0E8',
       backgroundImage:
-        'linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px)',
+        'linear-gradient(rgba(62,47,35,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(62,47,35,0.06) 1px, transparent 1px)',
       backgroundSize: `${CELL}px ${CELL}px`,
     }}
   />
@@ -37,15 +37,15 @@ export type Palette = {
   dark: [number, number, number];
 };
 
-export const BLUE: Palette = {
-  base: ['#2F6E9E', '#5A9CC0', '#1F4B72', '#8D9160', '#9CC3D6', '#3C7FA8'],
-  light: [214, 236, 246],
-  dark: [22, 58, 92],
+export const SAGE: Palette = {
+  base: ['#5E7F6C', '#8FAE95', '#3A5446', '#C89B6D', '#B9CDB9', '#6E8F7B'],
+  light: [236, 242, 228],
+  dark: [38, 58, 46],
 };
-export const RED: Palette = {
-  base: ['#D8322B', '#F07A3A', '#B01F3A', '#F4B25E', '#E4502F', '#8E1426'],
-  light: [255, 214, 170],
-  dark: [120, 16, 24],
+export const EMBER: Palette = {
+  base: ['#8A5A3B', '#C89B6D', '#3E2F23', '#E7C9A0', '#A86F48', '#2A1F17'],
+  light: [250, 228, 196],
+  dark: [40, 28, 20],
 };
 
 /** Blurred gradient field + a printed halftone of vertical dashes over it. */
@@ -126,7 +126,7 @@ export const BlockWipe: React.FC<{
   flash?: string[];
   seed?: number;
   children: React.ReactNode;
-}> = ({p, from = 'right', flash = ['#FFFFFF', '#EFEEEA'], seed = 3, children}) => {
+}> = ({p, from = 'right', flash = ['#FFFFFF', '#F5F0E8'], seed = 3, children}) => {
   if (p <= 0) return null;
   const settle = 1 + 0.04 * (1 - easeOutCubic(Math.min(1, p)));
   if (p >= 1) return <AbsoluteFill>{children}</AbsoluteFill>;
@@ -172,8 +172,8 @@ export const BlockWipe: React.FC<{
               ...(k < flash.length
                 ? {background: flash[k]}
                 : {
-                    backgroundColor: '#E9E8E3',
-                    backgroundImage: 'radial-gradient(circle, rgba(60,80,60,0.55) 28%, transparent 32%)',
+                    backgroundColor: '#EDE5D9',
+                    backgroundImage: 'radial-gradient(circle, rgba(62,47,35,0.45) 28%, transparent 32%)',
                     backgroundSize: '9px 9px',
                   }),
             }}
@@ -285,7 +285,7 @@ export const Cutout: React.FC<{
         opacity: Math.min(1, s * 2),
       }}
     >
-      {tile && <div style={{position: 'absolute', inset: 0, background: '#E2E1DD'}} />}
+      {tile && <div style={{position: 'absolute', inset: 0, background: '#EAE1D4'}} />}
       <Img
         src={staticFile(`eleven/obj/${src}.webp`)}
         style={{
@@ -316,7 +316,7 @@ export const Dots: React.FC<{f: number; x: number; y: number; w: number; h: numb
   w,
   h,
   d,
-  color = 'rgba(70,90,70,0.6)',
+  color = 'rgba(62,47,35,0.45)',
   out = 9999,
 }) => {
   if (f < d || f > out) return null;

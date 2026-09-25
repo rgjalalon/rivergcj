@@ -41,9 +41,9 @@ const Exit: React.FC<{f: number; next: Key; children: React.ReactNode}> = ({f, n
 
 export const ElevenSeconds: React.FC = () => {
   const f = useCurrentFrame();
-  const blueFlash = ['#3C7FA8', '#5A9CC0', '#8D9160'];
-  const greyFlash = ['#E2E1DD', '#EFEEEA', '#9CC3D6'];
-  const redFlash = ['#E4502F', '#F4B25E', '#B01F3A'];
+  const blueFlash = ['#6E8F7B', '#8FAE95', '#C89B6D'];
+  const greyFlash = ['#EAE1D4', '#F5F0E8', '#9CC3D6'];
+  const redFlash = ['#A86F48', '#E7C9A0', '#3E2F23'];
   const c = (k: Key) => local(f, k) * PACE.collage;
   const h = (k: Key) => local(f, k) * PACE.hero;
 
@@ -56,7 +56,7 @@ export const ElevenSeconds: React.FC = () => {
   const lift = interpolate(ci, [60, 70, 118, 128], [0, -40, -40, -80], {...clamp, easing: smooth});
 
   return (
-    <AbsoluteFill style={{background: '#000'}}>
+    <AbsoluteFill style={{background: '#17110D'}}>
       <Audio src={staticFile('eleven/soundtrack.wav')} />
       {on(f, 'c1') && (
         <Exit f={f} next="h1">

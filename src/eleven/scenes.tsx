@@ -2,7 +2,7 @@ import React from 'react';
 import {AbsoluteFill, Easing, Img, interpolate, staticFile} from 'remotion';
 import {fonts} from '../theme';
 import {
-  BLUE,
+  SAGE,
   Cutout,
   Dots,
   GlassPill,
@@ -10,7 +10,7 @@ import {
   GridBg,
   H,
   HalftoneBg,
-  RED,
+  EMBER,
   Typed,
   W,
   Word,
@@ -51,8 +51,8 @@ const AppTile: React.FC<{f: number; x: number; y: number; d: number}> = ({f, x, 
         width: 92,
         height: 92,
         borderRadius: 22,
-        background: 'linear-gradient(160deg, #FF9A62, #F0643A)',
-        boxShadow: '0 10px 24px rgba(240,100,58,0.35)',
+        background: 'linear-gradient(160deg, #D9B08A, #A86F48)',
+        boxShadow: '0 10px 24px rgba(168,111,72,0.35)',
         transform: `scale(${s})`,
         display: 'flex',
         alignItems: 'center',
@@ -80,11 +80,11 @@ const BlueChip: React.FC<{f: number; x: number; y: number; d: number; label: str
           fontSize: 30,
           fontWeight: 500,
           color: '#fff',
-          background: '#2F7CF6',
+          background: '#5E7F6C',
           padding: '9px 18px',
           borderRadius: 10,
           transform: `scale(${click})`,
-          boxShadow: '0 8px 20px rgba(47,124,246,0.35)',
+          boxShadow: '0 8px 20px rgba(94,127,108,0.35)',
           whiteSpace: 'nowrap',
         }}
       >
@@ -109,7 +109,7 @@ const ConsultCard: React.FC<{f: number; x: number; y: number; d: number}> = ({f,
         width: 300,
         padding: '18px 22px',
         borderRadius: 14,
-        background: 'linear-gradient(160deg, #134536, #0B2E24)',
+        background: 'linear-gradient(160deg, #4A392B, #2A1F17)',
         border: '1.5px solid rgba(255,255,255,0.15)',
         boxShadow: '0 14px 30px rgba(0,0,0,0.22)',
         transform: `scale(${s})`,
@@ -121,7 +121,7 @@ const ConsultCard: React.FC<{f: number; x: number; y: number; d: number}> = ({f,
       <div style={{fontSize: 26, fontWeight: 500}}>Consult</div>
       <div style={{fontSize: 15, opacity: 0.65, marginTop: 4}}>Today · 09:40 – 09:50</div>
       <div style={{display: 'flex', gap: 8, marginTop: 12}}>
-        <div style={{width: 44, height: 12, borderRadius: 6, background: '#3E9E6E'}} />
+        <div style={{width: 44, height: 12, borderRadius: 6, background: '#8FAE95'}} />
         <div style={{width: 70, height: 12, borderRadius: 6, background: 'rgba(255,255,255,0.8)'}} />
       </div>
     </div>
@@ -145,7 +145,7 @@ export const Collage1: React.FC<{f: number}> = ({f}) => (
       <Cutout f={f} src="lemon" x={1680} y={850} size={160} d={44} />
       <Cutout f={f} src="tea_set_01" x={60} y={50} size={200} d={40} />
       <Dots f={f} x={1690} y={0} w={240} h={120} d={56} />
-      <Dots f={f} x={0} y={960} w={240} h={120} d={60} color="rgba(226,80,40,0.7)" />
+      <Dots f={f} x={0} y={960} w={240} h={120} d={60} color="rgba(200,155,109,0.85)" />
     </Camera>
   </AbsoluteFill>
 );
@@ -241,7 +241,7 @@ export const Hero: React.FC<{f: number; seq: 'clock' | 'pwatch' | 'laptop'; seed
   const blink = Math.floor(f / 6) % 2 === 0;
   return (
     <AbsoluteFill>
-      <HalftoneBg f={f + seed * 40} pal={BLUE} seed={seed} />
+      <HalftoneBg f={f + seed * 40} pal={SAGE} seed={seed} />
       <Img
         src={staticFile(`eleven/3d/${seq}/${String(idx).padStart(3, '0')}.webp`)}
         style={{
@@ -251,13 +251,13 @@ export const Hero: React.FC<{f: number; seq: 'clock' | 'pwatch' | 'laptop'; seed
           width: size,
           height: size,
           transform: `translate(${tx}px, ${bob}px) scale(${sc})`,
-          filter: 'drop-shadow(0 40px 40px rgba(0,20,40,0.35))',
+          filter: 'drop-shadow(0 40px 40px rgba(30,40,30,0.35))',
         }}
       />
       {f >= 12 && (
         <div style={{position: 'absolute', left: pill.x, top: pill.y, transform: `scale(${pillIn})`, transformOrigin: 'left center'}}>
           <GlassPill>
-            <span style={{width: 10, height: 10, borderRadius: 5, background: '#FF5A4A', opacity: secs >= 11 ? 1 : blink ? 1 : 0.3}} />
+            <span style={{width: 10, height: 10, borderRadius: 5, background: '#E8A46A', opacity: secs >= 11 ? 1 : blink ? 1 : 0.3}} />
             <span style={{fontVariantNumeric: 'tabular-nums'}}>0:{String(secs).padStart(2, '0')}</span>
             <Typed text="Interrupted" f={f} start={37} cpf={1.2} fade={3} />
           </GlassPill>
@@ -285,10 +285,10 @@ export const Hero: React.FC<{f: number; seq: 'clock' | 'pwatch' | 'laptop'; seed
 export const ORB = {x: W / 2, y: H / 2};
 
 const orbFill = (t: number) =>
-  `radial-gradient(circle at ${40 + Math.sin(t * 1.3) * 18}% ${35 + Math.cos(t * 1.1) * 15}%, #FFFBE6 0%, #FFE9A0 22%, transparent 48%),
-   radial-gradient(circle at ${70 + Math.cos(t * 0.9) * 15}% ${70 + Math.sin(t * 1.2) * 12}%, #FF6A4D 0%, transparent 45%),
-   radial-gradient(circle at ${25 + Math.sin(t * 0.7) * 12}% ${75 + Math.cos(t) * 10}%, #F7A8C8 0%, transparent 40%),
-   radial-gradient(circle at 50% 50%, #FFC36B 0%, #F2703F 100%)`;
+  `radial-gradient(circle at ${40 + Math.sin(t * 1.3) * 18}% ${35 + Math.cos(t * 1.1) * 15}%, #FFFBE6 0%, #F6E3C3 22%, transparent 48%),
+   radial-gradient(circle at ${70 + Math.cos(t * 0.9) * 15}% ${70 + Math.sin(t * 1.2) * 12}%, #C89B6D 0%, transparent 45%),
+   radial-gradient(circle at ${25 + Math.sin(t * 0.7) * 12}% ${75 + Math.cos(t) * 10}%, #A9C4AE 0%, transparent 40%),
+   radial-gradient(circle at 50% 50%, #E7C9A0 0%, #A86F48 100%)`;
 
 export const Orb: React.FC<{t: number; r: number; glow?: number; style?: React.CSSProperties}> = ({t, r, glow = 1, style}) => (
   <div
@@ -317,7 +317,7 @@ export const Bloom: React.FC<{f: number}> = ({f}) => {
   const rings = interpolate(f, [52, 70], [0, 1], clamp);
   const textO = interpolate(f, [34, 42], [1, 0], clamp);
   return (
-    <AbsoluteFill style={{background: '#000'}}>
+    <AbsoluteFill style={{background: '#17110D'}}>
       {/* red halftone, clipped to a shrinking circle */}
       <AbsoluteFill
         style={{
@@ -326,7 +326,7 @@ export const Bloom: React.FC<{f: number}> = ({f}) => {
           transform: `scale(${interpolate(shrink, [0, 1], [1, 0.7])})`,
         }}
       >
-        <HalftoneBg f={f} pal={RED} seed={4} />
+        <HalftoneBg f={f} pal={EMBER} seed={4} />
         <AbsoluteFill style={{alignItems: 'center', justifyContent: 'center', opacity: textO}}>
           <div style={{fontFamily: fonts.sans, fontSize: 40, fontWeight: 500, color: '#fff', letterSpacing: -0.6}}>
             <Typed text="What if no one had to?" f={f} start={4} cpf={0.9} fade={4} />
@@ -339,7 +339,7 @@ export const Bloom: React.FC<{f: number}> = ({f}) => {
           <linearGradient id="ringg" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0" stopColor="#fff" stopOpacity={0.8} />
             <stop offset="0.5" stopColor="#fff" stopOpacity={0.15} />
-            <stop offset="1" stopColor="#b8d8ff" stopOpacity={0.75} />
+            <stop offset="1" stopColor="#CFE0CF" stopOpacity={0.75} />
           </linearGradient>
         </defs>
         {[300, 560, 860].map((r, i) => (
@@ -415,12 +415,12 @@ export const Chat: React.FC<{f: number; len: number}> = ({f, len}) => {
     <AbsoluteFill>
       <AbsoluteFill
         style={{
-          background: `radial-gradient(ellipse at ${blob(0, 35, 30)}, #1F4A1C 0%, transparent 45%),
-            radial-gradient(ellipse at ${blob(1, 45, 30)}, #C9B63A 0%, transparent 38%),
-            radial-gradient(ellipse at ${blob(2, 40, 40)}, #A9D2E6 0%, transparent 42%),
-            radial-gradient(ellipse at ${blob(3, 40, 35)}, #3F7E34 0%, transparent 50%),
-            radial-gradient(ellipse at ${blob(4, 30, 30)}, #D8A27E 0%, transparent 30%),
-            #4C7D45`,
+          background: `radial-gradient(ellipse at ${blob(0, 35, 30)}, #3E2F23 0%, transparent 45%),
+            radial-gradient(ellipse at ${blob(1, 45, 30)}, #C89B6D 0%, transparent 38%),
+            radial-gradient(ellipse at ${blob(2, 40, 40)}, #B9CDB9 0%, transparent 42%),
+            radial-gradient(ellipse at ${blob(3, 40, 35)}, #6E8F7B 0%, transparent 50%),
+            radial-gradient(ellipse at ${blob(4, 30, 30)}, #E7C9A0 0%, transparent 30%),
+            #7C6A58`,
           filter: 'blur(40px)',
           transform: 'scale(1.1)',
         }}
@@ -430,7 +430,7 @@ export const Chat: React.FC<{f: number; len: number}> = ({f, len}) => {
         <Bubble f={f} d={62} side="r" label="Patient" text="It started last week, and at night it gets worse…" x={900} y={CHAT_AVATAR.y + 110} />
         <Bubble f={f} d={120} side="r" label="Doctor" text="Take all the time you need." x={760} y={CHAT_AVATAR.y + 300} />
       </AbsoluteFill>
-      <AbsoluteFill style={{background: '#000', opacity: dark}} />
+      <AbsoluteFill style={{background: '#17110D', opacity: dark}} />
     </AbsoluteFill>
   );
 };
@@ -439,9 +439,9 @@ export const Chat: React.FC<{f: number; len: number}> = ({f, len}) => {
 const CARD_W = 360;
 const CARD_H = 220;
 const cards = [
-  {title: 'Clinical note', sub: 'Drafted while you talk', g: 'radial-gradient(circle at 70% 30%, #6FA36A, transparent 60%), radial-gradient(circle at 20% 80%, #2E6E7A, transparent 60%), #3D7348'},
-  {title: 'Letters', sub: 'Ready to sign', g: 'radial-gradient(circle at 30% 20%, #B9CF7A, transparent 55%), radial-gradient(circle at 80% 80%, #2F5E2A, transparent 60%), #4E8A45'},
-  {title: 'Coding', sub: 'Done for you', g: 'radial-gradient(circle at 20% 90%, #E0CE52, transparent 55%), radial-gradient(circle at 80% 20%, #5E8F4A, transparent 60%), #7F8F3A'},
+  {title: 'Clinical note', sub: 'Drafted while you talk', g: 'radial-gradient(circle at 70% 30%, #8FAE95, transparent 60%), radial-gradient(circle at 20% 80%, #3A5446, transparent 60%), #5E7F6C'},
+  {title: 'Letters', sub: 'Ready to sign', g: 'radial-gradient(circle at 30% 20%, #E7C9A0, transparent 55%), radial-gradient(circle at 80% 80%, #6B4A33, transparent 60%), #A86F48'},
+  {title: 'Coding', sub: 'Done for you', g: 'radial-gradient(circle at 20% 90%, #F6E3C3, transparent 55%), radial-gradient(circle at 80% 20%, #8C7A66, transparent 60%), #B8A691'},
 ];
 
 const CardIcon: React.FC<{i: number}> = ({i}) => {
@@ -500,7 +500,7 @@ export const Outro: React.FC<{f: number}> = ({f}) => {
   const gap = 36;
   const cardsVisible = f >= 104 && collapse < 1;
   return (
-    <AbsoluteFill style={{background: '#000', opacity: out}}>
+    <AbsoluteFill style={{background: '#17110D', opacity: out}}>
       {f < 110 && (
         <AbsoluteFill style={{alignItems: 'center', justifyContent: 'center', opacity: textO}}>
           <div style={{fontFamily: fonts.sans, fontSize: 36, fontWeight: 500, color: '#fff', letterSpacing: -0.4}}>
@@ -550,9 +550,9 @@ export const Outro: React.FC<{f: number}> = ({f}) => {
                 width: w,
                 height: h,
                 borderRadius: interpolate(merge, [0, 1], [18, 0]),
-                background: collapse > 0.6 ? 'linear-gradient(90deg,#CFE6F2,#7FB069,#D9C65A)' : c.g,
+                background: collapse > 0.6 ? 'linear-gradient(90deg,#F6E3C3,#8FAE95,#C89B6D)' : c.g,
                 border: isC && merge < 0.5 ? '1.5px solid rgba(255,255,255,0.55)' : '1px solid rgba(255,255,255,0.12)',
-                boxShadow: isC ? '0 0 60px rgba(120,190,110,0.25)' : 'none',
+                boxShadow: isC ? '0 0 60px rgba(200,155,109,0.3)' : 'none',
                 opacity: o,
                 overflow: 'hidden',
                 fontFamily: fonts.sans,
@@ -580,9 +580,9 @@ export const Outro: React.FC<{f: number}> = ({f}) => {
             top: cy + 59,
             width: 1240,
             height: 2,
-            background: 'linear-gradient(90deg, transparent, #CFE6F2 20%, #9CCB7F 50%, #D9C65A 80%, transparent)',
+            background: 'linear-gradient(90deg, transparent, #F6E3C3 20%, #8FAE95 50%, #C89B6D 80%, transparent)',
             opacity: lineFade,
-            boxShadow: '0 0 18px rgba(200,230,180,0.6)',
+            boxShadow: '0 0 18px rgba(231,201,160,0.6)',
           }}
         />
       )}
