@@ -94,7 +94,7 @@ All timing, camera keys and layout live in `src/wai/Backlog.tsx`. Logo: `public/
 
 # Wai: "The Other 8,759" (16:9)
 
-A 33-second landscape film (1920×1080, 30fps, no audio). It's built as one real-time 3D scene in Three.js, via `@remotion/three`: 8,760 glossy rounded cubes, one for every hour of the year. Kinetic chrome type sits on top, and it ends on a glossy logo card.
+A 33-second landscape film (1920×1080, 30fps) with synthesised sound design. It's built as one real-time 3D scene in Three.js, via `@remotion/three`: 8,760 glossy rounded cubes, one for every hour of the year. Kinetic chrome type sits on top, and it ends on a glossy logo card.
 
 **Rendered file:** [`renders/the-other-8759.mp4`](renders/the-other-8759.mp4)
 
@@ -114,3 +114,5 @@ npm run render:other   # writes out/the-other-8759.mp4 (uses --gl=angle for WebG
 | 28.6–33.0s | 7b | End card: the extruded chrome Wai logo rises with a sheen and a floor reflection |
 
 Timing, camera keyframes and vignette positions are in `src/other/timeline.ts`. The 3D scene is in `src/other/Field.tsx`, the type in `src/other/Type.tsx`, and copy plus the end card in `src/other/Film.tsx`. The logo is `public/wai/wai-logo-white.png`.
+
+**Sound:** a warm ambient pad in D (with a soft pulse from beat 5 onward) and glossy UI effects timed to the frame: tiny ticks as the cubes rise, a soft tap for every word that lands, bubbly pops for the tags and vignettes, a glass chime and low thump when the cube ignites, whooshes on camera sweeps, a ticking count-up, a boom, shimmer and heartbeat thumps for the wave, and a riser, thump and sheen chime into the logo. Regenerate with `pip install numpy scipy && python3 scripts/other-8759-audio.py` (writes `public/wai/other-8759-audio.wav`). Cue frames mirror `src/other/timeline.ts`.

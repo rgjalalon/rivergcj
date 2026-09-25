@@ -1,5 +1,5 @@
 import {ThreeCanvas} from '@remotion/three';
-import {AbsoluteFill, Easing, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Audio, Easing, staticFile, useCurrentFrame} from 'remotion';
 import * as THREE from 'three';
 import '../loadFonts';
 import {Grain} from '../components/Grain';
@@ -291,6 +291,7 @@ export const OtherFilm: React.FC = () => {
   const fadeOut = ease(frame, 960, 30);
   return (
     <AbsoluteFill style={{background: '#050404'}}>
+      <Audio src={staticFile('wai/other-8759-audio.wav')} />
       {frame < BEAT.logo + 2 && (
         <ThreeCanvas width={W} height={H} camera={{fov: 38, near: 0.1, far: 400}} gl={{antialias: true}}>
           <Field />
