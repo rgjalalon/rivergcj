@@ -87,4 +87,6 @@ A 29-second landscape kinetic-type film (1920×1080, 30fps). Dark UI, one carame
 | 19.7–23s | Cards tick off in quick succession; care segment floods the frame |
 | 23–29s | Closing line, then the Wai logo fades in bottom-centre |
 
+**Sound:** an original synthesised score (pad chords D → G → Bm → G → A → D, sub pulse, glass arpeggio) with effects timed to the frame: typing ticks, whooshes on camera moves, thumps as cards land, a click on send, rising pentatonic plucks as each card clears, an impact on the flood and a chime under the logo. Regenerate with `pip install numpy scipy && python3 scripts/wai-30h-audio.py` (writes `public/wai/30h-score.wav`); cue frames mirror `src/wai/Backlog.tsx`.
+
 All timing, camera keys and layout live in `src/wai/Backlog.tsx`. Logo: `public/wai/wai-logo-white.webp`.

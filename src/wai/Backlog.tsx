@@ -1,5 +1,5 @@
 import '../loadFonts';
-import {AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Audio, Easing, Img, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import {Grain, Vignette} from '../components/Grain';
 import {fonts} from '../theme';
 
@@ -245,6 +245,7 @@ export const WaiBacklog: React.FC = () => {
 
   return (
     <AbsoluteFill style={{background: C.bg, overflow: 'hidden'}}>
+      <Audio src={staticFile('wai/30h-score.wav')} />
       <Blob f={f} strength={f < B.line ? 0.35 : f < B.close ? 0.6 : 1} />
       <Grid />
 
