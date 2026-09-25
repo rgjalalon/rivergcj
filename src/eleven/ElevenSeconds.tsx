@@ -1,8 +1,8 @@
 import React from 'react';
 import {AbsoluteFill, Audio, Easing, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import '../loadFonts';
-import {BlockWipe, clamp} from './parts';
-import {Bloom, CHAT_AVATAR, CHAT_LIFT, Chat, Collage1, Collage2, Collage3, Collage4, Hero, ORB, Orb, Outro} from './scenes';
+import {BlockWipe, clamp, useDims} from './parts';
+import {Bloom, CHAT_LIFT, Chat, chatAvatar, orbAt, Collage1, Collage2, Collage3, Collage4, Hero, Orb, Outro} from './scenes';
 
 export const ELEVEN_FPS = 30;
 
@@ -41,6 +41,9 @@ const Exit: React.FC<{f: number; next: Key; children: React.ReactNode}> = ({f, n
 
 export const ElevenSeconds: React.FC = () => {
   const f = useCurrentFrame();
+  const {W, H, v} = useDims();
+  const ORB = orbAt(W, H);
+  const CHAT_AVATAR = chatAvatar(v);
   const blueFlash = ['#6E8F7B', '#8FAE95', '#C89B6D'];
   const greyFlash = ['#EAE1D4', '#F5F0E8', '#9CC3D6'];
   const redFlash = ['#A86F48', '#E7C9A0', '#3E2F23'];
@@ -111,7 +114,7 @@ export const ElevenSeconds: React.FC = () => {
         </BlockWipe>
       )}
       {on(f, 'chat') && (
-        <AbsoluteFill style={{clipPath: `circle(${interpolate(reveal, [0, 1], [190, 1200])}px at ${ORB.x}px ${ORB.y}px)`}}>
+        <AbsoluteFill style={{clipPath: `circle(${interpolate(reveal, [0, 1], [190, Math.hypot(W, H) / 2 + 60])}px at ${ORB.x}px ${ORB.y}px)`}}>
           <Chat f={ci} len={chatLen} />
         </AbsoluteFill>
       )}

@@ -4,6 +4,12 @@ import {fonts} from '../theme';
 
 export const W = 1920;
 export const H = 1080;
+
+/** Frame size of the current composition (landscape or vertical). */
+export const useDims = () => {
+  const {width, height} = useVideoConfig();
+  return {W: width, H: height, v: height > width};
+};
 export const CELL = 120; // grid cell; block wipes use the same grid
 export const ink = '#2A1F17';
 export const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
@@ -51,6 +57,7 @@ export const EMBER: Palette = {
 /** Blurred gradient field + a printed halftone of vertical dashes over it. */
 export const HalftoneBg: React.FC<{f: number; pal: Palette; seed?: number}> = ({f, pal, seed = 1}) => {
   const ref = useRef<HTMLCanvasElement>(null);
+  const {W, H} = useDims();
   const t = f / 30;
   useLayoutEffect(() => {
     const c = ref.current;
@@ -89,7 +96,7 @@ export const HalftoneBg: React.FC<{f: number; pal: Palette; seed?: number}> = ({
       x.fillStyle = `rgba(${dr},${dg},${db},${0.25 + k * 0.05})`;
       rs.forEach((r) => x.fillRect(r[0], r[1], r[2], r[3]));
     });
-  }, [t, pal, seed]);
+  }, [t, pal, seed, W, H]);
   const b = pal.base;
   const p = (i: number, a: number, r: number) =>
     `${50 + Math.sin(t * 0.3 + i * 1.7 + seed) * a}% ${50 + Math.cos(t * 0.25 + i * 2.3 + seed) * r}%`;

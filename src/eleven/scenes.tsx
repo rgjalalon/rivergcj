@@ -19,6 +19,7 @@ import {
   collageText,
   ink,
   useSpr,
+  useDims,
 } from './parts';
 
 const ease = Easing.bezier(0.22, 1, 0.36, 1);
@@ -128,7 +129,7 @@ const ConsultCard: React.FC<{f: number; x: number; y: number; d: number}> = ({f,
   );
 };
 
-export const Collage1: React.FC<{f: number}> = ({f}) => (
+const Collage1H: React.FC<{f: number}> = ({f}) => (
   <AbsoluteFill>
     <GridBg />
     <Camera f={f}>
@@ -150,7 +151,7 @@ export const Collage1: React.FC<{f: number}> = ({f}) => (
   </AbsoluteFill>
 );
 
-export const Collage2: React.FC<{f: number}> = ({f}) => (
+const Collage2H: React.FC<{f: number}> = ({f}) => (
   <AbsoluteFill>
     <GridBg />
     <Camera f={f}>
@@ -170,7 +171,7 @@ export const Collage2: React.FC<{f: number}> = ({f}) => (
   </AbsoluteFill>
 );
 
-export const Collage3: React.FC<{f: number}> = ({f}) => (
+const Collage3H: React.FC<{f: number}> = ({f}) => (
   <AbsoluteFill>
     <GridBg />
     <Camera f={f}>
@@ -191,7 +192,7 @@ export const Collage3: React.FC<{f: number}> = ({f}) => (
   </AbsoluteFill>
 );
 
-export const Collage4: React.FC<{f: number}> = ({f}) => (
+const Collage4H: React.FC<{f: number}> = ({f}) => (
   <AbsoluteFill>
     <GridBg />
     <Camera f={f} drift={0.6} zoom={[1.12, 0.9, 98]}>
@@ -220,6 +221,106 @@ export const Collage4: React.FC<{f: number}> = ({f}) => (
   </AbsoluteFill>
 );
 
+
+// ---------------------------------------------------------------- vertical (9:16) collage layouts
+const Collage1V: React.FC<{f: number}> = ({f}) => (
+  <AbsoluteFill>
+    <GridBg />
+    <Camera f={f} drift={0.8}>
+      <Word f={f} t="A patient starts" x={90} y={380} d={2} />
+      <Word f={f} t="to explain" x={330} y={470} d={14} />
+      <AppTile f={f} x={110} y={640} d={16} />
+      <Word f={f} t="why" x={300} y={760} d={24} />
+      <Glyph f={f} kind="chat" x={620} y={800} d={28} size={56} />
+      <Word f={f} t="they can't" x={420} y={930} d={30} />
+      <Word f={f} t="sleep." x={640} y={1060} d={38} />
+      <Cutout f={f} src="throw_pillows_01" x={640} y={100} size={320} d={20} />
+      <Cutout f={f} src="tea_set_01" x={60} y={110} size={220} d={40} />
+      <Cutout f={f} src="mug" x={80} y={1220} size={280} d={26} />
+      <Cutout f={f} src="potted_plant_04" x={440} y={1320} size={220} d={32} />
+      <Cutout f={f} src="round_spectacles" x={600} y={1480} size={360} d={38} tile={false} />
+      <Cutout f={f} src="lemon" x={140} y={1600} size={180} d={44} />
+      <Dots f={f} x={840} y={1800} w={240} h={120} d={56} />
+      <Dots f={f} x={0} y={0} w={240} h={120} d={60} color="rgba(200,155,109,0.85)" />
+    </Camera>
+  </AbsoluteFill>
+);
+
+const Collage2V: React.FC<{f: number}> = ({f}) => (
+  <AbsoluteFill>
+    <GridBg />
+    <Camera f={f} drift={0.8}>
+      <BlueChip f={f} x={90} y={360} d={3} label="Save note" />
+      <Word f={f} t="Another" x={120} y={560} d={2} />
+      <Word f={f} t="tries to" x={520} y={480} d={7} />
+      <Word f={f} t="describe" x={260} y={760} d={12} />
+      <Glyph f={f} kind="pulse" x={720} y={770} d={12} size={60} />
+      <Word f={f} t="the pain." x={480} y={900} d={18} />
+      <Cutout f={f} src="steth" x={600} y={80} size={380} d={4} />
+      <Cutout f={f} src="medical_box" x={60} y={1130} size={330} d={8} />
+      <Cutout f={f} src="medical_tape" x={480} y={1180} size={220} d={13} />
+      <Cutout f={f} src="wheelchair_01" x={560} y={1400} size={420} d={16} tile={false} />
+      <Cutout f={f} src="magnifying_glass_01" x={160} y={1560} size={200} d={20} />
+      <Dots f={f} x={0} y={1800} w={360} h={120} d={30} />
+    </Camera>
+  </AbsoluteFill>
+);
+
+const Collage3V: React.FC<{f: number}> = ({f}) => (
+  <AbsoluteFill>
+    <GridBg />
+    <Camera f={f} drift={0.8}>
+      <ConsultCard f={f} x={90} y={330} d={3} />
+      <Word f={f} t="Another" x={500} y={400} d={3} />
+      <Word f={f} t="just wants" x={200} y={600} d={8} />
+      <Word f={f} t="to ask" x={120} y={800} d={13} />
+      <Glyph f={f} kind="mic" x={420} y={815} d={13} size={56} />
+      <Word f={f} t="a question." x={530} y={790} d={17} />
+      <Cutout f={f} src="lightbulb_01" x={120} y={40} size={240} d={7} />
+      <Cutout f={f} src="office_notepads" x={720} y={80} size={240} d={5} />
+      <Cutout f={f} src="stationery_supplies" x={60} y={1060} size={280} d={10} />
+      <Cutout f={f} src="SchoolChair_01" x={560} y={980} size={440} d={14} tile={false} />
+      <Cutout f={f} src="desk_lamp_arm_01" x={120} y={1420} size={300} d={18} />
+      <Cutout f={f} src="binder_notebook" x={620} y={1520} size={240} d={22} />
+      <Dots f={f} x={840} y={1800} w={240} h={120} d={30} />
+    </Camera>
+  </AbsoluteFill>
+);
+
+const Collage4V: React.FC<{f: number}> = ({f}) => (
+  <AbsoluteFill>
+    <GridBg />
+    <Camera f={f} drift={0.3} zoom={[1.1, 0.92, 98]}>
+      <Word f={f} t="It's not rudeness." x={220} y={560} d={3} />
+      <Word f={f} t="Someone" x={120} y={720} d={28} />
+      <Glyph f={f} kind="doc" x={480} y={735} d={31} size={52} />
+      <Word f={f} t="has to" x={600} y={710} d={33} />
+      <Word f={f} t="write" x={220} y={880} d={39} />
+      <Word f={f} t="the note." x={480} y={880} d={45} />
+      <Cutout f={f} src="clipboard" x={90} y={150} size={260} d={6} />
+      <Cutout f={f} src="classic_laptop" x={560} y={1080} size={400} d={9} />
+      <Cutout f={f} src="vintage_stapler" x={680} y={170} size={260} d={13} />
+      <Cutout f={f} src="office_notepads" x={380} y={60} size={200} d={17} />
+      <Cutout f={f} src="binder_notebook" x={60} y={1150} size={280} d={20} />
+      <Cutout f={f} src="stationery_supplies" x={140} y={1480} size={240} d={24} />
+      <Cutout f={f} src="decorative_book_set_01" x={500} y={1500} size={380} d={28} tile={false} />
+      <Cutout f={f} src="cardboard_box_01" x={850} y={520} size={200} d={33} />
+      <Cutout f={f} src="wall_clock" x={880} y={900} size={180} d={48} />
+      <Cutout f={f} src="steth" x={-80} y={380} size={240} d={52} tile={false} />
+      <Cutout f={f} src="mug" x={-20} y={1760} size={200} d={44} />
+      <Cutout f={f} src="medical_box" x={400} y={1780} size={180} d={56} />
+      <Cutout f={f} src="desk_lamp_arm_01" x={760} y={1740} size={240} d={38} tile={false} />
+      <Cutout f={f} src="lightbulb_01" x={900} y={20} size={180} d={60} />
+      <Dots f={f} x={0} y={1000} w={240} h={120} d={70} />
+    </Camera>
+  </AbsoluteFill>
+);
+
+export const Collage1: React.FC<{f: number}> = ({f}) => (useDims().v ? <Collage1V f={f} /> : <Collage1H f={f} />);
+export const Collage2: React.FC<{f: number}> = ({f}) => (useDims().v ? <Collage2V f={f} /> : <Collage2H f={f} />);
+export const Collage3: React.FC<{f: number}> = ({f}) => (useDims().v ? <Collage3V f={f} /> : <Collage3H f={f} />);
+export const Collage4: React.FC<{f: number}> = ({f}) => (useDims().v ? <Collage4V f={f} /> : <Collage4H f={f} />);
+
 // =============================================================== hero (halftone) scenes
 const SEQ_N = 72;
 
@@ -230,6 +331,11 @@ export const Hero: React.FC<{f: number; seq: 'clock' | 'pwatch' | 'laptop'; seed
   size = 860,
   pill,
 }) => {
+  const {W, H, v} = useDims();
+  if (v) {
+    size = 980;
+    pill = {x: W / 2 + 60, y: H / 2 - 470};
+  }
   // swing in, then keep turning slowly
   const a = interpolate(f, [0, 26], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
   const idx = Math.round(Math.min(SEQ_N - 1, a * 56 + interpolate(f, [26, 60], [0, 9], clamp)));
@@ -273,6 +379,8 @@ export const Hero: React.FC<{f: number; seq: 'clock' | 'pwatch' | 'laptop'; seed
           color: 'rgba(255,255,255,0.8)',
           opacity: interpolate(f, [8, 16], [0, 1], clamp),
           letterSpacing: 0.2,
+          maxWidth: W - 120,
+          lineHeight: 1.4,
         }}
       >
         Average time a patient talks before being interrupted: 11 seconds · J Gen Intern Med, 2018
@@ -282,7 +390,7 @@ export const Hero: React.FC<{f: number; seq: 'clock' | 'pwatch' | 'laptop'; seed
 };
 
 // =============================================================== bloom: red → orb
-export const ORB = {x: W / 2, y: H / 2};
+export const orbAt = (W: number, H: number) => ({x: W / 2, y: H / 2});
 
 const orbFill = (t: number) =>
   `radial-gradient(circle at ${40 + Math.sin(t * 1.3) * 18}% ${35 + Math.cos(t * 1.1) * 15}%, #FFFBE6 0%, #F6E3C3 22%, transparent 48%),
@@ -308,6 +416,8 @@ export const Orb: React.FC<{t: number; r: number; glow?: number; style?: React.C
 );
 
 export const Bloom: React.FC<{f: number}> = ({f}) => {
+  const {W, H} = useDims();
+  const ORB = orbAt(W, H);
   const t = f / 30;
   // red field shrinks into a circle, then the circle becomes the orb
   const shrink = interpolate(f, [30, 50], [0, 1], {...clamp, easing: inOut});
@@ -377,19 +487,20 @@ const Bubble: React.FC<{
   wpf?: number;
 }> = ({f, d, side, label, text, x, y, wpf = 0.3}) => {
   const s = useSpr(f, d, 14, 170, 0.7);
+  const {v} = useDims();
   if (f < d) return null;
   return (
     <div style={{position: 'absolute', left: x, top: y, opacity: Math.min(1, s * 1.6), transform: `translateY(${(1 - s) * 18}px)`}}>
-      <div style={{fontFamily: fonts.sans, fontSize: 18, color: 'rgba(255,255,255,0.75)', marginBottom: 8, marginLeft: 4}}>{label}</div>
+      <div style={{fontFamily: fonts.sans, fontSize: v ? 24 : 18, color: 'rgba(255,255,255,0.75)', marginBottom: 8, marginLeft: 4}}>{label}</div>
       <div
         style={{
           fontFamily: fonts.sans,
-          fontSize: 30,
+          fontSize: v ? 40 : 30,
           lineHeight: 1.45,
           color: '#fff',
           padding: '20px 28px',
           borderRadius: 18,
-          maxWidth: 600,
+          maxWidth: v ? 720 : 600,
           background: 'linear-gradient(180deg, rgba(255,255,255,0.20), rgba(255,255,255,0.10))',
           border: '1.5px solid rgba(255,255,255,0.32)',
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25), 0 20px 40px rgba(0,30,10,0.18)',
@@ -405,10 +516,16 @@ const Bubble: React.FC<{
 };
 
 export const CHAT_AVATAR = {x: 610, y: 400};
+export const CHAT_AVATAR_V = {x: 90, y: 640};
+export const chatAvatar = (v: boolean) => (v ? CHAT_AVATAR_V : CHAT_AVATAR);
 // the conversation scrolls up as bubbles arrive (chat clock frames → px)
 export const CHAT_LIFT = {at: [60, 70, 128, 138, 258, 268], y: [0, -40, -40, -120, -120, -220]};
 
 export const Chat: React.FC<{f: number; len: number}> = ({f, len}) => {
+  const {v} = useDims();
+  const A = chatAvatar(v);
+  const sp = v ? 1.45 : 1; // taller bubbles need more room
+  const px = v ? [A.x + 50, 190, 190, 120] : [A.x + 50, 900, 900, 760];
   const t = f / 30;
   const lift = interpolate(f, CHAT_LIFT.at, CHAT_LIFT.y, {...clamp, easing: inOut});
   const dark = interpolate(f, [len - 14, len], [0, 1], clamp);
@@ -429,11 +546,11 @@ export const Chat: React.FC<{f: number; len: number}> = ({f, len}) => {
         }}
       />
       <AbsoluteFill style={{transform: `translateY(${lift}px)`}}>
-        <Bubble f={f} d={22} side="l" label="Wai · listening" text="I've got the notes. Go ahead." x={CHAT_AVATAR.x + 50} y={CHAT_AVATAR.y - 40} avatar />
+        <Bubble f={f} d={22} side="l" label="Wai · listening" text="I've got the notes. Go ahead." x={px[0]} y={A.y - 40} avatar />
         {/* the patient's lines type along with her voice-over */}
-        <Bubble f={f} d={58} side="r" label="Patient" text="It started last week, and at night… it just gets worse." x={900} y={CHAT_AVATAR.y + 110} wpf={0.14} />
-        <Bubble f={f} d={128} side="r" label="Patient" text="I don't want to make a fuss, but I haven't really gotten much sleep." x={900} y={CHAT_AVATAR.y + 290} wpf={0.14} />
-        <Bubble f={f} d={264} side="r" label="Doctor" text="Take all the time you need." x={760} y={CHAT_AVATAR.y + 470} />
+        <Bubble f={f} d={58} side="r" label="Patient" text="It started last week, and at night… it just gets worse." x={px[1]} y={A.y + 110 * sp} wpf={0.14} />
+        <Bubble f={f} d={128} side="r" label="Patient" text="I don't want to make a fuss, but I haven't really gotten much sleep." x={px[2]} y={A.y + 290 * sp} wpf={0.14} />
+        <Bubble f={f} d={264} side="r" label="Doctor" text="Take all the time you need." x={px[3]} y={A.y + 470 * sp} />
       </AbsoluteFill>
       <AbsoluteFill style={{background: '#17110D', opacity: dark}} />
     </AbsoluteFill>
@@ -484,7 +601,8 @@ export const Outro: React.FC<{f: number}> = ({f}) => {
   // 2. outline rectangle draws, then shrinks into the centre card
   const draw = interpolate(f, [66, 92], [0, 1], {...clamp, easing: inOut});
   const shrink = interpolate(f, [96, 120], [0, 1], {...clamp, easing: inOut});
-  const rw = interpolate(shrink, [0, 1], [1160, CARD_W]);
+  const {W, H, v} = useDims();
+  const rw = interpolate(shrink, [0, 1], [Math.min(1160, W - 100), CARD_W]);
   const rh = interpolate(shrink, [0, 1], [520, CARD_H]);
   const perim = 2 * (rw + rh);
   const fill = interpolate(f, [106, 126], [0, 1], clamp);
@@ -508,7 +626,7 @@ export const Outro: React.FC<{f: number}> = ({f}) => {
     <AbsoluteFill style={{background: '#17110D', opacity: out}}>
       {f < 110 && (
         <AbsoluteFill style={{alignItems: 'center', justifyContent: 'center', opacity: textO}}>
-          <div style={{fontFamily: fonts.sans, fontSize: 36, fontWeight: 500, color: '#fff', letterSpacing: -0.4}}>
+          <div style={{fontFamily: fonts.sans, fontSize: v ? 50 : 36, fontWeight: 500, color: '#fff', letterSpacing: -0.4, textAlign: 'center', maxWidth: W - 120}}>
             {del > 0 ? textStr : <WordsIn text={line} f={f} start={8} wpf={0.15} dim="rgba(255,255,255,0.28)" />}
           </div>
         </AbsoluteFill>
@@ -535,6 +653,7 @@ export const Outro: React.FC<{f: number}> = ({f}) => {
           />
         </svg>
       )}
+      <AbsoluteFill style={{transform: v ? 'scale(0.84)' : undefined}}>
       {cardsVisible &&
         cards.map((c, i) => {
           const off = i - 1;
@@ -591,6 +710,7 @@ export const Outro: React.FC<{f: number}> = ({f}) => {
           }}
         />
       )}
+      </AbsoluteFill>
       {logo > 0 && (
         <AbsoluteFill style={{alignItems: 'center', justifyContent: 'center'}}>
           <Img

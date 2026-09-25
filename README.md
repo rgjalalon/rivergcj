@@ -71,7 +71,9 @@ Shot timings and captions are in `src/wai/timeline.ts`. The logo is `public/wai/
 
 A 43-second 16:9 film (1920×1080, 30fps, music only). It follows the reference edit's structure scene for scene, with calmer pacing so every line has time to land. [`renders/eleven-seconds-vs-reference.jpg`](renders/eleven-seconds-vs-reference.jpg) compares matching moments side by side.
 
-**Rendered file:** [`renders/eleven-seconds.mp4`](renders/eleven-seconds.mp4) · `npm run render:eleven`
+**Rendered files:** [`renders/eleven-seconds.mp4`](renders/eleven-seconds.mp4) (16:9) · `npm run render:eleven`
+
+**Vertical (9:16, TikTok / Reels):** [`renders/eleven-seconds-vertical.mp4`](renders/eleven-seconds-vertical.mp4) · `npm run render:eleven-vertical`. It's the same film and timing, with each collage laid out again for a tall frame, larger chat text, and the cards scaled to fit.
 
 | Time | Scene | On screen |
 |---|---|---|
