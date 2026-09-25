@@ -69,19 +69,32 @@ Shot timings and captions are in `src/wai/timeline.ts`. The logo is `public/wai/
 
 # Wai: "11 Seconds" (landscape)
 
-A 32-second 16:9 film (1920×1080, 30fps) in an editorial collage style: grid backgrounds, halftone scraps, floating cutouts, kinetic scattered type, a gradient statement slide, a chat-bubble UI beat and a dark end card. No people.
+A 34-second 16:9 film (1920×1080, 30fps) in an editorial collage style: grid backgrounds, halftone scraps, floating cutouts, kinetic scattered type, a gradient statement slide, a chat-bubble UI beat and a dark end card. No people. It has a voiceover, an orchestral score and sound effects.
 
 **Rendered file:** [`renders/eleven-seconds.mp4`](renders/eleven-seconds.mp4) · `npm run render:eleven`
 
-| Time | Beat |
-|---|---|
-| 0.0–6.3s | Stopwatch ticks to 11: "11 seconds." + stat, source J Gen Intern Med, 2018 |
-| 6.3–13.3s | Stethoscope, clipboard; screen + keyboard drift between the speech bubbles: "It's not rudeness. It's the note." |
-| 13.3–16.3s | Gradient slide: "What if no one had to?" |
-| 16.3–24.8s | Waveform bubble; note / letter / coding cards draft themselves |
-| 24.8–28.3s | Stopwatch returns, still: "Take all the time you need." |
-| 28.3–32.0s | End card: Wai logo, "Care, uninterrupted.", wellnessa-i.com |
+| Time | Beat | Voiceover |
+|---|---|---|
+| 0.0–7.7s | Stopwatch ticks to 11, then the stat and its source (J Gen Intern Med, 2018) | "Eleven seconds. That's how long the average patient talks, before being interrupted." |
+| 7.7–14.7s | Consultation objects; the screen and keyboard drift between the speech bubbles | "It's not rudeness. It's the note. Someone has to write it." |
+| 14.7–17.7s | Gradient slide | "What if no one had to?" |
+| 17.7–26.7s | Waveform bubble; the note, letter and coding cards draft themselves | "Wai writes it all, while you talk. So the doctor looks at you. And you get heard." |
+| 26.7–30.2s | The stopwatch returns, stopped | "Take all the time you need." |
+| 30.2–34.0s | End card | "Wai. Care, uninterrupted." |
 
-Everything lives in `src/eleven/ElevenSeconds.tsx` (beat timings at the top).
+The visuals are in `src/eleven/ElevenSeconds.tsx`, with the beat timings at the top. The logo is `public/wai/wai-logo-white.webp`.
 
-**Sound:** `public/eleven/soundtrack.wav` is synthesised from code by `scripts/make_eleven_audio.py` (royalty-free, no samples). Sparse tense pulse + stopwatch ticks and typing in beats 1–2, a hard cut and bloom on the gradient slide, a warm 100 BPM groove with check chimes in beat 4, then it falls away to a still pad for "Take all the time you need" and resolves on the logo. Re-run the script after changing timings. The objects are SVG illustrations; the logo is `public/wai/wai-logo-white.webp`.
+## Sound
+
+The mixed track is `public/eleven/soundtrack.wav`.
+
+1. `scripts/make_eleven_vo.py` makes the voiceover with Kokoro, an open-weight TTS model (voice `af_heart`), and writes the clips to `public/eleven/vo/`. "Wai" is spelled "Why" in the script so the model says it correctly. To use a real voice artist, drop their recordings in with the same file names.
+2. `scripts/make_eleven_audio.py` writes the score as MIDI in D major at 84 BPM and plays it through FluidSynth with the FluidR3 GM soundfont (piano, strings, warm pad, cello, harp). It adds sound effects made in code (stopwatch ticks, pops, typing, whooshes, a sub hit, glass chimes), places each voiceover line on its beat, and lowers the music under the voice. If you change the beat timings, update `B1`–`B6` and re-run it.
+
+The score follows the story:
+
+- **Beats 1–2:** a sparse, uneasy piano figure over a cello drone, with strings creeping in as the typing builds.
+- **Beat 3:** a breath of silence, then a big string and piano bloom.
+- **Beat 4:** flowing piano with a soft pulse.
+- **Beat 5:** one held chord.
+- **Beat 6:** a harp run into the final chord.
