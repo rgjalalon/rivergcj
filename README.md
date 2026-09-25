@@ -90,6 +90,8 @@ A 29-second landscape kinetic-type film (1920×1080, 30fps). White UI with blue 
 **Sound:** an original techy-but-friendly score at 116 bpm (D–A–Bm–G, soft kick, 16th hats, claps, kick-ducked pads and bass, marimba plucks and a bleepy arp; drums drop out under the "Every hour…" line and the end card) with effects timed to the frame: typing ticks, whooshes on camera moves, thumps as cards land, a click on send, rising pentatonic plucks as each card clears, an impact on the flood and a chime under the logo. Regenerate with `pip install numpy scipy && python3 scripts/wai-30h-audio.py` (writes `public/wai/30h-score.wav`); cue frames mirror `src/wai/Backlog.tsx`.
 
 All timing, camera keys and layout live in `src/wai/Backlog.tsx`. Logo: `public/wai/wai-logo-white.webp`.
+---
+
 # Wai: "The Other 8,759" (16:9)
 
 A 33-second landscape film (1920×1080, 30fps, no audio). It's built as one real-time 3D scene in Three.js, via `@remotion/three`: 8,760 glossy rounded cubes, one for every hour of the year. Kinetic chrome type sits on top, and it ends on a glossy logo card.
