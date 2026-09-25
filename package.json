@@ -8,7 +8,13 @@
     "render": "remotion render WellnessAppWalkthrough out/the-wellness-app.mp4",
     "still": "remotion still WellnessAppWalkthrough out/still.png",
     "render:wai": "remotion render WaiBrandFilm out/wai-brand-film.mp4",
-    "render:other": "remotion render TheOther8759 out/the-other-8759.mp4 --gl=angle"
+    "render:other": "remotion render TheOther8759 out/the-other-8759.mp4 --gl=angle",
+    "render:wai-30h": "remotion render WaiBacklog out/wai-the-30-hours.mp4",
+    "render:wai-shortfall": "remotion render WaiShortfall out/wai-the-shortfall.mp4",
+    "render:wai-shortfall-9x16": "for h in count burnout question; do remotion render WaiShortfall-9x16-$h out/wai-the-shortfall-9x16-$h.mp4; done",
+    "still:inflammation": "remotion still InflammationPost out/inflammation-post.png",
+    "still:lpa": "remotion still LpaPost out/lpa-post.png",
+    "stills:aging": "for i in 1 2 3 4 5 6; do remotion still AgingWell-$i out/aging-well-$i.png; done"
   },
   "dependencies": {
     "@react-three/fiber": "^9.8.1",

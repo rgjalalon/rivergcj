@@ -1,0 +1,243 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Inflammation Signal Carousel</title>
+<style>
+@font-face{font-family:DM;src:url(fonts/dm-sans-latin-300-normal.woff2);font-weight:300}
+@font-face{font-family:DM;src:url(fonts/dm-sans-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:DM;src:url(fonts/dm-sans-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:DM;src:url(fonts/dm-sans-latin-300-italic.woff2);font-weight:300;font-style:italic}
+@font-face{font-family:DM;src:url(fonts/dm-sans-latin-400-italic.woff2);font-weight:400;font-style:italic}
+:root{
+  --paper:#F2ECE4; --paper2:#E9E1D6; --ink:#2B221D; --ink2:#5E5047; --muted:#8F8076;
+  --clay:#A5704F; --blood:#6B2A26; --line:rgba(43,34,29,.18); --lineL:rgba(255,255,255,.32);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#777;font-family:DM,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;background:var(--paper);margin:0 0 40px}
+.grain::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.10;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* running header / footer */
+.run{position:absolute;left:72px;right:72px;top:64px;display:flex;justify-content:space-between;align-items:center;
+  font-size:15px;letter-spacing:.22em;text-transform:uppercase;font-weight:400;color:var(--ink2);z-index:3}
+.run.l{color:rgba(255,255,255,.82)}
+.run::after{content:"";position:absolute;left:0;right:0;top:34px;height:1px;background:var(--line)}
+.run.l::after{background:var(--lineL)}
+.foot{position:absolute;left:72px;right:72px;bottom:60px;display:flex;justify-content:space-between;align-items:center;z-index:3;
+  font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.foot.l{color:rgba(255,255,255,.7)}
+.foot img{height:22px;display:block}
+.kick{font-size:16px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;color:var(--clay)}
+.kick.l{color:#E9C9B3}
+em{font-style:italic;font-weight:300}
+.src{font-size:14px;letter-spacing:.04em;color:var(--muted);line-height:1.5}
+.src b{font-weight:500;letter-spacing:.2em;text-transform:uppercase;font-size:12px;margin-right:10px}
+.swipe{display:flex;align-items:center;gap:14px}
+.swipe svg{display:block}
+
+/* 1 cover */
+.s1 .scrim{position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(20,15,11,.55) 0%,rgba(20,15,11,0) 22%,rgba(20,15,11,0) 45%,rgba(20,15,11,.72) 72%,rgba(16,12,9,.93) 100%)}
+.s1 .mast{position:absolute;top:118px;left:0;right:0;text-align:center;z-index:3}
+.s1 .mast img{height:26px}
+.s1 .mast .sub{margin-top:14px;font-size:13px;letter-spacing:.34em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.s1 .body{position:absolute;left:72px;right:72px;bottom:190px;color:#fff;z-index:3}
+.s1 h1{font-weight:300;font-size:104px;line-height:.98;letter-spacing:-.035em;margin:26px 0 38px}
+.s1 h1 em{color:#EBCBB4}
+.s1 .dek{display:grid;grid-template-columns:1fr 1fr;gap:48px;border-top:1px solid var(--lineL);padding-top:28px}
+.s1 .dek p{font-size:22px;line-height:1.45;font-weight:300;color:rgba(255,255,255,.88)}
+.s1 .dek .credit{font-size:16px;letter-spacing:.02em;color:rgba(255,255,255,.62);line-height:1.55}
+.s1 .dek .credit span{display:block;font-size:12px;letter-spacing:.24em;text-transform:uppercase;margin-bottom:8px;color:rgba(255,255,255,.8)}
+
+/* 2 */
+.s2 .head{position:absolute;left:72px;right:72px;top:150px}
+.s2 h2{font-weight:300;font-size:86px;line-height:1;letter-spacing:-.035em;margin-top:22px}
+.s2 .fig{position:absolute;left:72px;top:400px;width:560px;height:720px;overflow:hidden}
+.s2 .fig img{width:100%;height:100%;object-fit:cover;object-position:30% 50%}
+.s2 .figcap{position:absolute;left:72px;top:1136px;width:560px}
+.s2 .col{position:absolute;left:676px;right:72px;top:400px}
+.s2 .big{font-weight:300;font-size:128px;letter-spacing:-.05em;line-height:.9;color:var(--blood)}
+.s2 .big small{font-size:.5em;letter-spacing:-.02em}
+.s2 .bigcap{font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);margin:18px 0 0;line-height:1.5;padding-bottom:34px;border-bottom:1px solid var(--line)}
+.s2 .col p{font-size:22px;line-height:1.5;font-weight:300;color:var(--ink);margin-top:32px}
+.s2 .col p strong{font-weight:500}
+
+/* 3 */
+.s3 .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(40,14,12,.25),rgba(40,14,12,0) 30%,rgba(40,12,10,.35) 65%,rgba(30,8,7,.8))}
+.s3 .body{position:absolute;left:72px;right:72px;top:250px;color:#fff;z-index:3}
+.s3 .term{font-weight:300;font-size:200px;letter-spacing:-.06em;line-height:.85;margin:30px 0 64px;color:#fff}
+.s3 .def{font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.s3 h2{font-weight:300;font-size:58px;line-height:1.08;letter-spacing:-.03em;max-width:780px;margin-top:56px}
+.s3 h2 em{color:#F0CDBB}
+.s3 .quote{position:absolute;left:72px;right:72px;bottom:150px;z-index:3;color:#fff;display:grid;grid-template-columns:1fr 330px;gap:56px;border-top:1px solid var(--lineL);padding-top:30px}
+.s3 .quote p{font-size:25px;line-height:1.45;font-weight:300}
+.s3 .quote .who{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.75);line-height:1.8}
+.s3 .quote .who span{display:block;letter-spacing:.04em;text-transform:none;font-size:15px;color:rgba(255,255,255,.6);margin-top:18px;line-height:1.5}
+
+/* 4 */
+.s4 .head{position:absolute;left:72px;right:72px;top:150px}
+.s4 h2{font-weight:300;font-size:64px;line-height:1.04;letter-spacing:-.03em;margin-top:22px;max-width:900px}
+.s4 .stats{position:absolute;left:72px;right:72px;top:420px;display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--ink)}
+.s4 .stat{padding:26px 0 0}
+.s4 .stat + .stat{padding-left:36px;border-left:1px solid var(--line)}
+.s4 .lab{font-size:15px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--ink2)}
+.s4 .num{font-weight:300;font-size:150px;letter-spacing:-.06em;line-height:1;margin:14px 0 10px}
+.s4 .num small{font-size:.45em;letter-spacing:-.02em}
+.s4 .stat.a .num{color:var(--ink)}
+.s4 .stat.b .num{color:var(--blood)}
+.s4 .bar{height:10px;background:var(--paper2);border-radius:0 4px 4px 0;margin-top:6px;width:430px}
+.s4 .bar i{display:block;height:100%;border-radius:0 4px 4px 0}
+.s4 .stat.a .bar i{width:14.7%;background:var(--ink)}
+.s4 .stat.b .bar i{width:100%;background:var(--blood)}
+.s4 .note{font-size:15px;color:var(--muted);margin-top:14px;letter-spacing:.02em}
+.s4 .lower{position:absolute;left:72px;right:72px;top:810px;display:grid;grid-template-columns:400px 1fr;gap:48px}
+.s4 .lower .ph{height:370px;overflow:hidden}
+.s4 .lower .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 45%}
+.s4 .lower p{font-size:24px;line-height:1.5;font-weight:300}
+.s4 .lower .src{margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
+
+/* 5 */
+.s5 .right{position:absolute;right:0;top:0;bottom:0;width:388px}
+.s5 .right img{width:100%;height:100%;object-fit:cover;object-position:35% 50%}
+.s5 .run{right:460px}
+.s5 .left{position:absolute;left:72px;top:150px;width:548px}
+.s5 h2{font-weight:300;font-size:60px;line-height:1.05;letter-spacing:-.03em;margin-top:22px}
+.s5 .lede{font-size:23px;line-height:1.45;font-weight:300;color:var(--ink2);margin-top:22px}
+.s5 .card{position:absolute;left:72px;top:452px;width:500px;border-radius:18px;overflow:hidden;
+  box-shadow:0 40px 80px -30px rgba(60,40,25,.35),0 2px 8px rgba(60,40,25,.08)}
+.s5 .card img{display:block;width:100%;margin:-1px 0 -1px -1px;width:calc(100% + 2px)}
+.s5 .foot{right:460px}
+.s5 .tag{position:absolute;right:28px;bottom:40px;color:#fff;font-size:13px;letter-spacing:.24em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);opacity:.8}
+
+/* 6 outro */
+.s6 .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(35,20,14,.35) 0%,rgba(35,20,14,.05) 30%,rgba(35,20,14,.15) 55%,rgba(25,14,10,.78) 100%)}
+.s6 .body{position:absolute;left:72px;right:72px;top:230px;color:#fff;z-index:3;text-align:center}
+.s6 .kick{display:inline-flex;align-items:center;gap:18px}
+.s6 .kick::before,.s6 .kick::after{content:"";width:48px;height:1px;background:rgba(233,201,179,.7)}
+.s6 h2{font-weight:300;font-size:80px;line-height:1.04;letter-spacing:-.035em;margin:40px auto 0}
+.s6 h2 em{color:#F2D2BE;display:block}
+.s6 .cta{font-size:24px;line-height:1.5;font-weight:300;color:rgba(255,255,255,.88);max-width:640px;margin:44px auto 0}
+.s6 .actions{position:absolute;left:72px;right:72px;top:860px;z-index:3;display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--lineL);border-bottom:1px solid var(--lineL)}
+.s6 .act{display:flex;gap:20px;align-items:center;padding:28px 8px;color:#fff}
+.s6 .act + .act{border-left:1px solid var(--lineL);padding-left:36px}
+.s6 .act .ic{width:58px;height:58px;border-radius:50%;border:1px solid rgba(255,255,255,.5);display:grid;place-items:center;flex:none}
+.s6 .act b{display:block;font-weight:500;font-size:14px;letter-spacing:.22em;text-transform:uppercase}
+.s6 .act span{display:block;font-size:17px;font-weight:300;color:rgba(255,255,255,.75);margin-top:6px}
+.s6 .refs{position:absolute;left:72px;right:72px;top:1044px;z-index:3;color:rgba(255,255,255,.62);font-size:13px;line-height:1.7;display:grid;grid-template-columns:130px 1fr}
+.s6 .refs b{font-weight:500;letter-spacing:.22em;text-transform:uppercase;font-size:12px;color:rgba(255,255,255,.82)}
+.s6 .sign{position:absolute;left:0;right:0;bottom:118px;text-align:center;z-index:3}
+.s6 .sign img{height:28px}
+.s6 .sign .t{margin-top:14px;font-size:13px;letter-spacing:.34em;text-transform:uppercase;color:rgba(255,255,255,.66)}
+</style></head><body>
+
+<!-- 1 COVER -->
+<section class="slide s1 grain" id="s1">
+  <img class="bg" src="assets/cover.jpg">
+  <div class="scrim"></div>
+  <div class="run l"><span>Blood work, decoded</span><span>01 / 06</span></div>
+  <div class="mast"><img src="assets/wm-light.png"><div class="sub">Notes on longevity</div></div>
+  <div class="body">
+    <div class="kick l">The inflammation issue</div>
+    <h1>The inflammation signal your standard blood test <em>misses</em></h1>
+    <div class="dek">
+      <p>In 27,491 healthy women, GlycA, a steadier inflammation marker, was linked to who had a first cardiovascular event 17 years later.</p>
+      <div class="credit"><span>Inspired by</span>The Peter Attia Drive, episode #402, with Jim Otvos, Ph.D.</div>
+    </div>
+  </div>
+  <div class="foot l"><span>Swipe to read</span>
+    <span class="swipe"><svg width="64" height="14" viewBox="0 0 64 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M0 7h62M56 1l6 6-6 6"/></svg></span></div>
+</section>
+
+<!-- 2 -->
+<section class="slide s2 grain" id="s2">
+  <div class="run"><span>01 &nbsp;·&nbsp; The problem</span><span>02 / 06</span></div>
+  <div class="head">
+    <div class="kick">The usual test</div>
+    <h2>A moving <em>target</em></h2>
+  </div>
+  <div class="fig"><img src="assets/corridor.jpg"></div>
+  <div class="figcap src"><b>Source</b>Akinkuolie AO et al. Journal of the American Heart Association, 2014</div>
+  <div class="col">
+    <div class="big">29.2<small>%</small></div>
+    <div class="bigcap">Week-to-week swing of hs-CRP in healthy people</div>
+    <p>The standard inflammation test is <strong>hs-CRP</strong>. It spikes with illness, stress, or just a bad week.</p>
+    <p>So one high reading may not show your baseline.</p>
+  </div>
+  <div class="foot"><img src="assets/wm-dark.png"><span>Blood work, decoded</span></div>
+</section>
+
+<!-- 3 -->
+<section class="slide s3 grain" id="s3">
+  <img class="bg" src="assets/smoke.jpg">
+  <div class="scrim"></div>
+  <div class="run l"><span>02 &nbsp;·&nbsp; The alternative</span><span>03 / 06</span></div>
+  <div class="body">
+    <div class="kick l">Meet the marker</div>
+    <div class="term">GlycA</div>
+    <div class="def">Short for glycoprotein acetylation</div>
+    <h2>One signal that reads several inflammation proteins at once, <em>from the same blood draw.</em></h2>
+  </div>
+  <div class="quote">
+    <p>Jim Otvos, who developed the method, says it gives a fuller picture of inflammation than any single marker.</p>
+    <div class="who">Jim Otvos, Ph.D.<span>Otvos JD et al.<br>Clinical Chemistry, 2015</span></div>
+  </div>
+  <div class="foot l"><img src="assets/wm-light.png"><span>Blood work, decoded</span></div>
+</section>
+
+<!-- 4 -->
+<section class="slide s4 grain" id="s4">
+  <div class="run"><span>03 &nbsp;·&nbsp; The evidence</span><span>04 / 06</span></div>
+  <div class="head">
+    <div class="kick">Week to week, same healthy people</div>
+    <h2>A steadier marker is easier to <em>follow over time.</em></h2>
+  </div>
+  <div class="stats">
+    <div class="stat a"><div class="lab">GlycA</div><div class="num">4.3<small>%</small></div>
+      <div class="bar"><i></i></div><div class="note">Variation week to week</div></div>
+    <div class="stat b"><div class="lab">hs-CRP</div><div class="num">29.2<small>%</small></div>
+      <div class="bar"><i></i></div><div class="note">Roughly 7× the swing</div></div>
+  </div>
+  <div class="lower">
+    <div class="ph"><img src="assets/tubes.jpg"></div>
+    <div>
+      <p>Week to week, GlycA moved 4.3% and hs&#8209;CRP moved 29.2% in the same healthy people. That steadiness is what tracking chronic inflammation needs.</p>
+      <div class="src"><b>Source</b>Connelly MA et al. Clinica Chimica Acta, 2016</div>
+    </div>
+  </div>
+  <div class="foot"><img src="assets/wm-dark.png"><span>Blood work, decoded</span></div>
+</section>
+
+<!-- 5 -->
+<section class="slide s5 grain" id="s5">
+  <div class="right"><img src="assets/interior.jpg"></div>
+  <div class="run"><span>04 &nbsp;·&nbsp; What to do</span><span>05 / 06</span></div>
+  <div class="left">
+    <div class="kick">Before your next check-up</div>
+    <h2>You can&#8217;t feel low&#8209;grade <em>inflammation.</em></h2>
+    <p class="lede">You can ask whether your blood work measures it.</p>
+  </div>
+  <div class="card"><img src="assets/card.png"></div>
+  <div class="foot"><img src="assets/wm-dark.png"><span>Save the checklist</span></div>
+  <div class="tag">Three questions to ask</div>
+</section>
+
+<!-- 6 OUTRO -->
+<section class="slide s6 grain" id="s6">
+  <img class="bg" src="assets/outro.jpg">
+  <div class="scrim"></div>
+  <div class="run l"><span>05 &nbsp;·&nbsp; In closing</span><span>06 / 06</span></div>
+  <div class="body">
+    <div class="kick l">The takeaway</div>
+    <h2>One reading<br>is a snapshot. <em>A steadier marker<br>shows the trend.</em></h2>
+    <p class="cta">Next time you have bloods taken, ask what your panel measures for inflammation.</p>
+  </div>
+  <div class="actions">
+    <div class="act"><div class="ic"><svg width="22" height="26" viewBox="0 0 22 26" fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"><path d="M2 2h18v22l-9-6-9 6z"/></svg></div>
+      <div><b>Save</b><span>For your next appointment</span></div></div>
+    <div class="act"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></div>
+      <div><b>Share</b><span>With someone who tracks their bloods</span></div></div>
+  </div>
+  <div class="refs"><b>References</b>
+    <div>Akinkuolie AO et al. J Am Heart Assoc, 2014 &nbsp;·&nbsp; Otvos JD et al. Clin Chem, 2015 &nbsp;·&nbsp; Connelly MA et al. Clin Chim Acta, 2016 &nbsp;·&nbsp; The Peter Attia Drive, #402</div></div>
+  <div class="sign"><img src="assets/wm-light.png"><div class="t">Wellness, made personal</div></div>
+</section>
+</body></html>

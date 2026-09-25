@@ -71,6 +71,25 @@ Shot timings, collage beats and captions are in `src/wai/timeline.ts`. The logo 
 
 ---
 
+# Wai: "The 30 hours" (16:9)
+
+A 29-second landscape kinetic-type film (1920×1080, 30fps). White UI with blue as the hero colour (patient care, flood, logo) and orange used sparingly (carets, ticks on cleared cards, the word "not"), soft drifting blue gradient, subtle grid, no voiceover. Motion follows the reference edit: type at huge scale that pulls back, a camera that keeps drifting (push-ins, 3D tilt, depth blur, motion blur on fast moves), zoom-through transitions, and a glass prompt bar with a cursor click.
+
+**Rendered file:** [`renders/wai-the-30-hours.mp4`](renders/wai-the-30-hours.mp4) · `npm run render:wai-30h`
+
+| Time | Beat |
+|---|---|
+| 0–5s | Over the lily backdrop (`public/wai/lily.jpg`, cropped to 16:9 with a slow push), the counter fills the frame and the camera pulls back as the bar fills to 57.8 h; the lily dissolves to white by 5s |
+| 5–8s | Push in on the split: 27.2 h patient care glows, 30.6 h gray |
+| 8–13s | Camera tilts into 3D as task cards pile up and squeeze the care segment, then whips into a card |
+| 13.7–16.5s | "Every hour spent on a form…" word by word |
+| 16.5–19.7s | Glass prompt: "Clear this week's backlog" types, cursor clicks send, camera flies through the button |
+| 19.7–23s | Cards tick off in quick succession; care segment floods the frame |
+| 23–29s | Closing line, then the Wai logo fades in bottom-centre |
+
+**Sound:** an original techy-but-friendly score at 116 bpm (D–A–Bm–G, soft kick, 16th hats, claps, kick-ducked pads and bass, marimba plucks and a bleepy arp; drums drop out under the "Every hour…" line and the end card) with effects timed to the frame: typing ticks, whooshes on camera moves, thumps as cards land, a click on send, rising pentatonic plucks as each card clears, an impact on the flood and a chime under the logo. Regenerate with `pip install numpy scipy && python3 scripts/wai-30h-audio.py` (writes `public/wai/30h-score.wav`); cue frames mirror `src/wai/Backlog.tsx`.
+
+All timing, camera keys and layout live in `src/wai/Backlog.tsx`. Logo: `public/wai/wai-logo-white.webp`.
 # Wai: "The Other 8,759" (16:9)
 
 A 33-second landscape film (1920×1080, 30fps, no audio). It's built as one real-time 3D scene in Three.js, via `@remotion/three`: 8,760 glossy rounded cubes, one for every hour of the year. Kinetic chrome type sits on top, and it ends on a glossy logo card.
