@@ -7,11 +7,11 @@ import {fonts} from '../theme';
 // Beats: 11M count-up → "can't hire our way out" → burnout grid → hour
 // blocks drown in admin → "hours already exist" → AI sweep → close + logo.
 export const SHORT_FPS = 30;
-export const SHORT_DURATION = 930;
+export const SHORT_DURATION = 1000;
 export const SHORT_W = 1920;
 export const SHORT_H = 1080;
 
-const B = {hire: 150, grid: 245, hours: 425, exist: 585, sweep: 680, close: 800, logo: 860};
+const B = {hire: 150, grid: 245, hours: 425, exist: 585, sweep: 680, close: 800, logo: 895};
 
 const C = {
   bg: '#0A0B0E',
@@ -36,23 +36,11 @@ const scene = (f: number, a: number, b: number, dIn = 20, dOut = 16) => p(f, a, 
 const fmt = (n: number) => Math.round(n).toLocaleString('en-US');
 
 // ---- Shared pieces -----------------------------------------------------------
-const Grid: React.FC<{f: number}> = ({f}) => (
-  <AbsoluteFill
-    style={{
-      backgroundImage: `linear-gradient(${C.line} 1px, transparent 1px), linear-gradient(90deg, ${C.line} 1px, transparent 1px)`,
-      backgroundSize: '96px 96px',
-      backgroundPosition: `0 ${-f * 0.15}px`,
-      maskImage: 'radial-gradient(ellipse 70% 65% at 50% 50%, #000 20%, transparent 100%)',
-    }}
-  />
-);
-
 const Glow: React.FC<{f: number; strength: number}> = ({f, strength}) => (
   <AbsoluteFill
     style={{
       opacity: strength,
-      background: `radial-gradient(ellipse 40% 45% at ${50 + 8 * Math.sin(f / 80)}% ${58 + 6 * Math.cos(f / 95)}%, rgba(242,166,90,0.22) 0%, transparent 70%)`,
-      filter: 'blur(30px)',
+      background: `radial-gradient(ellipse 40% 45% at ${50 + 8 * Math.sin(f / 80)}% ${58 + 6 * Math.cos(f / 95)}%, rgba(242,166,90,0.2) 0%, rgba(242,166,90,0.1) 35%, rgba(242,166,90,0.03) 70%, rgba(242,166,90,0) 100%)`,
     }}
   />
 );
@@ -261,18 +249,30 @@ const HoursCaption: React.FC<{f: number}> = ({f}) => {
   );
 };
 
-// ---- Beat 7: close -----------------------------------------------------------------
+// ---- Beat 7: close ---------------------------------------------------------------
+// The line lands, holds, then dissolves upward; the logo arrives alone,
+// out of a warm bloom, and settles with a slow breath.
+const LOGO = staticFile('wai/wai-logo-white.webp');
+
 const Close: React.FC<{f: number}> = ({f}) => {
-  const lift = p(f, B.logo, 40, inOut);
-  const logo = p(f, B.logo + 10, 34);
+  const lineOut = p(f, B.logo - 22, 26, inOut);
+  const bloom = p(f, B.logo - 6, 50, inOut);
+  const logo = p(f, B.logo + 4, 46);
+  const breathe = 1 + 0.012 * Math.sin(Math.max(0, f - B.logo - 50) / 22);
+  const sheen = interpolate(f, [B.logo + 34, B.logo + 74], [-40, 140], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: inOut});
+  const mask = {maskImage: `url(${LOGO})`, WebkitMaskImage: `url(${LOGO})`, maskSize: 'contain', WebkitMaskSize: 'contain', maskRepeat: 'no-repeat', WebkitMaskRepeat: 'no-repeat', maskPosition: 'center', WebkitMaskPosition: 'center'} as React.CSSProperties;
   return (
     <AbsoluteFill style={{alignItems: 'center', justifyContent: 'center'}}>
-      <div style={{transform: `translateY(${-lift * 90}px)`}}>
-        <Kinetic f={f} at={B.close} text="Wai gives care its hours back." size={104} accent={['hours']} />
-      </div>
-      <div style={{position: 'absolute', top: 600, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 26, opacity: logo, filter: `blur(${(1 - logo) * 10}px)`, transform: `translateY(${(1 - logo) * 16}px)`}}>
-        <div style={{width: 250, height: 72, background: `url(${staticFile('wai/wai-logo-white.webp')}) center / contain no-repeat`}} />
-        <div style={{fontFamily: fonts.sans, fontSize: 30, letterSpacing: 3, color: C.warm}}>wellnessa-i.com</div>
+      {f < B.logo + 6 && (
+        <div style={{opacity: 1 - lineOut, transform: `translateY(${-lineOut * 40}px) scale(${mix(1, 0.97, lineOut)})`, filter: `blur(${lineOut * 12}px)`}}>
+          <Kinetic f={f} at={B.close} text="Wai gives care its hours back." size={104} accent={['hours']} />
+        </div>
+      )}
+      <AbsoluteFill style={{opacity: bloom * 0.9, background: 'radial-gradient(ellipse 34% 38% at 50% 50%, rgba(242,166,90,0.26) 0%, rgba(242,166,90,0.1) 40%, rgba(242,166,90,0.025) 75%, rgba(242,166,90,0) 100%)'}} />
+      <div style={{position: 'absolute', width: 420, height: 120, opacity: logo, filter: `blur(${(1 - logo) * 14}px) drop-shadow(0 0 40px rgba(242,166,90,${0.35 * logo}))`, transform: `scale(${mix(1.12, 1, logo) * breathe})`}}>
+        <div style={{position: 'absolute', inset: 0, background: `url(${LOGO}) center / contain no-repeat`}} />
+        {/* one warm sheen passes across the mark */}
+        <div style={{position: 'absolute', inset: 0, ...mask, background: `linear-gradient(100deg, transparent ${sheen - 18}%, rgba(242,166,90,0.9) ${sheen}%, transparent ${sheen + 18}%)`}} />
       </div>
     </AbsoluteFill>
   );
@@ -284,7 +284,6 @@ export const WaiShortfall: React.FC = () => {
   const warm = mix(0.25, 1, p(f, B.sweep, 90, inOut)) * (f < B.hours ? 0.6 : 1);
   return (
     <AbsoluteFill style={{background: C.bg}}>
-      <Grid f={f} />
       <Glow f={f} strength={warm} />
       {f < B.hire + 4 && <Count f={f} />}
       {f >= B.hire && f < B.grid && (
