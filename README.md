@@ -64,3 +64,22 @@ npm run render:wai   # writes out/wai-brand-film.mp4
 **Footage:** the real-life shots are placeholders until clips are added. See `public/wai/footage/README.md` for filenames and the shot list. The grade (warm highlights, espresso shadows, film grain, vignette) is applied automatically in `src/wai/Footage.tsx`.
 
 Shot timings and captions are in `src/wai/timeline.ts`. The logo is `public/wai/wai-logo-cream.png`.
+
+---
+
+# Wai: "11 Seconds" (landscape)
+
+A 32-second 16:9 film (1920×1080, 30fps) in an editorial collage style: grid backgrounds, halftone scraps, floating cutouts, kinetic scattered type, a gradient statement slide, a chat-bubble UI beat and a dark end card. No people.
+
+**Rendered file:** [`renders/eleven-seconds.mp4`](renders/eleven-seconds.mp4) · `npm run render:eleven`
+
+| Time | Beat |
+|---|---|
+| 0.0–6.3s | Stopwatch ticks to 11: "11 seconds." + stat, source J Gen Intern Med, 2018 |
+| 6.3–13.3s | Stethoscope, clipboard; screen + keyboard drift between the speech bubbles: "It's not rudeness. It's the note." |
+| 13.3–16.3s | Gradient slide: "What if no one had to?" |
+| 16.3–24.8s | Waveform bubble; note / letter / coding cards draft themselves |
+| 24.8–28.3s | Stopwatch returns, still: "Take all the time you need." |
+| 28.3–32.0s | End card: Wai logo, "Care, uninterrupted.", wellnessa-i.com |
+
+Everything lives in `src/eleven/ElevenSeconds.tsx` (beat timings at the top). The objects are SVG illustrations; the logo is `public/wai/wai-logo-white.webp`.
