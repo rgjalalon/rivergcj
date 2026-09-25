@@ -1,5 +1,5 @@
 import '../loadFonts';
-import {AbsoluteFill, Easing, interpolate, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Audio, Easing, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import {Grain} from '../components/Grain';
 import {fonts} from '../theme';
 
@@ -7,11 +7,11 @@ import {fonts} from '../theme';
 // Beats: 11M count-up → "can't hire our way out" → burnout grid → hour
 // blocks drown in admin → "hours already exist" → AI sweep → close + logo.
 export const SHORT_FPS = 30;
-export const SHORT_DURATION = 1000;
+export const SHORT_DURATION = 870;
 export const SHORT_W = 1920;
 export const SHORT_H = 1080;
 
-const B = {hire: 150, grid: 245, hours: 425, exist: 585, sweep: 680, close: 800, logo: 895};
+const B = {land: 42, hire: 96, grid: 176, hours: 336, exist: 486, sweep: 566, close: 690, logo: 780};
 
 const C = {
   bg: '#0A0B0E',
@@ -75,15 +75,24 @@ const Center: React.FC<{o: number; children: React.ReactNode; s?: number}> = ({o
 
 // ---- Beat 1: the number --------------------------------------------------------
 const Count: React.FC<{f: number}> = ({f}) => {
-  const n = 11_000_000 * p(f, 10, 90, Easing.bezier(0.3, 0, 0.1, 1));
-  const o = scene(f, 0, B.hire, 14);
+  // Counting from frame 0: the hook is motion before it's a sentence.
+  const n = 11_000_000 * p(f, 0, B.land, Easing.bezier(0.2, 0, 0.1, 1));
+  const hit = p(f, B.land, 16);
+  const punch = f >= B.land ? 1 + 0.07 * (1 - hit) : mix(0.9, 1, p(f, 0, B.land));
+  const shake = f >= B.land && f < B.land + 8 ? Math.sin(f * 2.7) * (B.land + 8 - f) * 1.2 : 0;
   return (
-    <Center o={o} s={mix(1.04, 1, p(f, 0, B.hire, inOut)) * mix(1, 0.94, p(f, B.hire - 16, 16))}>
-      <Label>Projected global health-worker shortfall by 2030 <Source>WHO</Source></Label>
-      <div style={{fontFamily: fonts.sans, fontWeight: 600, fontSize: 250, color: C.text, letterSpacing: -10, lineHeight: 1, marginTop: 28, fontVariantNumeric: 'tabular-nums'}}>
-        {fmt(n)}
+    <Center o={scene(f, 0, B.hire, 1, 12)}>
+      <div style={{transform: `translate(${shake}px, ${shake * 0.4}px) scale(${punch})`, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        <div style={{fontFamily: fonts.sans, fontWeight: 600, fontSize: 260, color: C.text, letterSpacing: -10, lineHeight: 1, fontVariantNumeric: 'tabular-nums', textShadow: `0 0 ${60 * (1 - hit)}px rgba(242,166,90,${0.8 * (1 - hit) * (f >= B.land ? 1 : 0)})`}}>
+          {fmt(n)}
+        </div>
+        <div style={{width: mix(0, 620, p(f, B.land, 22)), height: 4, marginTop: 34, background: C.warm, borderRadius: 2, boxShadow: '0 0 24px rgba(242,166,90,0.6)'}} />
+        <Label style={{marginTop: 34, opacity: p(f, B.land + 4, 16), transform: `translateY(${(1 - p(f, B.land + 4, 16)) * 12}px)`}}>
+          Health workers the world will be short by 2030 <Source>WHO</Source>
+        </Label>
       </div>
-      <div style={{width: mix(0, 520, p(f, 96, 30)), height: 3, marginTop: 34, background: C.warm, borderRadius: 2}} />
+      {/* impact ring */}
+      <div style={{position: 'absolute', width: 400, height: 400, borderRadius: '50%', border: `2px solid ${C.warm}`, opacity: f >= B.land ? 0.5 * (1 - hit) : 0, transform: `scale(${mix(0.6, 3.4, hit)})`}} />
     </Center>
   );
 };
@@ -93,7 +102,11 @@ const COLS = 14;
 const ROWS = 6;
 const DOCS = COLS * ROWS;
 // Deterministic shuffle: which ~45% dim, and in what order.
-const order = Array.from({length: DOCS}, (_, i) => i).sort((a, b) => ((a * 73) % 97) - ((b * 73) % 97));
+const hash = (i: number) => {
+  const x = Math.sin(i * 12.9898 + 4.1) * 43758.5453;
+  return x - Math.floor(x);
+};
+const order = Array.from({length: DOCS}, (_, i) => i).sort((a, b) => hash(a) - hash(b));
 const DIM = Math.round(DOCS * 0.45);
 const dimRank = new Map(order.slice(0, DIM).map((id, r) => [id, r]));
 
@@ -116,7 +129,7 @@ const Burnout: React.FC<{f: number}> = ({f}) => {
           const c = i % COLS;
           const inT = p(f, B.grid + (r + c) * 1.4, 20);
           const rank = dimRank.get(i);
-          const lit = rank === undefined ? 1 : 1 - p(f, B.grid + 40 + rank * 1.8, 14, inOut);
+          const lit = rank === undefined ? 1 : 1 - p(f, B.grid + 30 + rank * 1.3, 14, inOut);
           return (
             <div key={i} style={{opacity: inT, transform: `translateY(${(1 - inT) * 14}px) scale(${mix(0.96, 1, lit)})`}}>
               <Doc lit={lit} />
@@ -163,7 +176,8 @@ const Hours: React.FC<{f: number}> = ({f}) => {
   const inSweep = f >= B.sweep;
   const legend = p(f, B.hours + 30, 24);
   return (
-    <AbsoluteFill style={{opacity: vis}}>
+    <AbsoluteFill style={{opacity: vis, perspective: 1600}}>
+      <AbsoluteFill style={{transform: `rotateX(${mix(22, 0, p(f, B.sweep - 10, 50, inOut))}deg) rotateZ(${mix(-4, 0, p(f, B.sweep - 10, 50, inOut))}deg) scale(${mix(1.06, 1, p(f, B.sweep - 10, 50, inOut))})`, transformOrigin: '50% 60%'}}>
       <div style={{position: 'absolute', left: GRID_X, top: GRID_Y - 70, display: 'flex', gap: 34, alignItems: 'center', opacity: legend}}>
         <Key color={C.warm} label="Patient care" />
         {ADMIN.map((a, i) => (
@@ -219,6 +233,7 @@ const Hours: React.FC<{f: number}> = ({f}) => {
           }}
         />
       )}
+      </AbsoluteFill>
       <HoursCaption f={f} />
     </AbsoluteFill>
   );
@@ -236,11 +251,12 @@ const HoursCaption: React.FC<{f: number}> = ({f}) => {
   // Beat 6: the headline figure ticks down as the sweep clears the backlog.
   const t = p(f, B.sweep + 10, SWEEP_D + 30, inOut);
   const n = mix(11_000_000, 7_400_000, t);
+  const gone = 1 - p(f, B.sweep + 64, 22, inOut);
   const b = p(f, B.sweep + 4, 18);
   return (
     <>
       {f >= B.sweep && (
-        <div style={{position: 'absolute', left: 0, right: 0, top: y - 10, textAlign: 'center', opacity: b}}>
+        <div style={{position: 'absolute', left: 0, right: 0, top: y - 10, textAlign: 'center', opacity: b * gone}}>
           <div style={{fontFamily: fonts.sans, fontWeight: 600, fontSize: 96, color: C.text, letterSpacing: -3.5, fontVariantNumeric: 'tabular-nums'}}>{fmt(n)}</div>
           <Label style={{marginTop: 6}}>The gap, closing</Label>
         </div>
@@ -279,28 +295,64 @@ const Close: React.FC<{f: number}> = ({f}) => {
 };
 
 // ---- Film --------------------------------------------------------------------------------
+/** Every shot drifts in, keeps pushing, then zooms through into the next. */
+const Shot: React.FC<{f: number; a: number; b: number; children: React.ReactNode}> = ({f, a, b, children}) => {
+  const enter = p(f, a, 18);
+  const exit = p(f, b - 12, 12, Easing.bezier(0.55, 0, 0.9, 0.3));
+  const drift = 1 + 0.04 * interpolate(f, [a, b], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  return (
+    <AbsoluteFill style={{transform: `scale(${mix(0.92, 1, enter) * drift * mix(1, 1.22, exit)})`, filter: `blur(${(1 - enter) * 10 + exit * 16}px)`}}>
+      {children}
+    </AbsoluteFill>
+  );
+};
+
 export const WaiShortfall: React.FC = () => {
   const f = useCurrentFrame();
   const warm = mix(0.25, 1, p(f, B.sweep, 90, inOut)) * (f < B.hours ? 0.6 : 1);
+  const vol = interpolate(f, [0, 6, SHORT_DURATION - 45, SHORT_DURATION - 2], [0, 0.9, 0.9, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <AbsoluteFill style={{background: C.bg}}>
+      <Audio src={staticFile('wai/30h-score.wav')} volume={vol} />
       <Glow f={f} strength={warm} />
-      {f < B.hire + 4 && <Count f={f} />}
-      {f >= B.hire && f < B.grid && (
-        <Center o={scene(f, B.hire, B.grid, 1, 16)}>
-          <Kinetic f={f} at={B.hire + 6} text="We cannot hire our way out of this." />
-        </Center>
+      {f < B.hire && (
+        <Shot f={f} a={-18} b={B.hire}>
+          <Count f={f} />
+        </Shot>
       )}
-      {f >= B.grid && f < B.hours && <Burnout f={f} />}
-      {f >= B.hours && f < B.close && <Hours f={f} />}
+      {f >= B.hire && f < B.grid && (
+        <Shot f={f} a={B.hire} b={B.grid}>
+          <Center o={1}>
+            <Kinetic f={f} at={B.hire + 2} text="We cannot hire our way out of this." size={96} accent={['cannot']} />
+          </Center>
+        </Shot>
+      )}
+      {f >= B.grid && f < B.hours && (
+        <Shot f={f} a={B.grid} b={B.hours}>
+          <Burnout f={f} />
+        </Shot>
+      )}
+      {f >= B.hours && f < B.exist && (
+        <Shot f={f} a={B.hours} b={B.exist}>
+          <Hours f={f} />
+        </Shot>
+      )}
       {f >= B.exist && f < B.sweep && (
-        <Center o={scene(f, B.exist, B.sweep, 1, 16)}>
-          <Kinetic f={f} at={B.exist + 4} text="The hours healthcare needs already exist." size={76} accent={['already', 'exist.']} />
-          <div style={{height: 22}} />
-          <Kinetic f={f} at={B.exist + 34} text="They're just trapped in the backlog." size={76} />
-        </Center>
+        <Shot f={f} a={B.exist} b={B.sweep}>
+          <Center o={1}>
+            <Kinetic f={f} at={B.exist + 2} text="The hours healthcare needs already exist." size={80} accent={['already', 'exist.']} />
+            <div style={{height: 22}} />
+            <Kinetic f={f} at={B.exist + 26} text="They're just trapped in the backlog." size={80} />
+          </Center>
+        </Shot>
+      )}
+      {f >= B.sweep && f < B.close && (
+        <Shot f={f} a={B.sweep} b={B.close}>
+          <Hours f={f} />
+        </Shot>
       )}
       {f >= B.close && <Close f={f} />}
+      <AbsoluteFill style={{background: 'radial-gradient(ellipse 80% 75% at 50% 50%, transparent 55%, rgba(0,0,0,0.55) 100%)', pointerEvents: 'none'}} />
       <Grain />
     </AbsoluteFill>
   );
