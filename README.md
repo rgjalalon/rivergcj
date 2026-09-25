@@ -69,31 +69,31 @@ Shot timings and captions are in `src/wai/timeline.ts`. The logo is `public/wai/
 
 # Wai: "11 Seconds" (landscape)
 
-A 33-second 16:9 film (1920×1080, 30fps, music only). It follows the reference edit's structure and pacing beat for beat. [`renders/eleven-seconds-vs-reference.jpg`](renders/eleven-seconds-vs-reference.jpg) compares frames side by side.
+A 43-second 16:9 film (1920×1080, 30fps, music only). It follows the reference edit's structure scene for scene, with calmer pacing so every line has time to land. [`renders/eleven-seconds-vs-reference.jpg`](renders/eleven-seconds-vs-reference.jpg) compares matching moments side by side.
 
 **Rendered file:** [`renders/eleven-seconds.mp4`](renders/eleven-seconds.mp4) · `npm run render:eleven`
 
 | Time | Scene | On screen |
 |---|---|---|
-| 0.0–2.7s | Collage (grid, typed words, cutouts) | "A patient starts to explain why they can't sleep." |
-| 2.3–4.3s | Blue halftone: 3D alarm clock swings in | Glass pill counts 0:01 → 0:11, then "Interrupted" |
-| 3.9–5.7s | Collage | "Another tries to describe the pain." + a "Save note" button being clicked |
-| 5.4–7.3s | Blue halftone: 3D pocket watch | "0:11 Interrupted" |
-| 7.0–8.8s | Collage | "Another just wants to ask a question." |
-| 8.5–10.4s | Blue halftone: 3D laptop typing a note | "0:11 Interrupted" |
-| 10.1–13.3s | Collage, pulling back | "It's not rudeness. Someone has to write the note." |
-| 13.0–14.7s | Red halftone, shrinking to a circle | "What if no one had to?" |
-| 14.7–16.7s | Glowing orb with rings (Wai) | |
-| 16.7–23.3s | Orb opens into a green glass chat | Wai: "I've got the notes. Go ahead." · Patient: "It started last week…" · Doctor: "Take all the time you need." |
-| 23.0–26.5s | Type on black, outline draws around it | "Wai writes it all. You get heard." |
-| 26.5–29.0s | Three glass cards | Clinical note: Drafted while you talk · Letters: Ready to sign · Coding: Done for you |
-| 29.0–33.3s | Cards merge to a line, logo glows up | Wai logo · "Care, uninterrupted." · wellnessa-i.com |
+| 0.0–3.7s | Collage (grid, typed words, cutouts) | "A patient starts to explain why they can't sleep." |
+| 3.2–6.0s | Blue halftone: 3D alarm clock swings in | Glass pill counts 0:01 → 0:11, then "Interrupted" |
+| 5.5–8.1s | Collage | "Another tries to describe the pain." + a "Save note" button being clicked |
+| 7.6–10.2s | Blue halftone: 3D pocket watch | "0:11 Interrupted" |
+| 9.7–12.3s | Collage | "Another just wants to ask a question." |
+| 11.8–14.4s | Blue halftone: 3D laptop typing a note | "0:11 Interrupted" |
+| 13.9–18.0s | Collage, pulling back | "It's not rudeness. Someone has to write the note." |
+| 17.5–20.0s | Red halftone, shrinking to a circle | "What if no one had to?" |
+| 20.0–22.3s | Glowing orb with rings (Wai), where the music drops | |
+| 22.3–31.0s | Orb opens into a green glass chat | Wai: "I've got the notes. Go ahead." · Patient: "It started last week…" · Doctor: "Take all the time you need." |
+| 30.5–34.5s | Type on black, outline draws around it | "Wai writes it all. You get heard." |
+| 34.5–37.8s | Three glass cards | Clinical note: Drafted while you talk · Letters: Ready to sign · Coding: Done for you |
+| 37.8–43.3s | Cards merge to a line, logo glows up | Wai logo · "Care, uninterrupted." · wellnessa-i.com |
 
-The stat source ("J Gen Intern Med, 2018") sits as a footnote on the three halftone scenes. Transitions between scenes are pixel-block wipes on the 120px background grid.
+The stat source ("J Gen Intern Med, 2018") sits as a footnote on the three halftone scenes. Transitions between scenes are soft pixel-block dissolves on the 120px background grid. The blocks open in a staggered wave with a brief tinted flash, the outgoing scene drifts forward, and the incoming one settles from a slight zoom.
 
 ## Code
 
-- `src/eleven/ElevenSeconds.tsx`: the timeline (scene windows in frames) and transitions
+- `src/eleven/ElevenSeconds.tsx`: the timeline (scene windows in frames), per-scene pacing and transitions
 - `src/eleven/scenes.tsx`: the collages, halftone hero scenes, red-to-orb bloom, chat and outro
 - `src/eleven/parts.tsx`: shared pieces (grid, canvas halftone, block wipe, typed text, cutout tiles, glass pill)
 

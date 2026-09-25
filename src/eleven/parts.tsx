@@ -111,10 +111,13 @@ export const HalftoneBg: React.FC<{f: number; pal: Palette; seed?: number}> = ({
 };
 
 // ---------------------------------------------------------------- block wipe
+const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3);
+
 /**
- * Pixel-block transition on the background grid. `p` runs 0→1. Children are
- * the incoming scene; they show through the revealed blocks. Blocks about to
- * flip show a flat colour or a dot swatch for a couple of frames.
+ * Pixel-block transition on the background grid, softened: each block dissolves
+ * in over a few frames, in a staggered wave, some with a brief tinted flash
+ * growing from the block's centre. `p` runs 0→1. Children are the incoming scene, which
+ * also settles from a slight zoom.
  */
 export const BlockWipe: React.FC<{
   p: number;
@@ -123,12 +126,14 @@ export const BlockWipe: React.FC<{
   flash?: string[];
   seed?: number;
   children: React.ReactNode;
-}> = ({p, id, from = 'right', flash = ['#FFFFFF', '#EFEEEA'], seed = 3, children}) => {
+}> = ({p, from = 'right', flash = ['#FFFFFF', '#EFEEEA'], seed = 3, children}) => {
   if (p <= 0) return null;
+  const settle = 1 + 0.04 * (1 - easeOutCubic(Math.min(1, p)));
   if (p >= 1) return <AbsoluteFill>{children}</AbsoluteFill>;
   const cols = W / CELL;
   const rows = Math.ceil(H / CELL);
-  const shown: React.ReactNode[] = [];
+  const SPAN = 0.3; // how long a single block takes to open, in wipe progress
+  const rects: string[] = [];
   const mids: React.ReactNode[] = [];
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
@@ -141,20 +146,29 @@ export const BlockWipe: React.FC<{
             : from === 'bottom'
               ? 1 - r / (rows - 1)
               : Math.hypot(c - cols / 2, r - rows / 2) / Math.hypot(cols / 2, rows / 2);
-      const th = 0.5 * pos + 0.42 * rand(i, seed) + 0.04;
-      if (p > th) {
-        shown.push(<rect key={i} x={c * CELL} y={r * CELL} width={CELL} height={CELL} />);
-      } else if (p > th - 0.14) {
+      const start = (0.55 * pos + 0.45 * rand(i, seed)) * (1 - SPAN);
+      const q = Math.max(0, Math.min(1, (p - start) / SPAN));
+      if (q <= 0) continue;
+      const e = easeOutCubic(q);
+      // pixel-snapped so neighbouring blocks meet without hairline seams
+      rects.push(`<rect x='${c * CELL}' y='${r * CELL}' width='${CELL}' height='${CELL}' fill='white' fill-opacity='${Math.min(1, e * 1.1).toFixed(3)}'/>`);
+      // the tinted flash grows from the block's centre
+      const sz = Math.round(CELL * (0.45 + 0.55 * e));
+      const x0 = c * CELL + Math.round((CELL - sz) / 2);
+      const y0 = r * CELL + Math.round((CELL - sz) / 2);
+      const fl = q < 0.6 ? Math.sin((Math.PI * q) / 0.6) * 0.6 : 0;
+      if (fl > 0.02 && rand(i, seed + 5) < 0.35) {
         const k = Math.floor(rand(i, seed + 9) * (flash.length + 1));
         mids.push(
           <div
             key={i}
             style={{
               position: 'absolute',
-              left: c * CELL,
-              top: r * CELL,
-              width: CELL,
-              height: CELL,
+              left: x0,
+              top: y0,
+              width: sz,
+              height: sz,
+              opacity: fl,
               ...(k < flash.length
                 ? {background: flash[k]}
                 : {
@@ -168,14 +182,13 @@ export const BlockWipe: React.FC<{
       }
     }
   }
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}' viewBox='0 0 ${W} ${H}' shape-rendering='crispEdges'>${rects.join('')}</svg>`;
+  const mask = `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
   return (
     <AbsoluteFill>
-      <svg width={0} height={0} style={{position: 'absolute'}}>
-        <defs>
-          <clipPath id={id}>{shown}</clipPath>
-        </defs>
-      </svg>
-      <AbsoluteFill style={{clipPath: `url(#${id})`}}>{children}</AbsoluteFill>
+      <AbsoluteFill style={{maskImage: mask, WebkitMaskImage: mask, maskSize: '100% 100%', WebkitMaskSize: '100% 100%'}}>
+        <AbsoluteFill style={{transform: `scale(${settle})`}}>{children}</AbsoluteFill>
+      </AbsoluteFill>
       {mids}
     </AbsoluteFill>
   );

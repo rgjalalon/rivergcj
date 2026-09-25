@@ -28,8 +28,8 @@ from scipy.signal import butter, sosfilt
 
 SR = 48000
 FPS = 30
-# Frames: drop on the orb (440), final chord on the logo (870), end (1000)
-B1, B2, B3, B4, B5, B6, END = 0, 0, 440, 0, 870, 870, 1000
+# Frames: drop on the orb (590), final chord on the logo (1135), end (1300)
+B1, B2, B3, B4, B5, B6, END = 0, 0, 590, 0, 1135, 1135, 1300
 DUR = END / FPS + 0.3
 N = int(DUR * SR)
 rng = np.random.default_rng(11)
@@ -39,7 +39,9 @@ BPM = 104
 BEAT = 60 / BPM
 BAR = BEAT * 4
 DROP = B3 / FPS          # full groove drops as the orb appears (like the reference)
-G0 = DROP - 6 * BAR      # six intro bars before it
+INTRO = int(np.ceil(DROP / BAR))  # intro bars before the drop
+LIGHT = 3                # of those, bars with only keys, snaps and shaker
+G0 = DROP - INTRO * BAR
 BREAK = B5 / FPS         # gentle breakdown
 FINAL = B6 / FPS         # last chord on the logo
 NBARS = int((BREAK - G0) / BAR) + 1
@@ -114,16 +116,16 @@ def n_(t, ch, note, vel, dur):
 COMP = [(0, 1.2, 0), (1.5, 0.45, -8), (2.5, 0.9, -4), (3.25, 0.35, -12)]
 for b in range(-1, NBARS):
     root, ch = CHORDS[b % 4]
-    base = 48 if b < 2 else 54 if b < 6 else 58
+    base = 48 if b < LIGHT else 54 if b < INTRO else 58
     for beat, d, dv in COMP:
         t = bar_t(b, beat)
         if t >= BREAK - 0.05:
             break
         for m in ch:
             n_(t, EP, m, base + dv, BEAT * d)
-    if b >= 2 and bar_t(b) < BREAK:
+    if b >= LIGHT and bar_t(b) < BREAK:
         for m in [root + 12] + ch:
-            n_(bar_t(b), PAD, m, 36 if b < 6 else 44, BAR)
+            n_(bar_t(b), PAD, m, 36 if b < INTRO else 44, BAR)
 
 # breakdown: one open, warm chord (only when there is room for one)
 for m in ([41, 53, 57, 60, 64, 67] if FINAL - BREAK > 0.5 else []):
@@ -216,16 +218,16 @@ lead = np.zeros((N, 2))
 
 # funky octave bass: root, pickup, octave, root, octave, fifth
 BASS = [(0, 0, 0.7), (0.75, 0, 0.4), (1.5, 12, 0.4), (2.5, 0, 0.7), (3.25, 12, 0.3), (3.5, 7, 0.4)]
-for b in range(2, NBARS):
+for b in range(LIGHT, NBARS):
     root, _ = CHORDS[b % 4]
     r = root if root < 44 else root - 12
-    bright = 0.35 if b < 6 else 1.0
+    bright = 0.35 if b < INTRO else 1.0
     for beat, off, d in BASS:
         t = bar_t(b, beat)
-        if b == 5 and beat >= 3:
+        if b == INTRO - 1 and beat >= 3:
             continue  # leave room for the build
         if t < BREAK - 0.05:
-            place(bass, bass_note(r + off + 12, d, bright), t, 0.8 if b < 6 else 1.0)
+            place(bass, bass_note(r + off + 12, d, bright), t, 0.8 if b < INTRO else 1.0)
 if FINAL - BREAK > 0.5:
     place(bass, bass_note(41, 4.0, 0.3) * np.exp(-np.arange(int(4 * BEAT * SR)) / SR / 1.4), BREAK, 0.6)
 place(bass, bass_note(41, 6.0, 0.6) * np.exp(-np.arange(int(6 * BEAT * SR)) / SR / 1.6), FINAL, 0.9)
@@ -235,8 +237,8 @@ HOOK = [
     [(0, 72, 0.5), (0.5, 74, 0.5), (1, 77, 1.0), (2.5, 74, 0.5), (3, 72, 1.0)],
     [(0, 69, 0.5), (0.5, 72, 0.5), (1, 74, 1.5), (3, 77, 0.5), (3.5, 79, 0.5)],
 ]
-for b in range(6, NBARS):
-    for beat, m, d in HOOK[(b - 6) % 2]:
+for b in range(INTRO, NBARS):
+    for beat, m, d in HOOK[(b - INTRO) % 2]:
         t = bar_t(b, beat)
         if t < BREAK - 0.1:
             place(lead, lead_note(m, d), t, 1.0)
@@ -303,22 +305,22 @@ SWING = 0.035
 for b in range(0, NBARS):
     if bar_t(b) >= BREAK:
         break
-    full = b >= 6
+    full = b >= INTRO
     for k in range(16):  # shaker 16ths, swung
         t = bar_t(b, k * 0.25) + (SWING if k % 2 else 0)
-        if t < BREAK - 0.02 and not (b == 5 and k >= 14):
+        if t < BREAK - 0.02 and not (b == INTRO - 1 and k >= 14):
             place(drums, shaker(), t, [0.18, 0.09, 0.14, 0.09][k % 4] * (1 if full else 0.8), 0.35)
     for beat in (1, 3):
         t = bar_t(b, beat)
         if t < BREAK - 0.02:
             if full:
                 place(drums, clap(), t, 0.5)
-            elif b < 5:
+            elif b < INTRO - 1:
                 place(drums, snap(), t, 0.35, -0.2)
-    if b >= 2:
+    if b >= LIGHT:
         for k in range(8):
             t = bar_t(b, k * 0.5) + (SWING if k % 2 else 0)
-            if t < BREAK - 0.02 and not (b == 5 and k >= 6):
+            if t < BREAK - 0.02 and not (b == INTRO - 1 and k >= 6):
                 place(drums, hat(open_=(k % 4 == 3)), t, (0.14 if k % 2 else 0.09) * (1.3 if full else 1), 0.2)
     if full:
         for beat in (0, 1.75, 2.5):
@@ -329,7 +331,7 @@ for b in range(0, NBARS):
 
 # snare build over the last bar before the drop
 for k in range(16):
-    t = bar_t(5, k * 0.25)
+    t = bar_t(INTRO - 1, k * 0.25)
     if t < DROP - 0.3:
         place(drums, snare(), t, 0.08 + 0.3 * (k / 16) ** 2, 0.1 * ((-1) ** k))
 n = int(BAR * SR)
