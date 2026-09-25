@@ -69,24 +69,21 @@ Shot timings and captions are in `src/wai/timeline.ts`. The logo is `public/wai/
 
 # Wai: "11 Seconds" (landscape)
 
-A 34-second 16:9 film (1920×1080, 30fps) in an editorial collage style: grid backgrounds, halftone scraps, floating cutouts, kinetic scattered type, a gradient statement slide, a chat-bubble UI beat and a dark end card. No people. It has a voiceover, an orchestral score and sound effects.
+A 34-second 16:9 film (1920×1080, 30fps) in an editorial collage style: grid backgrounds, halftone scraps, floating cutouts, kinetic scattered type, a gradient statement slide, a chat-bubble UI beat and a dark end card. No people and no voiceover. The soundtrack is music only.
 
 **Rendered file:** [`renders/eleven-seconds.mp4`](renders/eleven-seconds.mp4) · `npm run render:eleven`
 
-| Time | Beat | Voiceover |
+| Time | Beat | Music |
 |---|---|---|
-| 0.0–7.7s | Stopwatch ticks to 11, then the stat and its source (J Gen Intern Med, 2018) | "Eleven seconds. That's how long the average patient talks, before being interrupted." |
-| 7.7–14.7s | Consultation objects; the screen and keyboard drift between the speech bubbles | "It's not rudeness. It's the note. Someone has to write it." |
-| 14.7–17.7s | Gradient slide | "What if no one had to?" |
-| 17.7–26.7s | Waveform bubble; the note, letter and coding cards draft themselves | "Wai (way) writes it all, while you talk. So the doctor looks at you. And you get heard." |
-| 26.7–30.2s | The stopwatch returns, stopped | "Take all the time you need." |
-| 30.2–34.0s | End card | "Wai. Care, uninterrupted." |
+| 0.0–7.7s | Stopwatch ticks to 11, then the stat and its source (J Gen Intern Med, 2018) | Light, bouncy intro: Rhodes, snaps, shaker |
+| 7.7–14.7s | Consultation objects; the screen and keyboard drift between the speech bubbles | Bass and hats come in, then a snare build and a short cut |
+| 14.7–17.7s | Gradient slide: "What if no one had to?" | The drop: full groove |
+| 17.7–26.7s | Waveform bubble; the note, letter and coding cards draft themselves | Groove, with the lead hook |
+| 26.7–30.2s | The stopwatch returns, stopped: "Take all the time you need." | Drums drop out and the sound softens |
+| 30.2–34.0s | End card: logo, "Care, uninterrupted.", wellnessa-i.com | Final chord rings out |
 
 The visuals are in `src/eleven/ElevenSeconds.tsx`, with the beat timings at the top. The logo is `public/wai/wai-logo-white.webp`.
 
-## Sound
+## Music
 
-The mixed track is `public/eleven/soundtrack.wav`.
-
-1. `scripts/make_eleven_vo.py` makes the voiceover with Kokoro, an open-weight TTS model (voice `af_heart`), and writes the clips to `public/eleven/vo/`. Each line is rendered as short phrases, trimmed, then joined with pauses set by hand, and each phrase has its own speed. "Wai" is pronounced "way". To use a real voice artist, drop their recordings in with the same file names.
-2. `scripts/make_eleven_audio.py` builds music shaped like the reference: about 104 BPM in F major, an airy intro with no low end (Rhodes, vibes, pad, then hats that creep in under the typing), a short cut to silence, then a warm electronic groove that drops on the gradient slide (kick, clap, hats, pumping sub bass, Rhodes, vibes). It breaks down under "Take all the time you need" and lands on a final chord on the logo. The keys play through FluidSynth with the FluidR3 GM soundfont, and the drums, bass and sound effects are made in code. The music is lowered under the voice. If you change the beat timings, update `B1`–`B6` and re-run it.
+`scripts/make_eleven_audio.py` writes `public/eleven/soundtrack.wav`. It's a warm, upbeat groove at 104 BPM in F major: Rhodes comping and a warm pad played through FluidSynth with the FluidR3 GM soundfont, plus a funky octave synth bass, a soft analogue-style lead hook, swung drums and sidechain pump, all made in code. If you change the beat timings, update `B1`–`B6` and re-run it. To use a licensed track instead, replace the WAV.
