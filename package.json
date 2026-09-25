@@ -7,14 +7,19 @@
     "studio": "remotion studio",
     "render": "remotion render WellnessAppWalkthrough out/the-wellness-app.mp4",
     "still": "remotion still WellnessAppWalkthrough out/still.png",
-    "render:wai": "remotion render WaiBrandFilm out/wai-brand-film.mp4"
+    "render:wai": "remotion render WaiBrandFilm out/wai-brand-film.mp4",
+    "render:other": "remotion render TheOther8759 out/the-other-8759.mp4 --gl=angle"
   },
   "dependencies": {
+    "@react-three/fiber": "^9.8.1",
     "@remotion/cli": "4.0.528",
     "@remotion/fonts": "4.0.528",
+    "@remotion/three": "^4.0.528",
+    "@types/three": "^0.170.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "remotion": "4.0.528"
+    "remotion": "4.0.528",
+    "three": "^0.170.0"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",

@@ -9,6 +9,8 @@ const faces = [
   {family: 'Inter', file: 'inter-latin-400-normal.woff2', weight: '400', style: 'normal'},
   {family: 'Inter', file: 'inter-latin-500-normal.woff2', weight: '500', style: 'normal'},
   {family: 'Inter', file: 'inter-latin-600-normal.woff2', weight: '600', style: 'normal'},
+  {family: 'Inter', file: 'inter-latin-700-normal.woff2', weight: '700', style: 'normal'},
+  {family: 'Inter', file: 'inter-latin-800-normal.woff2', weight: '800', style: 'normal'},
 ];
 
 for (const face of faces) {
