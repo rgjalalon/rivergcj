@@ -374,7 +374,8 @@ const Bubble: React.FC<{
   x: number;
   y: number;
   avatar?: boolean;
-}> = ({f, d, side, label, text, x, y, avatar}) => {
+  wpf?: number;
+}> = ({f, d, side, label, text, x, y, wpf = 0.3}) => {
   const s = useSpr(f, d, 14, 170, 0.7);
   if (f < d) return null;
   return (
@@ -397,17 +398,19 @@ const Bubble: React.FC<{
           minHeight: 39,
         }}
       >
-        <WordsIn text={text} f={f} start={d + 4} wpf={0.3} />
+        <WordsIn text={text} f={f} start={d + 4} wpf={wpf} />
       </div>
     </div>
   );
 };
 
 export const CHAT_AVATAR = {x: 610, y: 400};
+// the conversation scrolls up as bubbles arrive (chat clock frames → px)
+export const CHAT_LIFT = {at: [60, 70, 128, 138, 258, 268], y: [0, -40, -40, -120, -120, -220]};
 
 export const Chat: React.FC<{f: number; len: number}> = ({f, len}) => {
   const t = f / 30;
-  const lift = interpolate(f, [60, 70, 118, 128], [0, -40, -40, -80], {...clamp, easing: inOut});
+  const lift = interpolate(f, CHAT_LIFT.at, CHAT_LIFT.y, {...clamp, easing: inOut});
   const dark = interpolate(f, [len - 14, len], [0, 1], clamp);
   const blob = (i: number, ax: number, ay: number) =>
     `${50 + Math.sin(t * 0.35 + i * 1.9) * ax}% ${50 + Math.cos(t * 0.3 + i * 2.7) * ay}%`;
@@ -427,8 +430,10 @@ export const Chat: React.FC<{f: number; len: number}> = ({f, len}) => {
       />
       <AbsoluteFill style={{transform: `translateY(${lift}px)`}}>
         <Bubble f={f} d={22} side="l" label="Wai · listening" text="I've got the notes. Go ahead." x={CHAT_AVATAR.x + 50} y={CHAT_AVATAR.y - 40} avatar />
-        <Bubble f={f} d={62} side="r" label="Patient" text="It started last week, and at night it gets worse…" x={900} y={CHAT_AVATAR.y + 110} />
-        <Bubble f={f} d={120} side="r" label="Doctor" text="Take all the time you need." x={760} y={CHAT_AVATAR.y + 300} />
+        {/* the patient's lines type along with her voice-over */}
+        <Bubble f={f} d={58} side="r" label="Patient" text="It started last week, and at night… it just gets worse." x={900} y={CHAT_AVATAR.y + 110} wpf={0.14} />
+        <Bubble f={f} d={128} side="r" label="Patient" text="I don't want to make a fuss, but I haven't really gotten much sleep." x={900} y={CHAT_AVATAR.y + 290} wpf={0.14} />
+        <Bubble f={f} d={264} side="r" label="Doctor" text="Take all the time you need." x={760} y={CHAT_AVATAR.y + 470} />
       </AbsoluteFill>
       <AbsoluteFill style={{background: '#17110D', opacity: dark}} />
     </AbsoluteFill>
@@ -471,7 +476,7 @@ const CardIcon: React.FC<{i: number}> = ({i}) => {
 export const Outro: React.FC<{f: number}> = ({f}) => {
   // 1. text on black
   const del = interpolate(f, [86, 104], [0, 1], clamp);
-  const line = 'Wai writes it all. You get heard.';
+  const line = 'Stop losing minutes to paperwork. Start listening.';
   const shownWords = line.split(' ');
   const keep = Math.ceil(shownWords.length * (1 - del));
   const textStr = del > 0 ? shownWords.slice(0, keep).join(' ') : line;
@@ -504,7 +509,7 @@ export const Outro: React.FC<{f: number}> = ({f}) => {
       {f < 110 && (
         <AbsoluteFill style={{alignItems: 'center', justifyContent: 'center', opacity: textO}}>
           <div style={{fontFamily: fonts.sans, fontSize: 36, fontWeight: 500, color: '#fff', letterSpacing: -0.4}}>
-            {del > 0 ? textStr : <WordsIn text={line} f={f} start={8} wpf={0.22} dim="rgba(255,255,255,0.28)" />}
+            {del > 0 ? textStr : <WordsIn text={line} f={f} start={8} wpf={0.15} dim="rgba(255,255,255,0.28)" />}
           </div>
         </AbsoluteFill>
       )}

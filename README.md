@@ -105,6 +105,15 @@ All CC0. Credits are in [`public/eleven/CREDITS.md`](public/eleven/CREDITS.md).
 - `public/eleven/3d/`: 72-frame rotations of the alarm clock, pocket watch and laptop. I rendered these from Poly Haven's glTF models with three.js, with the clock hands set to 10:10:11 and a note on the laptop screen.
 - `scripts/eleven-assets/`: rebuilds all of the above (`fetch_assets.py`, `render.mjs`).
 
+## Voice-over
+
+Clips are in `public/eleven/vo/` and cued in `VO_CUES` in `scripts/make_eleven_audio.py`. The music ducks under them.
+
+- **Narrator** (`n1`–`n8`): a male voice (Kokoro `am_michael`) reading the lines from your recording, with your phrasing and pauses. "Eleven seconds" lands on each 0:11 timer, and "Stop losing minutes to paperwork. Start listening." plays over the black type.
+- **Patient** (`p1`, `p2`): your own recording of her lines, converted to a female voice with OpenVoice V2, so the natural hesitations are kept. The chat bubbles type along with her words, and the doctor's "Take all the time you need." follows.
+
+The film now runs 50s, with a longer chat scene so her lines fit.
+
 ## Music
 
 `scripts/make_eleven_audio.py` writes `public/eleven/soundtrack.wav`: a warm, upbeat groove at 104 BPM in F major. It stays light through the collages, cuts out for a moment, drops into the full groove when the orb appears (as the reference does), and ends on a chord under the logo. There's no voiceover and there are no sound effects. To use a licensed track instead, replace the WAV.

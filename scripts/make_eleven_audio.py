@@ -28,8 +28,8 @@ from scipy.signal import butter, sosfilt
 
 SR = 48000
 FPS = 30
-# Frames: drop on the orb (590), final chord on the logo (1135), end (1300)
-B1, B2, B3, B4, B5, B6, END = 0, 0, 590, 0, 1135, 1135, 1300
+# Frames: drop on the orb (590), final chord on the logo (1340), end (1500)
+B1, B2, B3, B4, B5, B6, END = 0, 0, 590, 0, 1340, 1340, 1500
 DUR = END / FPS + 0.3
 N = int(DUR * SR)
 rng = np.random.default_rng(11)
@@ -372,5 +372,34 @@ music = filt(music, 'high', 30)
 music = music - 0.4 * filt(music, 'band', [180, 450]) + 0.8 * filt(music, 'band', [2000, 6000]) + 0.5 * filt(music, 'high', 6000)  # clean the mud, add presence and air
 music = np.tanh(music * 2.0) / 2.0  # glue
 music *= 0.9 / np.abs(music).max()
+
+# ================================================================ voice-over
+# Narrator (n*) and patient (p*) clips from public/eleven/vo, placed on the
+# picture (seconds). The music ducks under the voice.
+VO_CUES = {
+    'n1': 0.5, 'n2': 4.6, 'n3': 5.9, 'n4': 8.9, 'n5': 9.9, 'n6': 12.3, 'n7': 15.9,
+    'p1': 25.3, 'p2': 28.6,
+    'n8': 37.6,
+}
+vo = np.zeros((N, 2))
+for key, t in VO_CUES.items():
+    path = f'public/eleven/vo/{key}.wav'
+    if not os.path.exists(path):
+        continue
+    v, vsr = sf.read(path)
+    if v.ndim > 1:
+        v = v.mean(1)
+    assert vsr == SR, path
+    v = filt(v, 'high', 80)
+    v = v / (np.sqrt((v ** 2).mean()) + 1e-9) * 0.11
+    place(vo, v, t, 1.0)
+if np.abs(vo).max() > 0:
+    vo = reverb(vo, 0.6, 0.06)
+    lvl = np.convolve(np.abs(vo).mean(1), np.ones(4800) / 4800, 'same')
+    duck = 1 - 0.55 * np.clip(lvl / 0.02, 0, 1)
+    duck = np.convolve(duck, np.ones(9600) / 9600, 'same')[:, None]
+    music = music * 0.75 * duck + vo
+    music = np.tanh(music * 1.2) / 1.2
+    music *= 0.9 / np.abs(music).max()
 sf.write('public/eleven/soundtrack.wav', music.astype(np.float32), SR, subtype='PCM_16')
 print('wrote public/eleven/soundtrack.wav', round(DUR, 2), 's')

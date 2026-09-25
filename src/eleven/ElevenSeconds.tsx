@@ -2,7 +2,7 @@ import React from 'react';
 import {AbsoluteFill, Audio, Easing, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import '../loadFonts';
 import {BlockWipe, clamp} from './parts';
-import {Bloom, CHAT_AVATAR, Chat, Collage1, Collage2, Collage3, Collage4, Hero, ORB, Orb, Outro} from './scenes';
+import {Bloom, CHAT_AVATAR, CHAT_LIFT, Chat, Collage1, Collage2, Collage3, Collage4, Hero, ORB, Orb, Outro} from './scenes';
 
 export const ELEVEN_FPS = 30;
 
@@ -18,8 +18,8 @@ export const T = {
   h3: [354, 432],
   c4: [416, 540],
   bloom: [524, 700],
-  chat: [669, 930],
-  outro: [915, 1300],
+  chat: [669, 1130],
+  outro: [1115, 1500],
 } as const;
 export const ELEVEN_DURATION = T.outro[1];
 const WIPE = 16;
@@ -53,7 +53,7 @@ export const ElevenSeconds: React.FC = () => {
   const smooth = Easing.bezier(0.65, 0, 0.35, 1);
   const reveal = interpolate(ci, [0, 24], [0, 1], {...clamp, easing: smooth});
   const toAvatar = interpolate(ci, [4, 28], [0, 1], {...clamp, easing: smooth});
-  const lift = interpolate(ci, [60, 70, 118, 128], [0, -40, -40, -80], {...clamp, easing: smooth});
+  const lift = interpolate(ci, CHAT_LIFT.at, CHAT_LIFT.y, {...clamp, easing: smooth});
 
   return (
     <AbsoluteFill style={{background: '#17110D'}}>
