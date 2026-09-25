@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   AbsoluteFill,
+  Audio,
   Easing,
   Img,
   Sequence,
@@ -847,6 +848,7 @@ export const ElevenSeconds: React.FC = () => {
   );
   return (
     <AbsoluteFill style={{background: '#050505'}}>
+      <Audio src={staticFile('eleven/soundtrack.wav')} />
       {seq(beats.b1, (l) => <Beat1 len={l} />)}
       {seq(beats.b2, (l) => <Beat2 len={l} />)}
       {seq(beats.b3, (l) => <Beat3 len={l} />)}

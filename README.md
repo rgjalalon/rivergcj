@@ -82,4 +82,6 @@ A 32-second 16:9 film (1920×1080, 30fps) in an editorial collage style: grid ba
 | 24.8–28.3s | Stopwatch returns, still: "Take all the time you need." |
 | 28.3–32.0s | End card: Wai logo, "Care, uninterrupted.", wellnessa-i.com |
 
-Everything lives in `src/eleven/ElevenSeconds.tsx` (beat timings at the top). The objects are SVG illustrations; the logo is `public/wai/wai-logo-white.webp`.
+Everything lives in `src/eleven/ElevenSeconds.tsx` (beat timings at the top).
+
+**Sound:** `public/eleven/soundtrack.wav` is synthesised from code by `scripts/make_eleven_audio.py` (royalty-free, no samples). Sparse tense pulse + stopwatch ticks and typing in beats 1–2, a hard cut and bloom on the gradient slide, a warm 100 BPM groove with check chimes in beat 4, then it falls away to a still pad for "Take all the time you need" and resolves on the logo. Re-run the script after changing timings. The objects are SVG illustrations; the logo is `public/wai/wai-logo-white.webp`.
