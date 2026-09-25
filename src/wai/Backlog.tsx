@@ -1,5 +1,5 @@
 import '../loadFonts';
-import {AbsoluteFill, Audio, Easing, interpolate, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Audio, Easing, Img, interpolate, staticFile, useCurrentFrame} from 'remotion';
 import {Grain} from '../components/Grain';
 import {fonts} from '../theme';
 
@@ -249,6 +249,17 @@ export const WaiBacklog: React.FC = () => {
       <Audio src={staticFile('wai/30h-score.wav')} />
       <Blob f={f} strength={f < B.line ? 0.35 : f < B.close ? 0.6 : 1} />
       <Grid />
+
+      {/* Opening backdrop: the lily, cropped to 16:9, slow push, dissolves to white as the chart settles */}
+      {f < B.split + 10 && (
+        <AbsoluteFill style={{opacity: 1 - p(f, 96, 50, inOut)}}>
+          <Img
+            src={staticFile('wai/lily.jpg')}
+            style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 46%', transform: `scale(${mix(1.14, 1.02, p(f, 0, 150, Easing.out(Easing.quad)))})`, filter: 'blur(3px) saturate(0.95)'}}
+          />
+          <AbsoluteFill style={{background: 'radial-gradient(ellipse 60% 60% at 30% 40%, rgba(255,255,255,0.28), rgba(255,255,255,0) 70%)'}} />
+        </AbsoluteFill>
+      )}
 
       {/* Chart world under the camera */}
       {stageOn && (

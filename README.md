@@ -79,7 +79,7 @@ A 29-second landscape kinetic-type film (1920×1080, 30fps). White UI with blue 
 
 | Time | Beat |
 |---|---|
-| 0–5s | Counter fills the frame, camera pulls back as the bar fills to 57.8 h; caption types on |
+| 0–5s | Over the lily backdrop (`public/wai/lily.jpg`, cropped to 16:9 with a slow push), the counter fills the frame and the camera pulls back as the bar fills to 57.8 h; the lily dissolves to white by 5s |
 | 5–8s | Push in on the split: 27.2 h patient care glows, 30.6 h gray |
 | 8–13s | Camera tilts into 3D as task cards pile up and squeeze the care segment, then whips into a card |
 | 13.7–16.5s | "Every hour spent on a form…" word by word |
