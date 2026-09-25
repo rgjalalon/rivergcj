@@ -73,17 +73,18 @@ Shot timings, collage beats and captions are in `src/wai/timeline.ts`. The logo 
 
 # Wai: "The 30 hours" (16:9)
 
-A 36-second landscape kinetic-type film (1920×1080, 30fps). Dark UI, one caramel accent, subtle grid, no voiceover.
+A 29-second landscape kinetic-type film (1920×1080, 30fps). Dark UI, one caramel accent, subtle grid, no voiceover. Motion follows the reference edit: type at huge scale that pulls back, a camera that keeps drifting (push-ins, 3D tilt, depth blur, motion blur on fast moves), zoom-through transitions, and a glass prompt bar with a cursor click.
 
 **Rendered file:** [`renders/wai-the-30-hours.mp4`](renders/wai-the-30-hours.mp4) · `npm run render:wai-30h`
 
 | Time | Beat |
 |---|---|
-| 0–5s | Weekly bar fills to 57.8 h (AMA, 2024, n=18,000) |
-| 5–10s | Split: 27.2 h patient care glows, 30.6 h "everything else" in gray |
-| 10–16s | Gray breaks into task cards that pile up and squeeze the care segment |
-| 16–20s | "Every hour spent on a form…" |
-| 20–27s | Wai assistant ticks off cards one by one; care segment floods the frame |
-| 27–36s | Closing line, then the Wai logo fades in bottom-centre |
+| 0–5s | Counter fills the frame, camera pulls back as the bar fills to 57.8 h; caption types on |
+| 5–8s | Push in on the split: 27.2 h patient care glows, 30.6 h gray |
+| 8–13s | Camera tilts into 3D as task cards pile up and squeeze the care segment, then whips into a card |
+| 13.7–16.5s | "Every hour spent on a form…" word by word |
+| 16.5–19.7s | Glass prompt: "Clear this week's backlog" types, cursor clicks send, camera flies through the button |
+| 19.7–23s | Cards tick off in quick succession; care segment floods the frame |
+| 23–29s | Closing line, then the Wai logo fades in bottom-centre |
 
-All timing and layout lives in `src/wai/Backlog.tsx`. Logo: `public/wai/wai-logo-white.webp`.
+All timing, camera keys and layout live in `src/wai/Backlog.tsx`. Logo: `public/wai/wai-logo-white.webp`.
