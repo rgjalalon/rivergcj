@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>River Geoff Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Layout: a design-tool workspace. Layers panel (projects) | dotted canvas (the work) | inspector (specs, palette, brief). */
+:root {
+  --bg: #efeeeb;
+  --panel: #faf9f7;
+  --canvas: #e5e3df;
+  --dot: #cfccc6;
+  --line: #d9d6d0;
+  --fg: #1b1a18;
+  --muted: #6d6861;
+  --accent: #2f5ff0;
+  --accent-soft: rgba(47, 95, 240, .12);
+  --on-accent: #ffffff;
+  --ok: #1f8a4c;
+  --shadow: 0 1px 2px rgba(20,18,15,.06), 0 8px 24px rgba(20,18,15,.08);
+  --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --font-ui: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 10px;
+  --left: 264px;
+  --right: 300px;
+  --top: 56px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151412; --panel: #1c1b19; --canvas: #100f0e; --dot: #2a2825; --line: #2d2b28;
+    --fg: #ecebe7; --muted: #9b968f; --accent: #5b86ff; --accent-soft: rgba(91,134,255,.16);
+    --on-accent: #0c0c0c; --ok: #4cc27f; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151412; --panel: #1c1b19; --canvas: #100f0e; --dot: #2a2825; --line: #2d2b28;
+  --fg: #ecebe7; --muted: #9b968f; --accent: #5b86ff; --accent-soft: rgba(91,134,255,.16);
+  --on-accent: #0c0c0c; --ok: #4cc27f; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--fg);
+  font: 14px/1.5 var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+img, video { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.label {
+  font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted); font-weight: 500;
+}
+
+/* ---------- top bar ---------- */
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  height: var(--top); display: flex; align-items: center; gap: 16px;
+  padding-inline: 16px; background: var(--panel); border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand-mark {
+  width: 28px; height: 28px; border-radius: 7px; background: var(--fg); color: var(--bg);
+  display: grid; place-items: center; font: italic 18px/1 var(--font-display);
+}
+.brand-name { font-weight: 600; white-space: nowrap; }
+.brand-file { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.tabs { display: flex; gap: 2px; margin-inline: auto; background: var(--bg); padding: 3px; border-radius: 9px; border: 1px solid var(--line); }
+.tab {
+  border: 0; background: transparent; padding: 6px 14px; border-radius: 6px; cursor: pointer;
+  color: var(--muted); font-weight: 500;
+}
+.tab:hover { color: var(--fg); }
+.tab[aria-selected="true"] { background: var(--panel); color: var(--fg); box-shadow: var(--shadow); }
+.top-actions { display: flex; align-items: center; gap: 8px; }
+.icon-btn {
+  width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--line);
+  background: transparent; display: grid; place-items: center; cursor: pointer;
+}
+.icon-btn:hover { background: var(--bg); }
+.btn {
+  border: 0; border-radius: 8px; padding: 8px 14px; cursor: pointer; font-weight: 500;
+  background: var(--fg); color: var(--bg); white-space: nowrap;
+}
+.btn:hover { opacity: .88; }
+.btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+
+/* ---------- shell ---------- */
+.shell {
+  display: grid;
+  grid-template-columns: var(--left) minmax(0, 1fr) var(--right);
+  min-height: calc(100vh - var(--top));
+}
+.shell.no-inspector { grid-template-columns: var(--left) minmax(0, 1fr); }
+.panel { background: var(--panel); min-width: 0; }
+.layers { border-right: 1px solid var(--line); }
+.inspector { border-left: 1px solid var(--line); }
+.panel-inner {
+  position: sticky; top: calc(var(--top) + env(safe-area-inset-top, 0px));
+  max-height: calc(100vh - var(--top)); overflow-y: auto;
+  padding: 16px; display: flex; flex-direction: column; gap: 18px;
+}
+
+/* layers */
+.search {
+  width: 100%; border: 1px solid var(--line); background: var(--bg); color: var(--fg);
+  border-radius: 8px; padding: 8px 10px; font: inherit;
+}
+.layer-scroll { display: flex; flex-direction: column; gap: 16px; }
+.layer-group { display: flex; flex-direction: column; gap: 2px; }
+.layer-group-head { display: flex; justify-content: space-between; align-items: baseline; padding: 0 8px 6px; }
+.layer {
+  display: grid; grid-template-columns: 30px minmax(0,1fr) auto; align-items: center; gap: 10px;
+  width: 100%; text-align: left; border: 0; background: transparent; cursor: pointer;
+  padding: 6px 8px; border-radius: 7px;
+}
+.layer:hover { background: var(--bg); }
+.layer[aria-current="true"] { background: var(--accent-soft); }
+.layer[aria-current="true"] .layer-title { color: var(--accent); }
+.layer-thumb { width: 30px; aspect-ratio: 4/5; border-radius: 3px; object-fit: cover; background: var(--canvas); }
+.layer-thumb.all { display: grid; place-items: center; border: 1px dashed var(--line); font-size: 12px; color: var(--muted); }
+.layer-title { font-size: 13px; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.layer-count { font-size: 11px; color: var(--muted); }
+.empty-note { color: var(--muted); font-size: 13px; padding: 0 8px; }
+
+/* ---------- canvas ---------- */
+.canvas {
+  min-width: 0;
+  background-color: var(--canvas);
+  background-image: radial-gradient(var(--dot) 1px, transparent 1.2px);
+  background-size: 18px 18px;
+  padding: 28px clamp(16px, 3vw, 40px) 64px;
+  display: flex; flex-direction: column; gap: 24px;
+}
+.canvas-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.canvas-head > div { min-width: 0; }
+.eyebrow { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 13px; }
+.dot-sep { width: 3px; height: 3px; border-radius: 50%; background: currentColor; }
+h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; }
+.display { font: 400 clamp(30px, 4vw, 48px)/1.05 var(--font-display); letter-spacing: -.01em; max-width: 22ch; }
+.display em { font-style: italic; }
+.toolbar { display: flex; align-items: center; gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 9px; padding: 4px; box-shadow: var(--shadow); }
+.toolbar .icon-btn { border: 0; width: 30px; height: 30px; }
+.counter { padding-inline: 8px; font-size: 12px; }
+
+/* hero (all work) */
+.hero {
+  display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 24px; align-items: end;
+}
+.hero-title { font: 400 clamp(38px, 6vw, 76px)/.98 var(--font-display); letter-spacing: -.02em; }
+.hero-title em { font-style: italic; color: var(--accent); }
+.hero-side { display: flex; flex-direction: column; gap: 14px; color: var(--muted); max-width: 44ch; }
+.hero-side p { margin: 0; }
+.status {
+  display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+  padding: 4px 10px 4px 8px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line);
+  font-size: 12px; color: var(--fg);
+}
+.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
+
+.filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 5px 12px;
+  font-size: 12px; cursor: pointer; color: var(--muted);
+}
+.chip:hover { color: var(--fg); }
+.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 28px 22px; }
+.card { border: 0; padding: 0; background: transparent; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 12px; }
+.stack { position: relative; aspect-ratio: 4/5; max-width: 100%; }
+.stack img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 4px;
+  box-shadow: var(--shadow); transition: transform .35s cubic-bezier(.2,.7,.2,1);
+}
+.stack img:nth-child(1) { transform: translate(10px, -8px) rotate(3deg) scale(.94); filter: brightness(.8); }
+.stack img:nth-child(2) { transform: translate(5px, -4px) rotate(1.5deg) scale(.97); filter: brightness(.9); }
+.card:hover .stack img:nth-child(1) { transform: translate(26px, -12px) rotate(6deg) scale(.94); }
+.card:hover .stack img:nth-child(2) { transform: translate(13px, -6px) rotate(3deg) scale(.97); }
+.card:hover .stack img:nth-child(3), .card:focus-visible .stack img:nth-child(3) { outline: 2px solid var(--accent); outline-offset: 3px; }
+.card-meta { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.card-title { font-weight: 500; line-height: 1.3; }
+.card-sub { color: var(--muted); font-size: 12px; display: flex; gap: 6px; align-items: center; }
+
+/* strip (project) */
+.strip-wrap {
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity;
+  padding: 34px 4px 40px; margin-inline: -4px; scrollbar-width: thin;
+}
+.strip { display: flex; width: max-content; box-shadow: var(--shadow); }
+.frame {
+  position: relative; border: 0; padding: 0; background: var(--panel); cursor: pointer;
+  height: clamp(300px, 58vh, 560px); aspect-ratio: 4/5; scroll-snap-align: center; flex: none;
+}
+.frame img { width: 100%; height: 100%; object-fit: cover; }
+.frame::after { content: ""; position: absolute; inset: 0; pointer-events: none; transition: box-shadow .15s; }
+.frame:hover::after { box-shadow: inset 0 0 0 1px var(--accent); }
+.frame[aria-current="true"] { z-index: 2; }
+.frame[aria-current="true"]::after { box-shadow: 0 0 0 2px var(--accent); }
+.handle { display: none; position: absolute; width: 9px; height: 9px; background: var(--panel); border: 1.5px solid var(--accent); z-index: 3; }
+.frame[aria-current="true"] .handle { display: block; }
+.h-tl { top: -5px; left: -5px; } .h-tr { top: -5px; right: -5px; } .h-bl { bottom: -5px; left: -5px; } .h-br { bottom: -5px; right: -5px; }
+.frame-tag {
+  display: none; position: absolute; left: -2px; top: -26px; z-index: 3;
+  background: var(--accent); color: var(--on-accent); font: 500 11px/1 var(--font-mono);
+  padding: 5px 7px; border-radius: 4px 4px 0 0; white-space: nowrap;
+}
+.frame[aria-current="true"] .frame-tag { display: block; }
+.frame-size {
+  display: none; position: absolute; left: 50%; bottom: -28px; transform: translateX(-50%); z-index: 3;
+  background: var(--accent); color: var(--on-accent); font: 500 11px/1 var(--font-mono); padding: 5px 7px; border-radius: 4px; white-space: nowrap;
+}
+.frame[aria-current="true"] .frame-size { display: block; }
+.hint { color: var(--muted); font-size: 12px; display: flex; gap: 14px; flex-wrap: wrap; }
+kbd { font: 11px var(--font-mono); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; background: var(--panel); }
+.next-project {
+  display: flex; align-items: center; gap: 14px; border: 1px solid var(--line); background: var(--panel);
+  border-radius: var(--radius); padding: 10px 14px 10px 10px; cursor: pointer; text-align: left; max-width: 460px;
+}
+.next-project img { width: 44px; aspect-ratio: 4/5; object-fit: cover; border-radius: 3px; }
+.next-project span { min-width: 0; }
+
+/* motion */
+.window { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); max-width: 1040px; }
+.window-bar { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.lights { display: flex; gap: 6px; }
+.lights i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+.window-title { font-size: 12px; color: var(--muted); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.window video { width: 100%; aspect-ratio: 16/9; background: #000; }
+.stills { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; max-width: 1040px; }
+.stills img { width: 100%; border-radius: 12px; box-shadow: var(--shadow); aspect-ratio: 16/9; object-fit: cover; }
+.motion-block { display: flex; flex-direction: column; gap: 14px; }
+.motion-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; max-width: 1040px; }
+.motion-head h2 { font: 400 28px/1.1 var(--font-display); }
+.motion-head p { margin: 0; color: var(--muted); max-width: 60ch; }
+
+/* inspector */
+.insp-section { display: flex; flex-direction: column; gap: 10px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.insp-section:last-child { border-bottom: 0; }
+.props { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 16px; margin: 0; font-size: 13px; }
+.props dt { color: var(--muted); }
+.props dd { margin: 0; text-align: right; }
+.brief { margin: 0; font-size: 13px; color: var(--fg); line-height: 1.6; }
+.swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.swatch { border: 1px solid var(--line); border-radius: 8px; padding: 0; overflow: hidden; background: var(--panel); cursor: pointer; text-align: left; }
+.swatch i { display: block; height: 38px; }
+.swatch span { display: block; font: 10px/1 var(--font-mono); padding: 6px 5px; color: var(--muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: 12px; padding: 3px 9px; border-radius: 6px; background: var(--bg); border: 1px solid var(--line); }
+.mini-profile { display: flex; gap: 12px; align-items: center; }
+.mini-profile img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; object-position: 50% 20%; }
+.mini-profile strong { display: block; font-weight: 600; }
+.mini-profile span { color: var(--muted); font-size: 12px; }
+.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stat { background: var(--bg); border-radius: 8px; padding: 10px; }
+.stat b { display: block; font: 400 26px/1 var(--font-display); }
+.stat span { font-size: 11px; color: var(--muted); }
+.link-btn { border: 0; background: none; padding: 0; color: var(--accent); cursor: pointer; font-weight: 500; text-align: left; }
+
+/* about */
+.about { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 28px; max-width: 1100px; align-items: start; }
+.profile-card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); position: sticky; top: calc(var(--top) + 24px); }
+.profile-card img { width: 100%; aspect-ratio: 4/5; object-fit: cover; object-position: 50% 15%; }
+.profile-body { padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.profile-name { font: 400 34px/1 var(--font-display); }
+.profile-role { color: var(--muted); }
+.about-main { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.sheet { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+.sheet-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.sheet h2 { font: 400 26px/1.1 var(--font-display); }
+.bio p { margin: 0; max-width: 65ch; line-height: 1.65; }
+.bio { display: flex; flex-direction: column; gap: 12px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.fact { background: var(--bg); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.fact b { font-weight: 500; }
+.timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.timeline li { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); }
+.timeline li:first-child { border-top: 0; padding-top: 0; }
+.timeline .years { color: var(--muted); font-size: 12px; padding-top: 2px; }
+.timeline b { font-weight: 500; display: block; }
+.timeline span { color: var(--muted); font-size: 13px; }
+.contact-list { display: flex; flex-direction: column; }
+.contact-row { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); }
+.contact-row:first-child { border-top: 0; }
+.contact-row .val { overflow-wrap: anywhere; user-select: all; }
+.copy { border: 1px solid var(--line); background: var(--bg); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px);
+  background: var(--fg); color: var(--bg); padding: 8px 14px; border-radius: 8px; font-size: 13px;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 50;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+.view-enter { animation: rise .35s cubic-bezier(.2,.7,.2,1); }
+@keyframes rise { from { transform: translateY(8px); opacity: .4; } to { transform: none; opacity: 1; } }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1180px) {
+  .shell, .shell.no-inspector { grid-template-columns: var(--left) minmax(0, 1fr); }
+  .inspector { grid-column: 2; border-left: 0; border-top: 1px solid var(--line); }
+  .inspector .panel-inner { position: static; max-height: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px 28px; padding: 20px clamp(16px, 3vw, 40px); }
+  .insp-section { border-bottom: 0; padding-bottom: 0; }
+}
+@media (max-width: 860px) {
+  .brand-file { display: none; }
+  .shell, .shell.no-inspector { grid-template-columns: minmax(0, 1fr); }
+  .layers { border-right: 0; border-bottom: 1px solid var(--line); }
+  .layers .panel-inner { position: static; max-height: none; padding: 10px 16px; gap: 8px; }
+  .layers .search, .layers .layer-group-head, .layers .empty-note { display: none; }
+  .layer-scroll { flex-direction: row; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+  .layer-group { flex-direction: row; gap: 6px; }
+  .layer { width: auto; grid-template-columns: 22px auto; padding: 5px 10px 5px 5px; border: 1px solid var(--line); white-space: nowrap; }
+  .layer-thumb { width: 22px; }
+  .layer-title { max-width: 16ch; }
+  .layer-count { display: none; }
+  .inspector { grid-column: 1; }
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .about { grid-template-columns: minmax(0, 1fr); }
+  .profile-card { position: static; display: grid; grid-template-columns: 120px minmax(0, 1fr); }
+  .profile-card img { height: 100%; aspect-ratio: auto; }
+}
+@media (max-width: 560px) {
+  .topbar { gap: 8px; padding-inline: 12px; }
+  .brand-name { display: none; }
+  .tab { padding: 6px 10px; }
+  .top-actions .btn { display: none; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 14px; }
+  .frame { height: min(62vh, 110vw); }
+  .timeline li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .contact-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .contact-row .label { grid-column: 1 / -1; }
+  .profile-card { grid-template-columns: 96px minmax(0, 1fr); }
+  .profile-name { font-size: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">r</div>
+    <span class="brand-name" id="brand-name">River Geoff</span>
+    <span class="brand-file mono">portfolio-26.canvas</span>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button class="tab" role="tab" id="tab-work" data-view="work">Work</button>
+    <button class="tab" role="tab" id="tab-motion" data-view="motion">Motion</button>
+    <button class="tab" role="tab" id="tab-about" data-view="about">About</button>
+  </nav>
+  <div class="top-actions">
+    <button class="icon-btn" id="theme-btn" type="button" aria-label="Switch colour theme">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+    <button class="btn" id="contact-btn" type="button">Get in touch</button>
+  </div>
+</header>
+
+<div class="shell" id="shell">
+  <aside class="panel layers" aria-label="Projects">
+    <div class="panel-inner">
+      <input class="search" id="layer-search" type="search" placeholder="Filter projects" aria-label="Filter projects">
+      <div class="layer-scroll" id="layers"></div>
+    </div>
+  </aside>
+  <main class="canvas" id="canvas"></main>
+  <aside class="panel inspector" id="inspector" aria-label="Details"><div class="panel-inner" id="inspector-inner"></div></aside>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="content.js"></script>
+<script>
+(() => {
+  const P = window.PROFILE, WORK = window.PROJECTS, MOTION = window.MOTION;
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const pad = (n) => String(n).padStart(2, "0");
+  const src = (p, i) => `assets/work/${p.id}-${pad(i)}.jpg`;
+  const totalFrames = WORK.reduce((n, p) => n + p.frames, 0);
+  const clients = [...new Set(WORK.map((p) => p.client))];
+
+  const state = { view: "work", project: null, frame: 1, filter: "All", query: "" };
+
+  /* ---------- theme ---------- */
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  };
+  const savedTheme = store.get("theme");
+  if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+  $("#theme-btn").addEventListener("click", () => {
+    const cur = document.documentElement.dataset.theme ||
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const next = cur === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    store.set("theme", next);
+  });
+
+  /* ---------- toast + copy ---------- */
+  let toastTimer;
+  function toast(msg) {
+    const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 1600);
+  }
+  function copy(text, what) {
+    const done = () => toast(`Copied ${what}`);
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(done, () => toast("Select the text to copy it"));
+    } else toast("Select the text to copy it");
+  }
+
+  /* ---------- layers panel ---------- */
+  function renderLayers() {
+    const q = state.query.trim().toLowerCase();
+    const match = (p) => !q || (p.title + " " + p.client + " " + p.tags.join(" ")).toLowerCase().includes(q);
+    let html = `<div class="layer-group">
+      <button class="layer" data-project="" aria-current="${state.view === "work" && !state.project}">
+        <span class="layer-thumb all" aria-hidden="true">${WORK.length}</span>
+        <span class="layer-title">All work</span><span class="layer-count mono">${totalFrames}</span>
+      </button></div>`;
+    let any = false;
+    for (const c of clients) {
+      const items = WORK.filter((p) => p.client === c && match(p));
+      if (!items.length) continue;
+      any = true;
+      html += `<div class="layer-group"><div class="layer-group-head"><span class="label">${esc(c)}</span></div>` +
+        items.map((p) => `<button class="layer" data-project="${p.id}" aria-current="${state.view === "work" && state.project === p.id}">
+          <img class="layer-thumb" src="${src(p, 1)}" alt="" loading="lazy">
+          <span class="layer-title">${esc(p.title)}</span><span class="layer-count mono">${p.frames}</span></button>`).join("") +
+        `</div>`;
+    }
+    const motionItems = MOTION.filter((m) => !q || (m.title + " " + m.client).toLowerCase().includes(q));
+    if (motionItems.length) {
+      any = true;
+      html += `<div class="layer-group"><div class="layer-group-head"><span class="label">Motion</span></div>` +
+        motionItems.map((m) => `<button class="layer" data-motion="${m.id}" aria-current="false">
+          <img class="layer-thumb" src="${esc(m.poster || m.stills[0])}" alt="" loading="lazy">
+          <span class="layer-title">${esc(m.client)} · ${esc(m.title)}</span><span class="layer-count mono">${m.video ? "▶" : m.stills.length}</span></button>`).join("") +
+        `</div>`;
+    }
+    if (!any) html += `<p class="empty-note">No projects match “${esc(state.query)}”.</p>`;
+    $("#layers").innerHTML = html;
+  }
+  $("#layers").addEventListener("click", (e) => {
+    const b = e.target.closest(".layer"); if (!b) return;
+    if (b.dataset.motion !== undefined) { go("motion"); requestAnimationFrame(() => document.getElementById("m-" + b.dataset.motion)?.scrollIntoView({ behavior: "smooth", block: "start" })); return; }
+    openProject(b.dataset.project || null);
+  });
+  $("#layer-search").addEventListener("input", (e) => { state.query = e.target.value; renderLayers(); });
+
+  /* ---------- views ---------- */
+  function go(view, push = true) {
+    state.view = view;
+    document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", String(t.dataset.view === view)));
+    $("#shell").classList.toggle("no-inspector", view === "about");
+    $("#inspector").hidden = view === "about";
+    if (push) {
+      const hash = view === "work" && state.project ? state.project : view;
+      history.replaceState(null, "", "#" + hash);
+    }
+    render();
+    window.scrollTo({ top: 0 });
+  }
+  document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => {
+    if (t.dataset.view === "work") state.project = null;
+    go(t.dataset.view);
+  }));
+  $("#contact-btn").addEventListener("click", () => {
+    go("about");
+    requestAnimationFrame(() => $("#contact")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  });
+
+  function openProject(id, frame = 1) {
+    state.project = id; state.frame = frame; go("work");
+  }
+
+  function render() {
+    renderLayers();
+    const c = $("#canvas");
+    if (state.view === "work") state.project ? renderProject(c) : renderAll(c);
+    else if (state.view === "motion") renderMotion(c);
+    else renderAbout(c);
+    c.classList.remove("view-enter"); void c.offsetWidth; c.classList.add("view-enter");
+  }
+
+  /* all work */
+  function renderAll(c) {
+    const kinds = ["All", ...new Set(WORK.map((p) => p.client)), ...new Set(WORK.map((p) => p.kind))];
+    const list = WORK.filter((p) => state.filter === "All" || p.client === state.filter || p.kind === state.filter);
+    c.innerHTML = `
+      <section class="hero">
+        <h1 class="hero-title">Social campaigns that <em>hold</em> a scroll.</h1>
+        <div class="hero-side">
+          <span class="status">${esc(P.status)}</span>
+          <p>${esc(P.intro)}</p>
+        </div>
+      </section>
+      <div class="canvas-head">
+        <div class="filters" role="group" aria-label="Filter work">
+          ${kinds.map((k) => `<button class="chip" data-filter="${esc(k)}" aria-pressed="${state.filter === k}">${esc(k)}</button>`).join("")}
+        </div>
+        <span class="label mono">${list.length} projects · ${list.reduce((n, p) => n + p.frames, 0)} frames</span>
+      </div>
+      <div class="grid">
+        ${list.map((p) => {
+          const picks = [Math.min(3, p.frames), Math.min(2, p.frames), 1];
+          return `<button class="card" data-open="${p.id}">
+            <div class="stack">${p.frames > 1 ? picks.map((i) => `<img src="${src(p, i)}" alt="" loading="lazy">`).join("") : `<img src="${src(p, 1)}" alt="" style="opacity:0"><img src="${src(p, 1)}" alt="" style="opacity:0"><img src="${src(p, 1)}" alt="${esc(p.title)}" loading="lazy">`}</div>
+            <div class="card-meta"><span class="card-title">${esc(p.title)}</span>
+            <span class="card-sub">${esc(p.client)}<i class="dot-sep"></i>${esc(p.kind)}<i class="dot-sep"></i><span class="mono">${p.frames} ${p.frames === 1 ? "frame" : "frames"}</span></span></div>
+          </button>`;
+        }).join("")}
+      </div>`;
+    c.querySelectorAll("[data-filter]").forEach((b) => b.addEventListener("click", () => { state.filter = b.dataset.filter; render(); }));
+    c.querySelectorAll("[data-open]").forEach((b) => b.addEventListener("click", () => openProject(b.dataset.open)));
+    renderOverviewInspector();
+  }
+
+  function renderOverviewInspector() {
+    $("#inspector-inner").innerHTML = `
+      <section class="insp-section">
+        <span class="label">Designer</span>
+        <div class="mini-profile"><img src="${esc(P.photo)}" alt="Portrait of ${esc(P.name)}">
+          <div><strong>${esc(P.name)}</strong><span>${esc(P.role)}</span></div></div>
+        <button class="link-btn" data-go="about">View full details →</button>
+      </section>
+      <section class="insp-section">
+        <span class="label">This file</span>
+        <div class="stat-row">
+          <div class="stat"><b>${WORK.length}</b><span>projects</span></div>
+          <div class="stat"><b>${totalFrames}</b><span>frames</span></div>
+          <div class="stat"><b>${clients.length}</b><span>clients</span></div>
+        </div>
+      </section>
+      <section class="insp-section">
+        <span class="label">Clients</span>
+        <dl class="props">${clients.map((c) => `<dt>${esc(c)}</dt><dd class="mono">${WORK.filter((p) => p.client === c).length} projects</dd>`).join("")}</dl>
+      </section>
+      <section class="insp-section">
+        <span class="label">Skills</span>
+        <div class="tags">${P.skills.map((s) => `<span class="tag">${esc(s)}</span>`).join("")}</div>
+      </section>`;
+    $("#inspector-inner [data-go]").addEventListener("click", () => go("about"));
+  }
+
+  /* single project */
+  function renderProject(c) {
+    const p = WORK.find((x) => x.id === state.project);
+    if (!p) { state.project = null; return renderAll(c); }
+    const idx = WORK.indexOf(p), next = WORK[(idx + 1) % WORK.length];
+    c.innerHTML = `
+      <div class="canvas-head">
+        <div>
+          <div class="eyebrow"><span>${esc(p.client)}</span><i class="dot-sep"></i><span>${esc(p.kind)}</span><i class="dot-sep"></i><span class="mono">${p.year}</span></div>
+          <h1 class="display">${esc(p.title)}</h1>
+        </div>
+        <div class="toolbar" role="group" aria-label="Frames">
+          <button class="icon-btn" id="prev" aria-label="Previous frame"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+          <span class="counter mono" id="counter"></span>
+          <button class="icon-btn" id="next" aria-label="Next frame"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+        </div>
+      </div>
+      <div class="strip-wrap" id="strip-wrap">
+        <div class="strip">
+          ${Array.from({ length: p.frames }, (_, k) => k + 1).map((i) => `
+            <button class="frame" data-frame="${i}" aria-label="Frame ${i} of ${p.frames}">
+              <span class="frame-tag">Frame ${pad(i)}</span>
+              <img src="${src(p, i)}" alt="${esc(p.title)}, frame ${i}" ${i > 3 ? 'loading="lazy"' : ""}>
+              <i class="handle h-tl"></i><i class="handle h-tr"></i><i class="handle h-bl"></i><i class="handle h-br"></i>
+              <span class="frame-size">1080 × 1350</span>
+            </button>`).join("")}
+        </div>
+      </div>
+      <div class="hint"><span><kbd>←</kbd> <kbd>→</kbd> step through frames</span><span>Frames sit edge to edge, the way they read when swiped.</span></div>
+      <button class="next-project" id="next-project">
+        <img src="${src(next, 1)}" alt="">
+        <span><span class="label">Next project</span><br>${esc(next.title)}</span>
+      </button>`;
+    c.querySelectorAll(".frame").forEach((f) => f.addEventListener("click", () => selectFrame(+f.dataset.frame)));
+    $("#prev").addEventListener("click", () => selectFrame(state.frame - 1));
+    $("#next").addEventListener("click", () => selectFrame(state.frame + 1));
+    $("#next-project").addEventListener("click", () => openProject(next.id));
+    renderProjectInspector(p);
+    selectFrame(state.frame, false);
+  }
+
+  function selectFrame(i, scroll = true) {
+    const p = WORK.find((x) => x.id === state.project); if (!p) return;
+    state.frame = Math.max(1, Math.min(p.frames, i));
+    document.querySelectorAll(".frame").forEach((f) => f.setAttribute("aria-current", String(+f.dataset.frame === state.frame)));
+    $("#counter").textContent = `${pad(state.frame)} / ${pad(p.frames)}`;
+    $("#prev").disabled = state.frame === 1; $("#next").disabled = state.frame === p.frames;
+    if (scroll) {
+      const f = document.querySelector(`.frame[data-frame="${state.frame}"]`), w = $("#strip-wrap");
+      w.scrollTo({ left: f.offsetLeft - (w.clientWidth - f.offsetWidth) / 2, behavior: "smooth" });
+    }
+  }
+
+  function renderProjectInspector(p) {
+    $("#inspector-inner").innerHTML = `
+      <section class="insp-section">
+        <span class="label">Project</span>
+        <dl class="props">
+          <dt>Client</dt><dd>${esc(p.client)}</dd>
+          <dt>Type</dt><dd>${esc(p.kind)}</dd>
+          <dt>Frames</dt><dd class="mono">${p.frames}</dd>
+          <dt>Format</dt><dd class="mono">1080 × 1350 · 4:5</dd>
+          <dt>Year</dt><dd class="mono">${esc(p.year)}</dd>
+        </dl>
+      </section>
+      <section class="insp-section">
+        <span class="label">Brief</span>
+        <p class="brief">${esc(p.summary)}</p>
+      </section>
+      <section class="insp-section">
+        <span class="label">Colour</span>
+        <div class="swatches">${p.palette.map((h) => `<button class="swatch" data-hex="${h}" aria-label="Copy ${h}"><i style="background:${h}"></i><span>${h.toUpperCase()}</span></button>`).join("")}</div>
+      </section>
+      <section class="insp-section">
+        <span class="label">Tags</span>
+        <div class="tags">${p.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+      </section>`;
+    $("#inspector-inner").querySelectorAll(".swatch").forEach((s) => s.addEventListener("click", () => copy(s.dataset.hex, s.dataset.hex.toUpperCase())));
+  }
+
+  /* motion */
+  function renderMotion(c) {
+    c.innerHTML = `
+      <div class="canvas-head"><div>
+        <div class="eyebrow"><span>Motion</span><i class="dot-sep"></i><span class="mono">${MOTION.length} pieces</span></div>
+        <h1 class="display">Product films and <em>brand motion</em></h1>
+      </div></div>
+      ${MOTION.map((m) => `
+        <section class="motion-block" id="m-${m.id}">
+          <div class="motion-head"><h2>${esc(m.client)} · ${esc(m.title)}</h2><span class="label mono">${esc(m.detail)}</span></div>
+          <div class="motion-head"><p>${esc(m.summary)}</p></div>
+          ${m.video ? `<div class="window"><div class="window-bar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="window-title mono">${esc(m.video.split("/").pop())}</span></div>
+            <video src="${esc(m.video)}" poster="${esc(m.poster)}" controls playsinline muted loop preload="metadata"></video></div>`
+          : `<div class="stills">${m.stills.map((s, i) => `<img src="${esc(s)}" alt="${esc(m.client)} ${esc(m.title)}, still ${i + 1}" loading="lazy">`).join("")}</div>`}
+        </section>`).join("")}`;
+    const m = MOTION[0];
+    $("#inspector-inner").innerHTML = `
+      <section class="insp-section"><span class="label">Motion</span>
+        <dl class="props">${MOTION.map((x) => `<dt>${esc(x.client)}</dt><dd>${esc(x.title)}</dd>`).join("")}</dl></section>
+      <section class="insp-section"><span class="label">Featured</span>
+        <dl class="props"><dt>Length</dt><dd class="mono">0:30</dd><dt>Frame rate</dt><dd class="mono">30 fps</dd><dt>Size</dt><dd class="mono">1920 × 1080</dd><dt>Built in</dt><dd>Remotion</dd></dl></section>
+      <section class="insp-section"><span class="label">Scenes</span>
+        <div class="tags">${["Home", "Booking", "Treatment", "Confirmation", "End card"].map((t) => `<span class="tag">${t}</span>`).join("")}</div></section>`;
+  }
+
+  /* about — reads everything from PROFILE in content.js */
+  function renderAbout(c) {
+    c.innerHTML = `
+      <div class="about">
+        <aside class="profile-card">
+          <img src="${esc(P.photo)}" alt="Portrait of ${esc(P.name)}">
+          <div class="profile-body">
+            <h1 class="profile-name">${esc(P.name)}</h1>
+            <span class="profile-role">${esc(P.role)}</span>
+            <span class="status">${esc(P.status)}</span>
+            <span class="label">${esc(P.location)}</span>
+          </div>
+        </aside>
+        <div class="about-main">
+          <section class="sheet">
+            <div class="sheet-head"><h2>About</h2><span class="label">Details</span></div>
+            <div class="bio">${P.bio.map((b) => `<p>${esc(b)}</p>`).join("")}</div>
+            ${P.facts.length ? `<div class="facts">${P.facts.map((f) => `<div class="fact"><span class="label">${esc(f.label)}</span><b>${esc(f.value)}</b></div>`).join("")}</div>` : ""}
+          </section>
+          ${P.experience.length ? `<section class="sheet">
+            <div class="sheet-head"><h2>Experience</h2><span class="label mono">${P.experience.length} roles</span></div>
+            <ol class="timeline">${P.experience.map((x) => `<li><span class="years mono">${esc(x.years)}</span><div><b>${esc(x.title)}</b><span>${esc(x.org)}</span></div></li>`).join("")}</ol>
+          </section>` : ""}
+          <section class="sheet">
+            <div class="sheet-head"><h2>Skills &amp; tools</h2></div>
+            ${P.skills.length ? `<span class="label">Skills</span><div class="tags">${P.skills.map((s) => `<span class="tag">${esc(s)}</span>`).join("")}</div>` : ""}
+            ${P.tools.length ? `<span class="label">Tools</span><div class="tags">${P.tools.map((s) => `<span class="tag">${esc(s)}</span>`).join("")}</div>` : ""}
+          </section>
+          ${P.contact.length ? `<section class="sheet" id="contact">
+            <div class="sheet-head"><h2>Get in touch</h2><span class="label">Copy to clipboard</span></div>
+            <div class="contact-list">${P.contact.map((x, i) => `<div class="contact-row"><span class="label">${esc(x.label)}</span>
+              ${x.href ? `<a class="val" href="${esc(x.href)}" target="_blank" rel="noopener">${esc(x.value)}</a>` : `<span class="val">${esc(x.value)}</span>`}
+              <button class="copy" data-copy="${i}">Copy</button></div>`).join("")}</div>
+          </section>` : ""}
+        </div>
+      </div>`;
+    c.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => {
+      const x = P.contact[+b.dataset.copy]; copy(x.value, x.label.toLowerCase());
+    }));
+  }
+
+  /* keyboard */
+  document.addEventListener("keydown", (e) => {
+    if (state.view !== "work" || !state.project || e.target.matches("input, textarea, video")) return;
+    if (e.key === "ArrowRight") { e.preventDefault(); selectFrame(state.frame + 1); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); selectFrame(state.frame - 1); }
+    if (e.key === "Escape") openProject(null);
+  });
+
+  /* boot from #hash: #work, #motion, #about, or a project id */
+  $("#brand-name").textContent = P.name;
+  const h = location.hash.slice(1);
+  if (WORK.some((p) => p.id === h)) { state.project = h; go("work", false); }
+  else go(["motion", "about"].includes(h) ? h : "work", false);
+})();
+</script>
+</body>
+</html>
