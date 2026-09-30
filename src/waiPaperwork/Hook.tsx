@@ -1,6 +1,6 @@
 import {AbsoluteFill, Img, interpolate, random, staticFile, useCurrentFrame} from 'remotion';
 import {copy, HEADLINES, headlineGaps, HOOK, TITLE_AT} from './timeline';
-import {easeInOut, easeOut, Mark, pw, ramp, Rise} from './util';
+import {easeInOut, easeOut, Mark, pw, ramp, Reveal} from './util';
 
 // Intro, frames 0–96: the original headline shots slam onto a growing pile,
 // faster and faster; then the pile steps back and the title lands.
@@ -58,9 +58,9 @@ export const Hook: React.FC = () => {
   const push = interpolate(frame, [TITLE_AT, HOOK], [1.04, 1], {extrapolateLeft: 'clamp', easing: easeOut});
   const text: React.CSSProperties = {
     fontFamily: pw.sans,
-    fontWeight: 800,
-    fontSize: 150,
-    lineHeight: '168px',
+    fontWeight: 700,
+    fontSize: 140,
+    lineHeight: '158px',
     letterSpacing: -5,
     color: pw.ink,
   };
@@ -82,21 +82,21 @@ export const Hook: React.FC = () => {
         <AbsoluteFill style={{alignItems: 'center', justifyContent: 'center'}}>
           <div style={{...text, transform: `scale(${push})`, textAlign: 'left'}}>
             <div>
-              <Rise frame={frame} at={TITLE_AT} dist={40}>
-                <Mark frame={frame} at={TITLE_AT + 8} dur={9}>
+              <Reveal frame={frame} at={TITLE_AT}>
+                <Mark frame={frame} at={TITLE_AT + 10} dur={12}>
                   {copy.title[0]}
                 </Mark>
-              </Rise>
+              </Reveal>
             </div>
             <div>
-              <Rise frame={frame} at={TITLE_AT + 4} dist={40}>
+              <Reveal frame={frame} at={TITLE_AT + 4}>
                 {copy.title[1]}
-              </Rise>
+              </Reveal>
             </div>
             <div>
-              <Rise frame={frame} at={TITLE_AT + 8} dist={40}>
+              <Reveal frame={frame} at={TITLE_AT + 8}>
                 {copy.title[2]}
-              </Rise>
+              </Reveal>
             </div>
           </div>
         </AbsoluteFill>

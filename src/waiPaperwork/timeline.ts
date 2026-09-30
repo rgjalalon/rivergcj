@@ -23,9 +23,9 @@ export const PW_DURATION = src(39.2);
 export const scenes = {
   hook: {from: 0, to: HOOK},
   footage: {from: HOOK, to: src(4.5)},
-  cards: {from: src(4.5), to: src(6.3)},
-  logo: {from: src(6.3), to: src(9.8)},
-  lockup: {from: src(9.8), to: src(12.9)},
+  cards: {from: src(4.5), to: src(6.9)},
+  logo: {from: src(6.9), to: src(9.4)},
+  lockup: {from: src(9.4), to: src(12.9)},
   product: {from: src(12.9), to: src(31.3)},
   papers: {from: src(31.3), to: src(35.0)},
   end: {from: src(35.0), to: PW_DURATION},
@@ -47,14 +47,37 @@ export const copy = {
   endLine: 'Less paperwork. More medicine.',
 };
 
+/**
+ * The product capture is retimed under the (untouched) music: each pair maps
+ * film time to capture time, both in source seconds. Slower where the UI has
+ * something to read (worklist filling in, the note drafting), faster through
+ * idle stretches and the letter scroll, so the section keeps its length.
+ */
+export const retime: [number, number][] = [
+  [12.9, 12.9],
+  [13.3, 13.3],
+  [15.8, 15.0],
+  [17.6, 16.4],
+  [18.2, 17.1],
+  [20.6, 18.8],
+  [21.8, 20.3],
+  [22.4, 21.0],
+  [23.6, 22.4],
+  [25.0, 23.9],
+  [25.8, 25.9],
+  [26.3, 26.4],
+  [30.6, 31.1],
+  [35.0, 35.0],
+];
+
 /** Product captions (source seconds). `mark` gets the highlighter. */
 export const captions: {from: number; to: number; text: string; mark?: string}[] = [
-  {from: 13.8, to: 16.8, text: 'Your whole list, already moving.', mark: 'already moving.'},
-  {from: 17.2, to: 19.3, text: 'Consult notes, drafted for you.', mark: 'drafted'},
-  {from: 19.4, to: 20.9, text: 'Checked. Signed. Filed.', mark: 'Filed.'},
-  {from: 21.2, to: 25.4, text: 'Letters written while you see the next patient.', mark: 'the next patient.'},
-  {from: 26.4, to: 31.1, text: 'Ready for your signature.', mark: 'signature.'},
-  {from: 31.6, to: 33.4, text: 'Every note. Every letter. Every referral.'},
+  {from: 14.3, to: 17.5, text: 'Your whole list, already moving.', mark: 'already moving.'},
+  {from: 18.5, to: 20.5, text: 'Consult notes, drafted for you.', mark: 'drafted'},
+  {from: 20.7, to: 22.3, text: 'Checked. Signed. Filed.', mark: 'Filed.'},
+  {from: 22.7, to: 25.7, text: 'Letters written while you see the next patient.', mark: 'the next patient.'},
+  {from: 26.7, to: 30.7, text: 'Ready for your signature.', mark: 'signature.'},
+  {from: 31.3, to: 33.3, text: 'Every note. Every letter. Every referral.'},
 ];
 
 /**
@@ -62,17 +85,17 @@ export const captions: {from: number; to: number; text: string; mark?: string}[]
  * zoom, plus a small tilt that settles as each view lands.
  */
 export const camera: {at: number; x: number; y: number; z: number; rx: number; ry: number}[] = [
-  {at: 12.9, x: 960, y: 560, z: 0.86, rx: 8, ry: -6},
-  {at: 14.6, x: 860, y: 580, z: 0.94, rx: 2, ry: -2},
-  {at: 16.8, x: 800, y: 590, z: 1.02, rx: 0, ry: 0},
-  {at: 17.6, x: 900, y: 520, z: 0.9, rx: 3, ry: 3},
-  {at: 20.8, x: 760, y: 590, z: 1.04, rx: 0, ry: 1},
-  {at: 21.6, x: 960, y: 520, z: 0.9, rx: 2, ry: -3},
-  {at: 23.4, x: 760, y: 700, z: 1.0, rx: 0, ry: -1},
-  {at: 25.6, x: 820, y: 620, z: 1.04, rx: 0, ry: 0},
-  {at: 26.4, x: 960, y: 380, z: 0.92, rx: 7, ry: 0},
-  {at: 29.8, x: 960, y: 600, z: 0.95, rx: 0, ry: 0},
-  {at: 31.0, x: 960, y: 600, z: 0.98, rx: 0, ry: 0},
-  {at: 31.6, x: 960, y: 540, z: 1.06, rx: 0, ry: 0},
-  {at: 35.0, x: 960, y: 560, z: 0.9, rx: 4, ry: 0},
+  {at: 12.9, x: 960, y: 560, z: 0.86, rx: 5, ry: -3},
+  {at: 15.2, x: 860, y: 580, z: 0.95, rx: 1, ry: -1},
+  {at: 17.6, x: 800, y: 590, z: 1.02, rx: 0, ry: 0},
+  {at: 18.5, x: 900, y: 520, z: 0.9, rx: 2, ry: 2},
+  {at: 21.8, x: 760, y: 590, z: 1.03, rx: 0, ry: 0},
+  {at: 22.6, x: 960, y: 520, z: 0.92, rx: 1, ry: -2},
+  {at: 25.0, x: 760, y: 700, z: 1.02, rx: 0, ry: 0},
+  {at: 25.8, x: 820, y: 620, z: 1.04, rx: 0, ry: 0},
+  {at: 26.6, x: 960, y: 380, z: 0.92, rx: 4, ry: 0},
+  {at: 29.6, x: 960, y: 600, z: 0.95, rx: 0, ry: 0},
+  {at: 30.6, x: 960, y: 600, z: 0.98, rx: 0, ry: 0},
+  {at: 31.3, x: 960, y: 540, z: 1.06, rx: 0, ry: 0},
+  {at: 35.0, x: 960, y: 560, z: 0.9, rx: 2, ry: 0},
 ];

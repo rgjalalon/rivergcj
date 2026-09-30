@@ -157,8 +157,8 @@ place(whoosh(0.4, 0.1, rise=False), HOOK - 3)
 # Type cards and logo.
 place(sub_hit(0.3, 80, 40, 1.0), src(4.5))
 place(whoosh(0.4, 0.08, rise=False), src(4.95))
-place(shimmer(1.8, 0.07), src(8.2))
-place(whoosh(0.6, 0.1, rise=False), src(12.3))
+place(shimmer(1.8, 0.07), src(7.3))
+place(whoosh(0.6, 0.1, rise=False), src(12.45))
 # Payoff and end card.
 place(sub_hit(0.4, 75, 36, 1.4), src(33.5))
 place(whoosh(0.8, 0.1, rise=False), src(34.8))

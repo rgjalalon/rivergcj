@@ -5,7 +5,7 @@ import {Hook} from './Hook';
 import {Product} from './Product';
 import {Cards, Question} from './Question';
 import {scenes, SRC_START, PW_FPS} from './timeline';
-import {pw, Source} from './util';
+import {pw, RetimedSource} from './util';
 
 const inScene = (frame: number, s: {from: number; to: number}) => frame >= s.from && frame < s.to;
 
@@ -22,7 +22,7 @@ export const PaperworkFilm: React.FC = () => {
       {inScene(frame, scenes.lockup) && <Lockup />}
       {inScene(frame, product) && (
         <Product>
-          <Source from={product.from} to={product.to} />
+          <RetimedSource />
         </Product>
       )}
       {frame >= scenes.end.from - 8 && <EndCard />}

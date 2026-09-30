@@ -1,6 +1,6 @@
 import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
 import {camera, captions, scenes, src} from './timeline';
-import {easeInOut, inOut, Mark, pw, ramp, Rise} from './util';
+import {easeInOut, inOut, Mark, pw, ramp, Reveal, Rise} from './util';
 
 /** Camera state at a film frame, eased between keyframes. */
 const cameraAt = (frame: number) => {
@@ -40,9 +40,9 @@ const Caption: React.FC<{frame: number; from: number; to: number; text: string; 
         bottom: 74,
         textAlign: 'center',
         fontFamily: pw.sans,
-        fontWeight: 600,
-        fontSize: 50,
-        letterSpacing: -1.2,
+        fontWeight: 500,
+        fontSize: 46,
+        letterSpacing: -1,
         color: pw.ink,
         opacity: vis,
       }}
@@ -52,7 +52,7 @@ const Caption: React.FC<{frame: number; from: number; to: number; text: string; 
       </Rise>
       {tail && (
         <Rise frame={frame} at={from + 4} dist={18}>
-          <Mark frame={frame} at={from + 10}>
+          <Mark frame={frame} at={from + 12}>
             {tail}
           </Mark>
         </Rise>
@@ -106,21 +106,21 @@ export const Product: React.FC<{children: React.ReactNode}> = ({children}) => {
         <div
           style={{
             fontFamily: pw.sans,
-            fontWeight: 800,
+            fontWeight: 700,
             fontSize: 150,
             letterSpacing: -5,
             color: pw.ink,
             transform: `scale(${1.04 - 0.04 * ramp(frame, payoff, 40)})`,
           }}
         >
-          <Rise frame={frame} at={payoff} dist={36}>
+          <Reveal frame={frame} at={payoff}>
             {'Your time, '}
-          </Rise>
-          <Rise frame={frame} at={payoff + 5} dist={36}>
-            <Mark frame={frame} at={payoff + 12}>
+          </Reveal>
+          <Reveal frame={frame} at={payoff + 5}>
+            <Mark frame={frame} at={payoff + 14}>
               back.
             </Mark>
-          </Rise>
+          </Reveal>
         </div>
       </AbsoluteFill>
     </AbsoluteFill>
