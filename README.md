@@ -64,3 +64,30 @@ npm run render:wai   # writes out/wai-brand-film.mp4
 **Footage:** the real-life shots are placeholders until clips are added. See `public/wai/footage/README.md` for filenames and the shot list. The grade (warm highlights, espresso shadows, film grain, vignette) is applied automatically in `src/wai/Footage.tsx`.
 
 Shot timings and captions are in `src/wai/timeline.ts`. The logo is `public/wai/wai-logo-cream.png`.
+
+---
+
+# Wai: "paperwork" film (re-edit)
+
+A 42-second landscape film (1920×1080, 30fps) built from the original 39-second Wai cut. The source footage, product capture and music are kept. The hook, typography, grade, camera and sound design are new.
+
+**Rendered file:** [`renders/wai-paperwork-film.mp4`](renders/wai-paperwork-film.mp4)
+
+```bash
+npm run render:paperwork   # writes out/wai-paperwork-film.mp4
+python3 scripts/make_paperwork_sfx.py   # rebuilds public/wai-paperwork/sfx.wav (needs numpy, scipy)
+```
+
+| Time | Scene | What changed from the original |
+|---|---|---|
+| 0.0–4.5s | **New hook.** "For every 1 hour with a patient," → the digit rolls to **2** "hours on *paperwork*." → sheets of paper bury the frame → "It's driving *doctors out*." | Replaces the generated news-headline montage (which carried fake mastheads such as "AP WIRE"). The stat is cited on screen (Sinsky et al., Annals of Internal Medicine, 2016). |
+| 4.5–7.2s | Typing footage: "What if AI could *carry* some of the load?" | Graded monochrome with a warm split tone, 2.39:1 letterbox, slow push. The baked-in yellow caption is hidden under a frosted band and the line is re-typed in large serif, synced to the original key sounds. |
+| 7.2–9.0s | "Not ~~replace~~ the clinician. / But *support* them." | Espresso type cards with a drawn strike-through. |
+| 9.0–12.5s | Logo reveal | Cream logo on espresso: blur-to-sharp wipe, glow, light sweep on the music swell. |
+| 12.5–15.6s | "wai drafts while you *carry on*." | The logo slides into the lockup, then a paper-coloured wipe leads into the product. |
+| 15.6–37.7s | Product: worklist → note → signed → letter → paper storm | The capture is multiplied onto warm paper, with a virtual camera (push-ins, tilt that settles) and serif captions. Ends on "Your time, *back*." |
+| 37.7–42.0s | End card | Espresso iris, logo, "Less paperwork. *More medicine.*", fade to black. |
+
+From 4.5s onward the source runs continuously, so the original music and typing sounds stay in sync. Cues are written in source seconds in `src/waiPaperwork/timeline.ts` (`src()` converts them to film frames). The copy, captions and camera keyframes all live there too.
+
+Assets in `public/wai-paperwork/`: `source.mp4` is the original video stream, `source-audio.m4a` is its soundtrack, and `sfx.wav` is the generated hook and transition sound design.
