@@ -3,6 +3,8 @@ import {WellnessAppWalkthrough} from './WellnessAppWalkthrough';
 import {DURATION, FPS} from './timeline';
 import {WaiFilm} from './wai/WaiFilm';
 import {WAI_DURATION, WAI_FPS, WAI_H, WAI_W} from './wai/timeline';
+import {WaiOrigin} from './wai-origin/WaiOrigin';
+import {ORIGIN_DURATION, ORIGIN_FPS, ORIGIN_H, ORIGIN_W} from './wai-origin/timeline';
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -22,6 +24,14 @@ export const RemotionRoot: React.FC = () => {
         fps={WAI_FPS}
         width={WAI_W}
         height={WAI_H}
+      />
+      <Composition
+        id="WaiOrigin"
+        component={WaiOrigin}
+        durationInFrames={ORIGIN_DURATION}
+        fps={ORIGIN_FPS}
+        width={ORIGIN_W}
+        height={ORIGIN_H}
       />
     </>
   );

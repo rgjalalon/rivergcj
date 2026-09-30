@@ -66,3 +66,39 @@ npm run render:wai   # writes out/wai-brand-film.mp4
 **Score:** `public/wai/audio/theme.mp3` ("Finding Myself," Mixkit Free License) fades in under the opening cut, dips slightly through the collage so the captions read clearly, and swells again into the end card. Volume envelope lives in `src/wai/WaiFilm.tsx`.
 
 Shot timings and captions are in `src/wai/timeline.ts`. The logo is `public/wai/wai-logo-cream.png`.
+
+---
+
+# Wai: origin film (vertical)
+
+A 105.6-second vertical film (1080×1920, 30fps) matching the length, beat count, and pacing of a second reference edit — which turned out to be Andreessen Horowitz's own brand film (it closes on the a16z logo), built from real footage of Steve Jobs, Steve Wozniak, Elon Musk, the Collison brothers, and other companies' trademarks (Coinbase, Slack, SpaceX, NYSE). None of that is reusable for Wai. This film keeps the reference's structure — a history-of-the-field opener, a breakthrough montage, builders at work, a symbolic spark-to-scale sequence, the product taking shape, and a triumphant close — but rewrites every beat as Wai's own story, with generic licensed footage and Wai's own product UI standing in for anything that was borrowed likeness or trademark in the original.
+
+**Rendered file:** [`renders/wai-origin.mp4`](renders/wai-origin.mp4)
+
+```bash
+npm run render:wai-origin   # writes out/wai-origin.mp4
+```
+
+| Time | Beat | Reference equivalent |
+|---|---|---|
+| 0.0–6.6s | A microscope on a bench, slow push in, dark dramatic light | The book opening |
+| 6.6–9.0s | Flash: a hand-drawn brain illustration, then cells under magnification | Patent drawing, punch-card computer |
+| 9.0–19.3s | Colleagues working intently around a screen | Young Jobs & Wozniak in the office |
+| 19.3–20.7s | Hands close on a keyboard | Close working shot |
+| 20.7–21.9s | Wai's own early product UI — a single unified record | The Airbnb website flash |
+| 21.9–31.0s | Flame → sun rays → Earth from orbit | Prometheus torch, golden light, Earth |
+| 31.0–37.7s | A hand sketching — an idea taking shape | Hand with phone, hand sketching |
+| 37.7–48.9s | Drone over green hills, then "Ask Wai anything" chat UI | Drone shot, AI-chat screenshot |
+| 48.9–58.4s | A researcher at close, focused work | UI screenshots, reflection shot |
+| 58.4–66.3s | A hand holding a smaller hand | Robotic hand meets human hand |
+| 66.3–74.0s | Drone over a river valley, then a clinician's confident portrait | Landscape drone, founder portraits |
+| 74.0–83.5s | Precision assembly line, then a drone lifting off | Robotics factory, rocket/plane footage |
+| 83.5–89.2s | A toast among friends | Office celebration |
+| 89.2–95.5s | Sun rays return — a callback into the reveal | Portfolio logo wall |
+| 95.5–105.6s | End card: Wai logo on espresso, "medical intelligence, made personal" | A16Z logo hold |
+
+**Footage:** `public/wai/origin/*.mp4` — seventeen Mixkit Free License clips (commercial use, no attribution required), graded with a heavier, more documentary contrast than the lifestyle brand film above (`src/wai-origin/OriginFootage.tsx`). The two product-UI beats (`src/wai-origin/ProductUi.tsx`) are original Wai screens, not screenshots of anyone else's software.
+
+**Score:** `public/wai/origin/theme-origin.mp3` ("The Journey," Mixkit Free License), a single building cue close to the reference's own runtime. Volume envelope is in `src/wai-origin/WaiOrigin.tsx`.
+
+Shot timings live in `src/wai-origin/timeline.ts`. The end card reuses `src/wai/EndCard.tsx` so both Wai films close the same way.
