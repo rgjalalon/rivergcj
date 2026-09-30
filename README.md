@@ -61,6 +61,8 @@ npm run render:wai   # writes out/wai-brand-film.mp4
 | 21.6–25.8s | Footage: golden-hour walk | one place / that actually gets it |
 | 25.8–30.0s | End card: Wai logo on espresso | medical intelligence, made personal |
 
-**Footage:** the real-life shots are placeholders until clips are added. See `public/wai/footage/README.md` for filenames and the shot list. The grade (warm highlights, espresso shadows, film grain, vignette) is applied automatically in `src/wai/Footage.tsx`.
+**Footage:** `public/wai/footage/*.mp4` holds seven real clips (Mixkit Free License — commercial use, no attribution required), graded warm on render by `src/wai/Footage.tsx`. The clinic shot is a bright kitchen consultation rather than a hospital exam room, to keep the film feeling personal rather than clinical. See `public/wai/footage/README.md` for filenames and the shot list if you want to swap in Wai's own footage later.
+
+**Score:** `public/wai/audio/theme.mp3` ("Finding Myself," Mixkit Free License) fades in under the opening cut, dips slightly through the collage so the captions read clearly, and swells again into the end card. Volume envelope lives in `src/wai/WaiFilm.tsx`.
 
 Shot timings and captions are in `src/wai/timeline.ts`. The logo is `public/wai/wai-logo-cream.png`.
