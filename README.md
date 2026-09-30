@@ -86,7 +86,9 @@ npm run render:clinic               # rebuilds the sound beds, then renders all 
 - **Product screens** (`src/clinic/Screen.tsx`): each step is a draft marked "Draft · needs your approval". The doctor selects the wrong text and types the correction, which stays underlined and is logged as "Edited by you · 1 change". Then the doctor moves the cursor to Approve and clicks. Use them as the reference for the real build that is filmed on set.
 - **Logos:** a manufacturer logo on a laptop lid is blurred out, so no other company is shown.
 
-**Sound:** room tone plus keyboard, mouse, door and light-switch sounds, synced to the picture by `scripts/clinic-audio.ts`. There is no music and no voiceover.
+**Sound:** a score, "A New Life" by Eugenio Mininni (Mixkit Stock Music Free License, fetched with the footage), sits under a quiet room-tone bed. The bed has keys, clicks, a door and the laptop lid, synced to the picture by `scripts/clinic-audio.ts`. The music opens near-silent, builds through the workflow and fades out across the end card. There is no voiceover.
+
+**Screens:** the camera is locked off, with a slow eased push and no shake. Every state change is continuous: the selection sweep, typing, the button hover and press, the draft-to-approved pill, and the check drawing on. The 9:16 cut uses a narrow, reflowed layout of the same app, so the text stays large on a phone.
 
 **Rules the edit keeps:**
 - There are no statistics or outcome claims.
@@ -102,6 +104,6 @@ npm run render:clinic               # rebuilds the sound beds, then renders all 
 | 0:32–0:41 | The doctor high-fives the girl → message to parent: "the patient" edited to "Maya" → Approve & send | You approve every word. |
 | 0:41–0:49 | Booking: Wed 25 Nov 14:30 edited to Fri 27 Nov 09:00 → Approve & book → today's list, all approved | |
 | 0:49–0:57 | The laptop closes · the doctor sits back · a silhouette walks on into the evening | 18:00 |
-| 0:57–1:00 | End card | Wai · Clinical assistant |
+| 0:57–1:00 | End card | Wai logo |
 
 The 30s and 9:16 cuts keep all four workflow steps, with each draft edited and approved in a single shot. Timings, shots and on-screen text are all in `src/clinic/timeline.ts`.

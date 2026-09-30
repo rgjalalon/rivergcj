@@ -22,4 +22,6 @@ The in and out points, crop focus and logo blur for each shot are set in `src/cl
 
 The Mixkit files are 720p, so the 1080p cuts are upscaled. Final delivery should use a 1080p or 4K source: the paid versions of these clips, or your own shoot.
 
-`sound-master.wav` and `sound-short.wav` are the generated sound beds: room tone, keys, clicks, a door and the laptop lid. There is no music and no voiceover. Rebuild them with `npm run clinic:audio`.
+The score is "A New Life" by Eugenio Mininni ([Mixkit Stock Music Free License](https://mixkit.co/license/#musicFree)). The same script fetches it to `music/543.mp3`, which is not committed.
+
+`sound-master.wav` and `sound-short.wav` are the generated effects beds: room tone, keys, clicks, a door and the laptop lid. They play under the score. There is no voiceover. Rebuild them with `npm run clinic:audio`.

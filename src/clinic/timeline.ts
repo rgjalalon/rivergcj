@@ -4,6 +4,13 @@
 
 export const FPS = 30;
 
+/**
+ * Score: "A New Life" by Eugenio Mininni (Mixkit Stock Music Free License),
+ * fetched to public/wai/clinic/music/. It opens near-silent and builds from
+ * about 25s, so the master starts at the top and the 30s cuts start later.
+ */
+export const MUSIC = {id: '543', startMaster: 0, startShort: 16, volume: 0.9};
+
 export type Cut = 'master' | 'short' | 'vertical';
 
 export const CUTS: Record<Cut, {w: number; h: number; seconds: number}> = {
@@ -89,9 +96,9 @@ export const clinic = {
 export const day = [
   {time: '14:00', name: 'Arthur Bell', item: 'Consultation note'},
   {time: '14:25', name: 'Priya Nair', item: 'Referral letter'},
-  {time: '14:50', name: 'Maya Kaur', item: 'Message and booking'},
+  {time: '14:50', name: 'Maya Kaur', item: 'Follow-up'},
   {time: '15:30', name: 'Tom Reid', item: 'Consultation note'},
-  {time: '16:10', name: 'Ama Osei', item: 'Repeat prescription'},
+  {time: '16:10', name: 'Ama Osei', item: 'Prescription'},
   {time: '16:50', name: 'Erik Lind', item: 'Consultation note'},
 ];
 

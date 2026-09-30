@@ -1,10 +1,10 @@
 import '../loadFonts';
-import {AbsoluteFill, getStaticFiles, Html5Audio, Img, interpolate, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Easing, getStaticFiles, Html5Audio, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {Grain} from '../components/Grain';
 import {fonts} from '../theme';
 import {Live} from './Live';
 import {ScreenShot} from './Screen';
-import {Cut, CUTS, edits} from './timeline';
+import {Cut, CUTS, edits, MUSIC} from './timeline';
 
 // "18:00": one doctor, one afternoon. Opens on the outcome, rewinds to 14:10,
 // shows each piece of after-work being drafted, edited and approved on screen,
@@ -16,6 +16,16 @@ export const ClinicFilm: React.FC<{cut: Cut}> = ({cut}) => {
   const {shots} = edits[cut];
   const shot = shots.find((s) => frame >= s.from && frame < s.to) ?? shots[shots.length - 1];
   const sound = `wai/clinic/sound-${cut === 'vertical' ? 'short' : cut}.wav`;
+  const music = `wai/clinic/music/${MUSIC.id}.mp3`;
+  const {fps, durationInFrames} = useVideoConfig();
+  const musicStart = (cut === 'master' ? MUSIC.startMaster : MUSIC.startShort) * fps;
+  // Score sits under the room tone: fades in, then fades out across the end card.
+  const musicVolume = (f: number) =>
+    MUSIC.volume *
+    Math.min(
+      interpolate(f, [0, 1.5 * fps], [0, 1], {extrapolateRight: 'clamp'}),
+      interpolate(f, [durationInFrames - 2.5 * fps, durationInFrames - 2], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}),
+    );
 
   return (
     <AbsoluteFill style={{background: '#000'}}>
@@ -45,7 +55,10 @@ export const ClinicFilm: React.FC<{cut: Cut}> = ({cut}) => {
       />
       <Supers cut={cut} />
       <Grain width={w} height={h} opacity={0.07} />
-      {getStaticFiles().some((f) => f.name === sound) ? <Html5Audio src={staticFile(sound)} /> : null}
+      {getStaticFiles().some((f) => f.name === sound) ? <Html5Audio src={staticFile(sound)} volume={0.6} /> : null}
+      {getStaticFiles().some((f) => f.name === music) ? (
+        <Html5Audio src={staticFile(music)} trimBefore={Math.round(musicStart)} volume={musicVolume} />
+      ) : null}
     </AbsoluteFill>
   );
 };
@@ -76,15 +89,17 @@ const Supers: React.FC<{cut: Cut}> = ({cut}) => {
       <div
         style={{
           fontFamily: fonts.sans,
-          fontWeight: 400,
-          fontSize: vertical ? 64 : 48,
-          letterSpacing: isTime ? 4 : 0.2,
+          fontWeight: 500,
+          fontSize: vertical ? 56 : 42,
+          letterSpacing: isTime ? 3 : -0.2,
           fontVariantNumeric: 'tabular-nums',
-          color: 'rgba(250,246,240,0.96)',
-          padding: '14px 34px',
-          borderRadius: 6,
-          background: 'rgba(22,18,14,0.66)',
-          textShadow: '0 2px 18px rgba(0,0,0,0.35)',
+          color: 'rgba(252,249,244,0.98)',
+          padding: vertical ? '18px 40px' : '14px 34px',
+          borderRadius: 999,
+          background: 'rgba(24,20,16,0.5)',
+          backdropFilter: 'blur(14px)',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.18)',
+          transform: `translateY(${(1 - o) * 8}px)`,
         }}
       >
         {s.text}
@@ -95,9 +110,10 @@ const Supers: React.FC<{cut: Cut}> = ({cut}) => {
 
 const EndCard: React.FC<{from: number; vertical: boolean}> = ({from, vertical}) => {
   const frame = useCurrentFrame() - from;
-  const bg = interpolate(frame, [0, 12], [0, 1], {extrapolateRight: 'clamp'});
-  const logo = interpolate(frame, [10, 34], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const line = interpolate(frame, [30, 52], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const ease = {easing: Easing.bezier(0.25, 0.1, 0.25, 1), extrapolateLeft: 'clamp' as const, extrapolateRight: 'clamp' as const};
+  const bg = interpolate(frame, [0, 14], [0, 1], ease);
+  const logo = interpolate(frame, [12, 42], [0, 1], ease);
+  const scale = interpolate(frame, [12, 90], [0.97, 1], ease);
   return (
     <AbsoluteFill
       style={{
@@ -107,19 +123,7 @@ const EndCard: React.FC<{from: number; vertical: boolean}> = ({from, vertical}) 
         justifyContent: 'center',
       }}
     >
-      <Img src={staticFile('wai/wai-logo-cream.png')} style={{width: vertical ? 480 : 420, opacity: logo}} />
-      <div
-        style={{
-          marginTop: vertical ? 64 : 52,
-          fontFamily: fonts.sans,
-          fontSize: vertical ? 38 : 32,
-          letterSpacing: 1,
-          color: 'rgba(245,240,232,0.7)',
-          opacity: line,
-        }}
-      >
-        Clinical assistant
-      </div>
+      <Img src={staticFile('wai/wai-logo-cream.png')} style={{width: vertical ? 480 : 440, opacity: logo, transform: `scale(${scale})`}} />
     </AbsoluteFill>
   );
 };

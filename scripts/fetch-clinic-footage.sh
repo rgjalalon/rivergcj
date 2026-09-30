@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Downloads the live-action footage for the "18:00" film from Mixkit
+# Downloads the live-action footage and the score for the "18:00" film from Mixkit
 # (free for commercial use under the Mixkit Stock Video Free License:
 # https://mixkit.co/license/#videoFree). The clips are not committed to the
 # repo, since that licence doesn't allow redistributing them as standalone files.
@@ -22,4 +22,7 @@ for id in "${clips[@]}"; do
   echo "fetching $id"
   curl -fsSL "https://assets.mixkit.co/videos/$id/$id-720.mp4" -o "$f"
 done
-echo "footage ready in public/wai/clinic/footage/"
+# Score: "A New Life" by Eugenio Mininni (Mixkit Stock Music Free License).
+mkdir -p music
+[ -s music/543.mp3 ] || curl -fsSL "https://assets.mixkit.co/music/543/543.mp3" -o music/543.mp3
+echo "footage and music ready in public/wai/clinic/"
