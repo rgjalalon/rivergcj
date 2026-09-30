@@ -61,7 +61,7 @@ npm run render:wai   # writes out/wai-brand-film.mp4
 | 21.6–25.8s | Footage: golden-hour walk | one place / that actually gets it |
 | 25.8–30.0s | End card: Wai logo on espresso | medical intelligence, made personal |
 
-**Footage:** `public/wai/footage/*.mp4` holds seven real clips (Mixkit Free License — commercial use, no attribution required), graded warm on render by `src/wai/Footage.tsx`. The clinic shot is a bright kitchen consultation rather than a hospital exam room, to keep the film feeling personal rather than clinical. See `public/wai/footage/README.md` for filenames and the shot list if you want to swap in Wai's own footage later.
+**Footage:** `public/wai/footage/*.mp4` holds seven real clips (Mixkit — note: several are under the Mixkit Restricted License, personal use only; license via Envato or swap before commercial release), graded warm on render by `src/wai/Footage.tsx`. The clinic shot is a bright kitchen consultation rather than a hospital exam room, to keep the film feeling personal rather than clinical. See `public/wai/footage/README.md` for filenames and the shot list if you want to swap in Wai's own footage later.
 
 **Score:** `public/wai/audio/theme.mp3` ("Finding Myself," Mixkit Free License) fades in under the opening cut, dips slightly through the collage so the captions read clearly, and swells again into the end card. Volume envelope lives in `src/wai/WaiFilm.tsx`.
 
@@ -97,8 +97,18 @@ npm run render:wai-origin   # writes out/wai-origin.mp4
 | 89.2–95.5s | Sun rays return — a callback into the reveal | Portfolio logo wall |
 | 95.5–105.6s | End card: Wai logo on espresso, "medical intelligence, made personal" | A16Z logo hold |
 
-**Footage:** `public/wai/origin/*.mp4` — seventeen Mixkit Free License clips (commercial use, no attribution required), graded with a heavier, more documentary contrast than the lifestyle brand film above (`src/wai-origin/OriginFootage.tsx`). The two product-UI beats (`src/wai-origin/ProductUi.tsx`) are original Wai screens, not screenshots of anyone else's software.
+**Footage:** `public/wai/origin/*.mp4` — seventeen Mixkit clips (several are Restricted License, personal use only — see public/wai/manifesto/CREDITS.md), graded with a heavier, more documentary contrast than the lifestyle brand film above (`src/wai-origin/OriginFootage.tsx`). The two product-UI beats (`src/wai-origin/ProductUi.tsx`) are original Wai screens, not screenshots of anyone else's software.
 
 **Score:** `public/wai/origin/theme-origin.mp3` ("The Journey," Mixkit Free License), a single building cue close to the reference's own runtime. Volume envelope is in `src/wai-origin/WaiOrigin.tsx`.
 
 Shot timings live in `src/wai-origin/timeline.ts`. The end card reuses `src/wai/EndCard.tsx` so both Wai films close the same way.
+
+---
+
+# Wai: manifesto (4:3)
+
+A 105.6s, 1440×1080 beat-for-beat reinterpretation of the a16z brand film as Wai's story of medicine: public-domain archival medical footage, narration with genuine archival soundbites, an Asclepius engraving and gilded statue for the "spark", Wai's own product UI, and a mosaic that resolves into a gold Wai logo.
+
+**Rendered file:** [`renders/wai-manifesto.mp4`](renders/wai-manifesto.mp4) · `npm run render:wai-manifesto`
+
+Shots (each pinned to a reference cut) live in `src/wai-manifesto/timeline.ts`. **Licensing:** see `public/wai/manifesto/CREDITS.md`. The narration is scratch TTS, and many modern clips are Mixkit Restricted, so both need replacing or licensing before public release.
