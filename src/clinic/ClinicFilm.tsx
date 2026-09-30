@@ -54,7 +54,8 @@ export const ClinicFilm: React.FC<{cut: Cut}> = ({cut}) => {
         }}
       />
       <Supers cut={cut} />
-      <Grain width={w} height={h} opacity={0.07} />
+      {/* Grain on footage only: over flat UI it reads as flicker. */}
+      {shot.kind === 'live' ? <Grain width={w} height={h} opacity={0.07} /> : null}
       {getStaticFiles().some((f) => f.name === sound) ? <Html5Audio src={staticFile(sound)} volume={0.6} /> : null}
       {getStaticFiles().some((f) => f.name === music) ? (
         <Html5Audio src={staticFile(music)} trimBefore={Math.round(musicStart)} volume={musicVolume} />

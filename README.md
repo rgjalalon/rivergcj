@@ -88,7 +88,7 @@ npm run render:clinic               # rebuilds the sound beds, then renders all 
 
 **Sound:** a score, "A New Life" by Eugenio Mininni (Mixkit Stock Music Free License, fetched with the footage), sits under a quiet room-tone bed. The bed has keys, clicks, a door and the laptop lid, synced to the picture by `scripts/clinic-audio.ts`. The music opens near-silent, builds through the workflow and fades out across the end card. There is no voiceover.
 
-**Screens:** the camera is locked off, with a slow eased push and no shake. Every state change is continuous: the selection sweep, typing, the button hover and press, the draft-to-approved pill, and the check drawing on. The 9:16 cut uses a narrow, reflowed layout of the same app, so the text stays large on a phone.
+**Screens:** each screen shot is fully locked off: one fixed frame, snapped to whole pixels, with no push, no pan and no grain, so the UI text never shimmers. Every state change is continuous: the selection sweep, typing, the button hover and press, the draft-to-approved pill, and the check drawing on. The 9:16 cut uses a narrow, reflowed layout of the same app, so the text stays large on a phone.
 
 **Rules the edit keeps:**
 - There are no statistics or outcome claims.

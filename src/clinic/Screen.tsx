@@ -610,12 +610,11 @@ export const ScreenShot: React.FC<{
   const p = clamp((frame - from) / (to - from));
   const {e, a, read} = phaseProgress(phase, p);
 
-  const s = (vertical ? verticalScale[framing] : framingScale[framing]) * (1 + 0.03 * smooth(p));
-
-  // Camera target: the edit while editing, easing across to the button to approve.
+  // Locked off: one fixed frame per shot, snapped to whole pixels. No push, no
+  // pan, so the UI text never resamples between frames.
+  const s = vertical ? verticalScale[framing] : framingScale[framing];
   const W = vertical ? COMPACT_W : CANVAS_W;
   const H = vertical ? COMPACT_H : CANVAS_H;
-  const pan = phase === 'approve' ? 1 : phase === 'both' ? smooth(a / APPROVE.pan) : 0;
   const wide = framing === 'ots';
   const centre = vertical ? compactCenter : cardCenter;
   const edit = wide ? centre : (vertical ? compactEdit : editTarget)[doc];
@@ -623,8 +622,11 @@ export const ScreenShot: React.FC<{
   const approveView: [number, number] = wide
     ? [lerp(centre[0], button[0], 0.3), lerp(centre[1], button[1], 0.3)]
     : [button[0] - (framing === 'ecu' ? 120 : vertical ? 120 : 220), button[1] - 90];
-  let tx = lerp(edit[0], approveView[0], pan);
-  const ty = lerp(edit[1], approveView[1], pan);
+  // Edit-only shots frame the edit, approve-only shots frame the button, and
+  // a shot that does both frames the space between them.
+  const mix = phase === 'approve' ? 1 : phase === 'both' ? 0.5 : 0;
+  let tx = lerp(edit[0], approveView[0], mix);
+  const ty = lerp(edit[1], approveView[1], mix);
   if (vertical) tx = centre[0]; // never crop the text column on a phone
 
   const cx = width / 2;
@@ -632,8 +634,8 @@ export const ScreenShot: React.FC<{
   // Keep the camera inside the window; a window smaller than the frame sits centred.
   const fit = (pos: number, frameSize: number, size: number, c: number) =>
     size <= frameSize ? c - size / 2 : Math.min(0, Math.max(frameSize - size, pos));
-  const left = fit(cx - tx * s, width, W * s, cx);
-  const top = fit(cy - ty * s, height, H * s, cy);
+  const left = Math.round(fit(cx - tx * s, width, W * s, cx));
+  const top = Math.round(fit(cy - ty * s, height, H * s, cy));
 
   return (
     <AbsoluteFill style={{background: backdrop[light], overflow: 'hidden'}}>
