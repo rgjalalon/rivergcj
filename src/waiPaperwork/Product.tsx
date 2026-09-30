@@ -1,6 +1,6 @@
 import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
 import {camera, captions, scenes, src} from './timeline';
-import {easeInOut, inOut, pw, ramp, Rise} from './util';
+import {easeInOut, inOut, Mark, pw, ramp, Rise} from './util';
 
 /** Camera state at a film frame, eased between keyframes. */
 const cameraAt = (frame: number) => {
@@ -18,31 +18,32 @@ const cameraAt = (frame: number) => {
   return keys[keys.length - 1];
 };
 
-const Caption: React.FC<{frame: number; from: number; to: number; text: string; em?: string}> = ({
+const Caption: React.FC<{frame: number; from: number; to: number; text: string; mark?: string}> = ({
   frame,
   from,
   to,
   text,
-  em,
+  mark,
 }) => {
   const vis = inOut(frame, from, to, 12, 10);
   if (vis <= 0) return null;
-  const emAt = em ? text.lastIndexOf(em) : -1;
-  const head = emAt >= 0 ? text.slice(0, emAt) : text;
-  const tail = emAt >= 0 ? text.slice(emAt, emAt + em!.length) : '';
-  const rest = emAt >= 0 ? text.slice(emAt + em!.length) : '';
+  const at = mark ? text.lastIndexOf(mark) : -1;
+  const head = at >= 0 ? text.slice(0, at) : text;
+  const tail = at >= 0 ? text.slice(at, at + mark!.length) : '';
+  const rest = at >= 0 ? text.slice(at + mark!.length) : '';
   return (
     <div
       style={{
         position: 'absolute',
         left: 0,
         right: 0,
-        bottom: 78,
+        bottom: 74,
         textAlign: 'center',
-        fontFamily: pw.serif,
-        fontSize: 52,
-        letterSpacing: -0.5,
-        color: pw.espresso,
+        fontFamily: pw.sans,
+        fontWeight: 600,
+        fontSize: 50,
+        letterSpacing: -1.2,
+        color: pw.ink,
         opacity: vis,
       }}
     >
@@ -50,8 +51,10 @@ const Caption: React.FC<{frame: number; from: number; to: number; text: string; 
         {head}
       </Rise>
       {tail && (
-        <Rise frame={frame} at={from + 5} dist={18} style={{fontStyle: 'italic', color: pw.caramelDeep}}>
-          {tail}
+        <Rise frame={frame} at={from + 4} dist={18}>
+          <Mark frame={frame} at={from + 10}>
+            {tail}
+          </Mark>
         </Rise>
       )}
       {rest}
@@ -60,26 +63,20 @@ const Caption: React.FC<{frame: number; from: number; to: number; text: string; 
 };
 
 /**
- * The product capture (worklist → note → letter → paper storm) on warm paper.
- * The capture is white-on-white, so multiplying it over cream keeps the cards,
- * shadows and type while the background takes on the paper tone; that also
- * lets the camera pull out past the frame edges without a seam.
+ * The product capture (worklist → note → letter → paper storm) on clean white,
+ * with a virtual camera. The capture's background is pure white, so the
+ * camera can pull out past the frame edges without a seam.
  */
 export const Product: React.FC<{children: React.ReactNode}> = ({children}) => {
   const frame = useCurrentFrame();
   const cam = cameraAt(frame);
   const payoff = src(33.5);
   const payoffVis = inOut(frame, payoff, scenes.papers.to + 6, 12, 10);
+  const enter = ramp(frame, scenes.product.from, 14);
 
   return (
-    <AbsoluteFill style={{background: pw.paper, overflow: 'hidden', isolation: 'isolate'}}>
-      <AbsoluteFill
-        style={{
-          background:
-            'radial-gradient(ellipse 70% 60% at 45% 40%, rgba(255,253,249,1) 0%, rgba(247,242,234,1) 55%, rgba(233,224,210,1) 100%)',
-        }}
-      />
-      <AbsoluteFill style={{perspective: 2400, mixBlendMode: 'multiply'}}>
+    <AbsoluteFill style={{background: pw.white, overflow: 'hidden'}}>
+      <AbsoluteFill style={{perspective: 2400, opacity: enter}}>
         <div
           style={{
             position: 'absolute',
@@ -89,35 +86,40 @@ export const Product: React.FC<{children: React.ReactNode}> = ({children}) => {
             height: 1080,
             transformOrigin: '0 0',
             transform: `translate(960px, 500px) rotateX(${cam.rx}deg) rotateY(${cam.ry}deg) scale(${cam.z}) translate(${-cam.x}px, ${-cam.y}px)`,
-            filter: `blur(${payoffVis * 5}px)`,
+            filter: `blur(${payoffVis * 6}px)`,
+            opacity: 1 - payoffVis * 0.55,
           }}
         >
           {children}
         </div>
       </AbsoluteFill>
-      {/* Paper fade behind the captions so they never sit on UI text. */}
+      {/* White fade behind the captions so they never sit on UI text. */}
       <AbsoluteFill
         style={{
-          background: 'linear-gradient(to bottom, rgba(247,242,234,0) 800px, rgba(247,242,234,0.94) 930px, rgba(247,242,234,1) 1080px)',
+          background: 'linear-gradient(to bottom, rgba(255,255,255,0) 800px, rgba(255,255,255,0.96) 930px, #fff 1080px)',
         }}
       />
       {captions.map((c) => (
-        <Caption key={c.from} frame={frame} from={src(c.from)} to={src(c.to)} text={c.text} em={c.em} />
+        <Caption key={c.from} frame={frame} from={src(c.from)} to={src(c.to)} text={c.text} mark={c.mark} />
       ))}
-      <AbsoluteFill
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          opacity: payoffVis,
-          background: `radial-gradient(ellipse 50% 36% at 50% 50%, rgba(247,242,234,0.97) 35%, rgba(247,242,234,0) 100%)`,
-        }}
-      >
-        <div style={{fontFamily: pw.serif, fontSize: 150, letterSpacing: -3, color: pw.ink, transform: `scale(${1.03 - 0.03 * ramp(frame, payoff, 40)})`}}>
-          <Rise frame={frame} at={payoff}>
+      <AbsoluteFill style={{alignItems: 'center', justifyContent: 'center', opacity: payoffVis}}>
+        <div
+          style={{
+            fontFamily: pw.sans,
+            fontWeight: 800,
+            fontSize: 150,
+            letterSpacing: -5,
+            color: pw.ink,
+            transform: `scale(${1.04 - 0.04 * ramp(frame, payoff, 40)})`,
+          }}
+        >
+          <Rise frame={frame} at={payoff} dist={36}>
             {'Your time, '}
           </Rise>
-          <Rise frame={frame} at={payoff + 6} style={{fontStyle: 'italic', color: pw.caramelDeep}}>
-            back.
+          <Rise frame={frame} at={payoff + 5} dist={36}>
+            <Mark frame={frame} at={payoff + 12}>
+              back.
+            </Mark>
           </Rise>
         </div>
       </AbsoluteFill>

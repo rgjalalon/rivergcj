@@ -15,7 +15,6 @@ from scipy.signal import butter, fftconvolve, sosfilt
 
 SR = 48000
 FPS = 30
-DURATION_FRAMES = 1260
 rng = np.random.default_rng(7)
 
 
@@ -111,6 +110,16 @@ def shimmer(length=1.6, level=0.08):
     return x / 4 * env(n, 0.08, 0.45) * level
 
 
+HOOK = 96
+SRC_START = 1.8
+
+
+def src(seconds):
+    """Source time (seconds) -> film frame, as in timeline.ts."""
+    return round(seconds * FPS + HOOK - SRC_START * FPS)
+
+
+DURATION_FRAMES = src(39.2)
 total = int(DURATION_FRAMES / FPS * SR) + SR
 mono = np.zeros(total)
 
@@ -121,31 +130,38 @@ def place(sig, frame):
     mono[s:e] += sig[: e - s]
 
 
-# Hook: "For every / 1 hour with a patient" — ticks under the words.
-for f in (0, 6, 12, 18, 24, 30):
-    place(tick(0.28), f)
-place(sub_hit(0.55, 120, 45, 1.2), 6)
-# Digit rolls 1 -> 2: quick whoosh into the main hit.
-place(whoosh(0.35, 0.22, rise=True), 32)
-place(sub_hit(0.95), 42)
-for f in (48, 54, 60, 66, 72):
-    place(tick(0.2), f)
-# Paper starts falling and piles up.
-for i in range(70):
-    f = 78 + (i / 70) ** 0.7 * 50 + rng.uniform(-2, 2)
-    place(rustle(rng.uniform(0.2, 0.45), 0.05 + 0.12 * (i / 70)), f)
-place(riser(1.2, 0.26), 99)
-place(sub_hit(0.5, 70, 32, 1.4), 104)
+def slap(level=0.3):
+    """A sheet landing on the pile: airy swish into a soft paper thud."""
+    n = int(0.12 * SR)
+    swish = band(rng.standard_normal(n), 1500, 9000) * np.linspace(0, 1, n) ** 2 * 0.5
+    m = int(0.18 * SR)
+    thud = lowpass(rng.standard_normal(m), 700) * env(m, 0, 0.03) * 1.6
+    snap = band(rng.standard_normal(m), 2500, 8000) * env(m, 0, 0.008)
+    return np.concatenate([swish, thud + snap]) * level
+
+
+# Intro: headline cards land on the pile (mirrors headlineGaps in timeline.ts),
+# getting denser, then the title hit.
+gaps = [7, 6, 6, 5, 5, 4, 4, 4, 3, 3, 3, 3]
+starts = [-3]
+for g in gaps:
+    starts.append(starts[-1] + g)
+for i, s0 in enumerate(starts):
+    land = s0 + 5
+    place(slap(0.22 + 0.012 * i), max(0, land - 0.12 * FPS))
+place(riser(0.9, 0.12), 34)
+place(sub_hit(0.8), 62)
+place(whoosh(0.45, 0.14, rise=False), 60)
 # Into footage: soft whoosh on the cut.
-place(whoosh(0.5, 0.12, rise=False), 132)
+place(whoosh(0.4, 0.1, rise=False), HOOK - 3)
 # Type cards and logo.
-place(sub_hit(0.35, 80, 40, 1.0), 216)
-place(whoosh(0.4, 0.08, rise=False), 229)
-place(shimmer(1.8, 0.09), 322)
-place(whoosh(0.7, 0.14, rise=False), 441)
+place(sub_hit(0.3, 80, 40, 1.0), src(4.5))
+place(whoosh(0.4, 0.08, rise=False), src(4.95))
+place(shimmer(1.8, 0.07), src(8.2))
+place(whoosh(0.6, 0.1, rise=False), src(12.3))
 # Payoff and end card.
-place(sub_hit(0.4, 75, 36, 1.4), 1086)
-place(whoosh(0.8, 0.12, rise=False), 1124)
+place(sub_hit(0.4, 75, 36, 1.4), src(33.5))
+place(whoosh(0.8, 0.1, rise=False), src(34.8))
 
 stereo = reverb(mono, decay=1.8, mix=0.22)[:total]
 peak = np.abs(stereo).max()

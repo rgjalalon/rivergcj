@@ -1,22 +1,24 @@
-// Wai "paperwork" film — 42s, 1920×1080, 30fps.
-// A re-edit of the original 39s cut: new cold-open hook, then the original
-// footage, music and product capture restyled on top. From SRC_START onwards
-// the source runs continuously (its music and typing sounds stay in sync), so
-// every later cue is written in source seconds and converted with `src()`.
+// Wai "paperwork" film — 1920×1080, 30fps, white and Open Sans throughout.
+// A re-edit of the original 39s cut. The intro keeps the original headline
+// shots, restaged as a pile of cards with a highlighter punch. From SRC_START
+// onwards the source runs continuously (its music and typing sounds stay in
+// sync), so every later cue is written in source seconds and converted with
+// `src()`.
 
 export const PW_FPS = 30;
 export const PW_W = 1920;
 export const PW_H = 1080;
-export const PW_DURATION = 1260;
 
-/** New hook length, in frames. The source picks up right after it. */
-export const HOOK = 135;
-/** Where the source is picked up (seconds): just before the typing footage. */
+/** Intro length, in frames. The source picks up right after it. */
+export const HOOK = 96;
+/** Where the source is picked up (seconds): the first laptop frame. */
 export const SRC_START = 1.8;
 const OFFSET = HOOK - SRC_START * PW_FPS;
 
 /** Source time (seconds) → film frame. */
 export const src = (seconds: number) => Math.round(seconds * PW_FPS + OFFSET);
+
+export const PW_DURATION = src(39.2);
 
 export const scenes = {
   hook: {from: 0, to: HOOK},
@@ -29,13 +31,15 @@ export const scenes = {
   end: {from: src(35.0), to: PW_DURATION},
 };
 
+/** Headline stills from the original intro (public/wai-paperwork/headlines). */
+export const HEADLINES = 13;
+/** Frames between headline slams: starts deliberate, then accelerates. */
+export const headlineGaps = [7, 6, 6, 5, 5, 4, 4, 4, 3, 3, 3, 3];
+/** Frame where the pile steps back and the title lands. */
+export const TITLE_AT = 62;
+
 export const copy = {
-  hookLabel1: 'For every',
-  hookLine1: 'hour with a patient,',
-  hookLabel2: 'doctors spend nearly',
-  hookLine2: 'hours on paperwork.',
-  citation: 'Sinsky et al., Annals of Internal Medicine, 2016',
-  hookOut: 'It’s driving doctors out.',
+  title: ['Paperwork', 'is driving', 'doctors out.'],
   question: 'What if AI could carry some of the load?',
   notReplace: 'Not replace the clinician.',
   support: 'But support them.',
@@ -43,13 +47,13 @@ export const copy = {
   endLine: 'Less paperwork. More medicine.',
 };
 
-/** Product captions (source seconds). `em` is set in caramel italic. */
-export const captions: {from: number; to: number; text: string; em?: string}[] = [
-  {from: 13.8, to: 16.8, text: 'Your whole list, already moving.', em: 'already moving.'},
-  {from: 17.2, to: 19.3, text: 'Consult notes, drafted for you.', em: 'drafted'},
-  {from: 19.4, to: 20.9, text: 'Checked. Signed. Filed.', em: 'Filed.'},
-  {from: 21.2, to: 25.4, text: 'Letters written while you see the next patient.', em: 'the next patient.'},
-  {from: 26.4, to: 31.1, text: 'Ready for your signature.', em: 'signature.'},
+/** Product captions (source seconds). `mark` gets the highlighter. */
+export const captions: {from: number; to: number; text: string; mark?: string}[] = [
+  {from: 13.8, to: 16.8, text: 'Your whole list, already moving.', mark: 'already moving.'},
+  {from: 17.2, to: 19.3, text: 'Consult notes, drafted for you.', mark: 'drafted'},
+  {from: 19.4, to: 20.9, text: 'Checked. Signed. Filed.', mark: 'Filed.'},
+  {from: 21.2, to: 25.4, text: 'Letters written while you see the next patient.', mark: 'the next patient.'},
+  {from: 26.4, to: 31.1, text: 'Ready for your signature.', mark: 'signature.'},
   {from: 31.6, to: 33.4, text: 'Every note. Every letter. Every referral.'},
 ];
 

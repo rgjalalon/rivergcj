@@ -2,14 +2,12 @@ import {Easing, interpolate, OffthreadVideo, Sequence, staticFile} from 'remotio
 import {src} from './timeline';
 
 export const pw = {
-  ink: '#17110D',
-  espresso: '#3E2F23',
-  cream: '#F5F0E8',
-  paper: '#F7F2EA',
-  caramel: '#C89B6D',
-  caramelDeep: '#9C6E43',
-  serif: '"Playfair Display", Georgia, serif',
-  sans: 'Inter, -apple-system, "Helvetica Neue", Arial, sans-serif',
+  white: '#FFFFFF',
+  ink: '#111111',
+  muted: '#8C8C8C',
+  /** The highlighter yellow from the original captions and headlines. */
+  marker: '#F9E85A',
+  sans: '"Open Sans", "Helvetica Neue", Arial, sans-serif',
 };
 
 export const easeOut = Easing.bezier(0.16, 1, 0.3, 1);
@@ -25,8 +23,8 @@ export const inOut = (frame: number, from: number, to: number, inDur = 10, outDu
 
 /**
  * The source edit, picked up at the matching source time. Everything after
- * the hook is locked to the source timeline, so a scene starting at film frame
- * `from` starts the source at the same point.
+ * the intro is locked to the source timeline, so a scene starting at film
+ * frame `from` starts the source at the same point.
  */
 export const Source: React.FC<{from: number; to: number; style?: React.CSSProperties}> = ({from, to, style}) => (
   <Sequence from={from} durationInFrames={to - from} layout="none">
@@ -55,12 +53,40 @@ export const Rise: React.FC<{
         display: 'inline-block',
         opacity: p,
         transform: `translateY(${(1 - p) * dist}px)`,
-        filter: `blur(${(1 - p) * 10}px)`,
+        filter: `blur(${(1 - p) * 8}px)`,
         whiteSpace: 'pre',
         ...style,
       }}
     >
       {children}
+    </span>
+  );
+};
+
+/** Highlighter stroke that wipes in left to right behind its text. */
+export const Mark: React.FC<{frame: number; at: number; dur?: number; children: React.ReactNode}> = ({
+  frame,
+  at,
+  dur = 10,
+  children,
+}) => {
+  const p = ramp(frame, at, dur, easeInOut);
+  return (
+    <span style={{position: 'relative', display: 'inline-block', whiteSpace: 'pre'}}>
+      <span
+        style={{
+          position: 'absolute',
+          left: '-0.12em',
+          right: '-0.12em',
+          top: '0.08em',
+          bottom: '0.02em',
+          background: pw.marker,
+          transformOrigin: '0 50%',
+          transform: `scaleX(${p})`,
+          zIndex: 0,
+        }}
+      />
+      <span style={{position: 'relative', zIndex: 1}}>{children}</span>
     </span>
   );
 };
