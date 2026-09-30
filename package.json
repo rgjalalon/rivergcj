@@ -7,7 +7,9 @@
     "studio": "remotion studio",
     "render": "remotion render WellnessAppWalkthrough out/the-wellness-app.mp4",
     "still": "remotion still WellnessAppWalkthrough out/still.png",
-    "render:wai": "remotion render WaiBrandFilm out/wai-brand-film.mp4"
+    "render:wai": "remotion render WaiBrandFilm out/wai-brand-film.mp4",
+    "clinic:audio": "node --experimental-strip-types scripts/clinic-audio.ts",
+    "render:clinic": "npm run clinic:audio && remotion render WaiClinicMaster out/wai-18-00-master-60s.mp4 && remotion render WaiClinicShort out/wai-18-00-cut-30s.mp4 && remotion render WaiClinicVertical out/wai-18-00-vertical-30s.mp4"
   },
   "dependencies": {
     "@remotion/cli": "4.0.528",

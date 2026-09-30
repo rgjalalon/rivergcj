@@ -64,3 +64,42 @@ npm run render:wai   # writes out/wai-brand-film.mp4
 **Footage:** the real-life shots are placeholders until clips are added. See `public/wai/footage/README.md` for filenames and the shot list. The grade (warm highlights, espresso shadows, film grain, vignette) is applied automatically in `src/wai/Footage.tsx`.
 
 Shot timings and captions are in `src/wai/timeline.ts`. The logo is `public/wai/wai-logo-cream.png`.
+
+---
+
+# Wai: "18:00" (clinical assistant brand film)
+
+This film follows one doctor through one afternoon. It opens on the outcome (lights off at 18:00), then rewinds to 14:10. After each patient leaves, the product drafts the follow-up work: the consultation note, the referral letter, the follow-up message and the next booking. In every step the doctor reads the draft, edits it on screen and approves it. The product name appears only in the last 3 seconds.
+
+**Rendered files**
+- [`renders/wai-18-00-master-60s.mp4`](renders/wai-18-00-master-60s.mp4): 60s master, 1920×1080
+- [`renders/wai-18-00-cut-30s.mp4`](renders/wai-18-00-cut-30s.mp4): 30s cut-down, 1920×1080
+- [`renders/wai-18-00-vertical-30s.mp4`](renders/wai-18-00-vertical-30s.mp4): 30s 9:16 cut, 1080×1920
+
+```bash
+npm run render:clinic   # rebuilds the sound beds, then renders all three cuts into out/
+```
+
+**What's final and what's a placeholder**
+- **Final:** the product screens (`src/clinic/Screen.tsx`). Each step is a draft marked "Draft · needs your approval". The doctor selects the wrong text and types the correction, which stays underlined and is logged as "Edited by you · 1 change". Then the doctor moves the cursor to Approve and clicks, and the step is marked signed, sent or booked. Use them as the reference for the real build that is filmed on set.
+- **Placeholders:** the live-action shots. They are graded, blocked-out stand-ins until footage is shot. See `public/wai/clinic/README.md` for filenames and briefs.
+
+**Sound:** room tone plus keyboard, mouse, door and light-switch sounds, synced to the picture by `scripts/clinic-audio.ts`. There is no music and no voiceover.
+
+**Rules the edit keeps:**
+- There are no statistics or outcome claims.
+- No other company is named or shown.
+- An edit and an approval are visible in every workflow step.
+- The name "Wai" appears only on the end card.
+
+| 60s | Shot | On-screen text |
+|---|---|---|
+| 0:00–0:10 | Window goes dark · corridor, light off · tidy desk · match cut to afternoon | 18:00 · 14:10 |
+| 0:10–0:22 | Mr Bell leaves → note draft → "twice daily" edited to "once daily" → Approve & sign | You read every line. |
+| 0:22–0:32 | Ms Nair leaves → referral: "A routine appointment is fine." edited to "Please see within two weeks." → Approve & send | You change what’s wrong. |
+| 0:32–0:41 | The child waves → message to parent: "the patient" edited to "Maya" → Approve & send | You approve every word. |
+| 0:41–0:49 | Booking: Wed 25 Nov 14:30 edited to Fri 27 Nov 09:00 → Approve & book → today's list, all approved | |
+| 0:49–0:57 | Laptop closes · corridor, light off · doctor walks into the dusk | 18:00 |
+| 0:57–1:00 | End card | Wai · Clinical assistant |
+
+The 30s and 9:16 cuts keep all four workflow steps, with each draft edited and approved in a single shot. Timings, shots and on-screen text are all in `src/clinic/timeline.ts`.
