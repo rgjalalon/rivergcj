@@ -4,6 +4,7 @@ A 10-page magazine-style essay for The Wellness LinkedIn page (1080×1350 portra
 
 - **Upload this to LinkedIn:** `rebuilding-the-spark.pdf` (Add a document → give it a title)
 - **Individual pages:** `pages/page-01.png` … `page-10.png` (2160×2700, for Instagram or image posts)
+- **Edit in Canva:** `rebuilding-the-spark.pptx`. In Canva: Create a design → Import file (or drag it onto the Canva home page). Every headline, paragraph, quote, line and logo comes in as its own editable element, at the same 1080×1350 size.
 - **Source:** `article.html` (edit copy here), fonts and logo in `assets/`
 
 Re-render after editing:
@@ -11,6 +12,12 @@ Re-render after editing:
 ```bash
 node make-logo-mask.mjs   # only if the logo file changes
 node render.mjs
+```
+
+Rebuild the Canva/PowerPoint file (needs `npm i pptxgenjs sharp` somewhere on `NODE_PATH`):
+
+```bash
+node build-pptx.cjs
 ```
 
 Type: Playfair Display (headlines), Newsreader (body), Inter (labels). Palette matches `src/theme.ts`.
