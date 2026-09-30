@@ -7,6 +7,31 @@ import {ScreenShot} from './Screens';
 import {f, M_DURATION, M_H, M_W, sfx, Shot, shots, voice, voiceDur} from './timeline';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
+const XF = 7;
+const LEAKS = [25.3, 38, 63.5, 76, 93.5];
+
+/** Fades a shot in over the tail of the previous one. */
+const Dissolve: React.FC<{frames: number; children: React.ReactNode}> = ({frames, children}) => {
+  const frame = useCurrentFrame();
+  const o = frames ? interpolate(frame, [0, frames], [0, 1], clamp) : 1;
+  return <AbsoluteFill style={{opacity: o}}>{children}</AbsoluteFill>;
+};
+
+/** A warm film light-leak that blooms across an act change. */
+const LightLeak: React.FC = () => {
+  const frame = useCurrentFrame();
+  const o = interpolate(frame, [0, 8, 22], [0, 0.85, 0], clamp);
+  const x = interpolate(frame, [0, 22], [10, 80]);
+  return (
+    <AbsoluteFill
+      style={{
+        opacity: o,
+        mixBlendMode: 'screen',
+        background: `radial-gradient(ellipse 55% 80% at ${x}% 40%, rgba(255,214,150,0.95), rgba(255,140,60,0.45) 40%, rgba(0,0,0,0) 75%)`,
+      }}
+    />
+  );
+};
 
 const ShotView: React.FC<{shot: Shot; span: number; seed: string}> = ({shot, span, seed}) => {
   switch (shot.kind) {
@@ -53,13 +78,21 @@ export const WaiManifesto: React.FC = () => {
       {shots.map((s, i) => {
         const from = f(s.at);
         const dur = f(s.to) - from;
+        const x = s.at >= 25.3 && s.kind !== 'black' && s.kind !== 'logo' ? XF : 0;
         return (
-          <Sequence key={i} from={from} durationInFrames={dur} premountFor={15}>
-            <ShotView shot={s} span={dur} seed={`s${i}`} />
+          <Sequence key={i} from={from - x} durationInFrames={dur + x} premountFor={15}>
+            <Dissolve frames={x}>
+              <ShotView shot={s} span={dur + x} seed={`s${i}`} />
+            </Dissolve>
           </Sequence>
         );
       })}
 
+      {LEAKS.map((at) => (
+        <Sequence key={`lk${at}`} from={f(at) - 8} durationInFrames={22}>
+          <LightLeak />
+        </Sequence>
+      ))}
       <Vignette strength={t < 24 ? 0.7 : 0.45} />
       <FilmGrain amount={grain} w={M_W} h={M_H} />
 

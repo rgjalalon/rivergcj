@@ -6,3 +6,4 @@
 - **Modern footage** (`modern/`, plus `../origin/`): Mixkit. Most modern clips are under the **Mixkit Restricted License (personal use only)**. Before any public or commercial release, license them via Envato Elements or swap them out. Free-license clips: crosswalk_aerial, reception, doctor_office, hologram_hand, capsule_machine, flame, hand_drawing, cells_micro.
 - **Narration** (`vo/n*.mp3`, `vo/ai01.mp3`): scratch TTS (Microsoft Edge neural voices). Replace with a licensed voice actor before release.
 - **Score and SFX** (`audio/`): Mixkit ("Silent Descent" plus SFX). Check each item's license on mixkit.co before commercial use.
+- **HD footage** (`hd/`): Coverr (coverr.co), real camera footage only (no AI-generated clips), under the Coverr license: free for commercial use, no attribution required.

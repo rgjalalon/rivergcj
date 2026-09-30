@@ -36,6 +36,7 @@ export type Shot =
 const A = (n: string) => `wai/manifesto/archival/${n}.mp4`;
 const Mo = (n: string) => `wai/manifesto/modern/${n}.mp4`;
 const O = (n: string) => `wai/origin/${n}.mp4`;
+const H = (n: string) => `wai/manifesto/hd/${n}.mp4`;
 
 const clip = (src: string, at: number, to: number, look: Look, trim = 0, push?: number): Shot => ({
   kind: 'clip',
@@ -79,26 +80,26 @@ export const shots: Shot[] = [
   {kind: 'engraving', at: 27.2, to: 27.45, chalk: true}, // chalk negative
   {kind: 'goldHead', at: 27.45, to: 29.5}, // golden statue
   clip(O('flame'), 29.5, 30.2, 'gold', 2), // golden hand with orb
-  clip(O('sun_rays'), 30.2, 31, 'gold', 1), // orb in flight
-  clip(Mo('helipads'), 31, 32.1, 'night', 1), // dark city
-  clip(Mo('light_tunnel'), 32.1, 33.8, 'gold', 0.5), // orb in the lens
-  clip(O('sun_rays'), 33.8, 36.1, 'gold', 3, 0.1), // golden burst
+  clip(H('rays_of_the_sun_shining_through_'), 30.2, 31, 'gold', 2), // orb in flight
+  clip(H('city_at_night'), 31, 32.1, 'night', 2), // dark city
+  clip(H('sun_reflecting_on_the_water'), 32.1, 33.8, 'gold', 1), // orb in the lens
+  clip(H('a_beautiful_sunrise_in_lisbon'), 33.8, 36.1, 'gold', 2, 0.1), // golden burst
   clip(O('earth_space'), 36.1, 38, 'modern', 1), // Earth
 
   // ACT III — the present.
-  clip(Mo('crosswalk_aerial'), 38, 38.8, 'modern', 2), // overhead crosswalk
-  clip(Mo('smartwatch_hr'), 38.8, 39.2, 'modern', 2), // phone selfie
+  clip(H('jogging_across_pedestrian_crossi'), 38, 38.8, 'modern', 3), // overhead crosswalk
+  clip(H('businesswoman_checking_the_time_'), 38.8, 39.2, 'modern', 4), // phone selfie
   {kind: 'screen', screen: 'phoneProfile', at: 39.2, to: 39.7}, // ride-hail app
-  clip(O('hands_code'), 39.7, 40.2, 'modern', 2), // typing
+  clip(H('a_female_s_hands_typing_on_lapto'), 39.7, 40.2, 'modern', 2), // typing
   clip(O('hand_drawing'), 40.2, 41, 'modern', 2), // stylus
   clip(Mo('tablet_brain'), 41, 41.4, 'modern', 2), // tablet
   {kind: 'screen', screen: 'scribeTerminal', at: 41.4, to: 42.7}, // terminal
-  clip(Mo('golden_vj'), 42.7, 43, 'gold', 1), // light streak
+  clip(H('sunlight_shining_through_green_l'), 42.7, 43, 'gold', 2), // light streak
   clip(Mo('screen_brain'), 43, 44, 'modern', 1), // Waymo
   clip(Mo('brain_models'), 44, 44.7, 'modern', 2), // lidar
-  clip(Mo('blood_platelets'), 44.7, 45.4, 'modern', 1), // point cloud
+  clip(H('science_experiment'), 44.7, 45.4, 'modern', 2), // point cloud
   clip(Mo('dna_scans'), 45.4, 46, 'modern', 2), // car in the ring
-  clip(Mo('hologram_doctor'), 46, 47.5, 'modern', 1), // drone render
+  clip(H('putting_medical_gloves_on'), 46, 47.5, 'modern', 2), // drone render
   clip(Mo('brain_monitor'), 47.5, 48, 'modern', 2), // MRI
   clip(O('cells_micro'), 48, 48.9, 'modern', 2), // cracked earth
   {kind: 'screen', screen: 'phoneProfile', at: 48.9, to: 49.4}, // biological-age app
@@ -109,37 +110,37 @@ export const shots: Shot[] = [
   clip(Mo('reception'), 54.5, 54.8, 'modern', 1), // desk monitor
   {kind: 'screen', screen: 'confirmBooking', at: 54.8, to: 55.4}, // "Place order"
   {kind: 'screen', screen: 'signNote', at: 55.4, to: 55.9}, // "Approve payroll"
-  clip(Mo('payment_phone'), 55.9, 56.6, 'modern', 2), // tap to pay
-  clip(Mo('senior_computer'), 56.6, 58.4, 'modern', 1, 0.05), // old man and the orb
+  clip(H('close_up_typing_on_mobile_phone'), 55.9, 56.6, 'modern', 2), // tap to pay
+  clip(H('a_senior_man_using_a_laptop'), 56.6, 58.4, 'modern', 2, 0.05), // old man and the orb
   clip(Mo('home_nurse'), 58.4, 60.4, 'modern', 2, 0.06), // the orb, close
   {kind: 'handsSpark', at: 60.4, to: 63.5}, // robot hand meets human hand
-  clip(Mo('light_tunnel'), 63.5, 65, 'modern', 2), // hyperspace
-  clip(Mo('blood_platelets'), 65, 66.3, 'modern', 4), // Colosseum
-  clip(Mo('dna_holo'), 66.3, 67.1, 'modern', 1), // canyon
-  clip(Mo('brain_models'), 67.1, 67.9, 'modern', 5), // village
+  clip(H('sun_reflecting_on_the_seawater'), 63.5, 65, 'gold', 1), // hyperspace
+  clip(H('checking_blood_pressure'), 65, 66.3, 'modern', 2), // Colosseum
+  clip(H('iv_in_hospital_room'), 66.3, 67.1, 'modern', 2), // canyon
+  clip(H('patient_donating_blood'), 67.1, 67.9, 'modern', 2), // village
   clip(Mo('heartbeat_monitor'), 67.9, 68.2, 'modern', 1), // domed room
-  clip(Mo('golden_vj'), 68.2, 68.9, 'gold', 2.4), // blur
-  clip(Mo('heli_rescue'), 68.9, 71, 'modern', 1), // jet through cloud
+  clip(H('nature_through_airplane_window'), 68.2, 68.9, 'modern', 2), // blur
+  clip(H('a_field_above_the_clouds'), 68.9, 71, 'modern', 2), // jet through cloud
   clip(Mo('doctor_office'), 71, 72, 'modern', 2), // portrait
   clip(Mo('portrait_dentist'), 72, 72.5, 'modern', 1), // portrait
   clip(O('dentist_portrait'), 72.5, 73.5, 'modern', 1), // portrait
-  clip(Mo('senior_computer'), 73.5, 74.5, 'modern', 6), // portrait
-  clip(Mo('home_nurse'), 74.5, 75.1, 'modern', 6), // the pair
+  clip(H('close_up_of_an_old_man_s_face'), 73.5, 74.5, 'modern', 2), // portrait
+  clip(H('grandfather_and_granddaughter'), 74.5, 75.1, 'modern', 2), // the pair
   clip(Mo('patient_good_news'), 75.1, 76, 'modern', 2), // portrait
 
   // ACT IV — the build.
-  clip(Mo('team_celebrate'), 76, 77, 'modern', 1), // Times Square billboard
+  clip(H('friends_laughing_and_looking_at_'), 76, 77, 'modern', 2), // Times Square billboard
   clip(Mo('applause'), 77, 78, 'modern', 1), // NYSE
-  clip(Mo('team_celebrate'), 78, 79.4, 'modern', 4), // NYSE
-  clip(O('celebration'), 79.4, 80.7, 'modern', 1), // Nasdaq
+  clip(H('a_young_man_showing_results_in_a'), 78, 79.4, 'modern', 2), // NYSE
+  clip(H('family_waving_sparklers'), 79.4, 80.7, 'modern', 2), // Nasdaq
   clip(Mo('capsule_machine'), 80.7, 81.5, 'modern', 1), // chip conveyor
   clip(Mo('circuit_machine'), 81.5, 83.3, 'modern', 1), // robot arms
   clip(Mo('lab_zoomout'), 83.3, 84, 'modern', 1), // city at night
-  clip(Mo('petri'), 84, 84.9, 'modern', 2), // gloved hand, chip
+  clip(H('taking_vitamins'), 84, 84.9, 'modern', 2), // gloved hand, chip
   clip(Mo('heli_takeoff'), 84.9, 86.5, 'modern', 1), // launch pad
-  clip(Mo('helipads'), 86.5, 87.3, 'modern', 3), // the tower
+  clip(H('a_city_at_night'), 86.5, 87.3, 'night', 3), // the tower
   clip(Mo('vitals'), 87.3, 87.8, 'modern', 1), // control room
-  clip(Mo('golden_vj'), 87.8, 88.3, 'gold', 2.6), // streak
+  clip(H('sun_reflecting_through_a_bamboo_'), 87.8, 88.3, 'gold', 2), // streak
   clip(Mo('heli_rescue'), 88.3, 89.2, 'modern', 4), // liftoff
   clip(O('flame'), 89.2, 90, 'gold', 1), // fire
   clip(O('drone_flying'), 90, 91.2, 'modern', 1), // ascent
