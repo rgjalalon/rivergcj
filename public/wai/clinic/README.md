@@ -1,22 +1,25 @@
-# "18:00" live-action slots
+# "18:00" live-action footage
 
-Drop each clip here under its exact filename. On the next render it replaces its placeholder and gets the film's grade (warm, desaturated, soft blacks). Shoot 16:9 for the master and 30s cut. The vertical cut crops the same clips to fill the frame, so keep the action near the centre line.
+The live-action shots use real footage from [Mixkit](https://mixkit.co). It is free for commercial use under the [Mixkit Stock Video Free License](https://mixkit.co/license/#videoFree). The clips are **not committed** because that licence doesn't allow redistributing them as standalone files. Fetch them before rendering:
 
-| File | Used in | Shot |
+```bash
+./scripts/fetch-clinic-footage.sh   # downloads into public/wai/clinic/footage/
+```
+
+One doctor carries the film: clips 6434, 15048 and 6595 come from the same shoot, with the same doctor in the same consulting room.
+
+| Shot | Clip | What's on screen |
 |---|---|---|
-| `ext-window.mp4` | 60s | Exterior wide from across the street, locked off. Dusk. One lit window goes dark. |
-| `corridor-switch.mp4` | 60s (twice), 30s | Corridor, medium, slow handheld drift back. Coat over arm, hand to the switch, light off. |
-| `desk-1800.mp4` | 60s | Desk close-up, static, last amber light. Closed laptop, empty tray, pen squared. |
-| `switch-on.mp4` | 60s, 30s | Match cut: same hand, same switch. Light on, blinds open to hard afternoon light. |
-| `bell-leaves.mp4` | 60s, 30s | Consult room, medium wide. An older man leaves, the door clicks shut, the doctor turns back to the desk. |
-| `nair-leaves.mp4` | 60s | Medium, handheld. A woman in her forties shakes hands and leaves. The doctor jots one word on a pad. |
-| `kaur-leaves.mp4` | 60s, 30s | Doorway, medium wide. A mother and child leave. The child waves, the doctor waves back. |
-| `desk-close.mp4` | 60s, 30s | Desk, medium, static, low sun. The laptop closes, the pen is squared. |
-| `ext-exit.mp4` | 60s, 30s | Exterior wide at dusk, locked off. The window goes dark; the doctor walks out into the street. |
+| `ext-window` | [22255](https://mixkit.co/free-stock-video/lights-switching-on-and-off-in-an-apartment-22255/) | Windows across a building going dark at nightfall |
+| `walk-away`, `walk-home` | [4629](https://mixkit.co/free-stock-video/backlit-woman-walking-at-sunset-4629/) | Silhouette walking at sunset |
+| `desk-1800`, `laptop-close` | [42653](https://mixkit.co/free-stock-video/woman-finishes-working-on-her-computer-42653/) | Hands on a laptop, then the lid closes (lid logo blurred) |
+| `office-1410` | [6434](https://mixkit.co/free-stock-video/doctor-working-in-her-office-6434/) | The doctor in her consulting room |
+| `back-to-desk`, `lean-back` | [15048](https://mixkit.co/free-stock-video/tired-doctor-working-at-their-desk-15048/) | The same doctor at her desk, typing, then sitting back |
+| `jots` | [29975](https://mixkit.co/free-stock-video/doctor-writing-down-a-prescription-29975/) | A doctor's hand writing on a pad |
+| `high-five` | [6595](https://mixkit.co/free-stock-video/doctor-giving-a-child-a-high-five-6595/) | The same doctor high-fives a girl, with her mother |
 
-`sound-master.wav` and `sound-short.wav` are the generated sound beds: room tone, keys, clicks, doors and switches. There is no music and no voiceover. Rebuild them with `npm run clinic:audio` after changing the timeline. Replace them with production sound when you have it.
+The in and out points, crop focus and logo blur for each shot are set in `src/clinic/timeline.ts`, under `live`. To use your own shoot instead, drop a clip at `footage/<clip>.mp4` or point a shot at a new clip ID. If a file is missing, that shot renders as a labelled placeholder.
 
-## On set
-- Screens: the monitor must run the real product build. No UI added in post. Cover every hardware and OS logo.
-- The product name must not appear on screen or in the interface before the end card.
-- Use fictional patient records, with consent from every actor.
+The Mixkit files are 720p, so the 1080p cuts are upscaled. Final delivery should use a 1080p or 4K source: the paid versions of these clips, or your own shoot.
+
+`sound-master.wav` and `sound-short.wav` are the generated sound beds: room tone, keys, clicks, a door and the laptop lid. There is no music and no voiceover. Rebuild them with `npm run clinic:audio`.

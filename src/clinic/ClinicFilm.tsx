@@ -19,7 +19,7 @@ export const ClinicFilm: React.FC<{cut: Cut}> = ({cut}) => {
 
   return (
     <AbsoluteFill style={{background: '#000'}}>
-      {shot.kind === 'live' ? <Live key={shot.n} id={shot.id} n={shot.n} from={shot.from} to={shot.to} width={w} height={h} /> : null}
+      {shot.kind === 'live' ? <Live key={shot.n} id={shot.id} start={shot.start} n={shot.n} from={shot.from} to={shot.to} width={w} height={h} /> : null}
       {shot.kind === 'screen' ? (
         <ScreenShot
           key={shot.n}

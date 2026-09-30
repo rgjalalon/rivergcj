@@ -77,12 +77,14 @@ This film follows one doctor through one afternoon. It opens on the outcome (lig
 - [`renders/wai-18-00-vertical-30s.mp4`](renders/wai-18-00-vertical-30s.mp4): 30s 9:16 cut, 1080×1920
 
 ```bash
-npm run render:clinic   # rebuilds the sound beds, then renders all three cuts into out/
+./scripts/fetch-clinic-footage.sh   # real footage (not committed)
+npm run render:clinic               # rebuilds the sound beds, then renders all three cuts into out/
 ```
 
-**What's final and what's a placeholder**
-- **Final:** the product screens (`src/clinic/Screen.tsx`). Each step is a draft marked "Draft · needs your approval". The doctor selects the wrong text and types the correction, which stays underlined and is logged as "Edited by you · 1 change". Then the doctor moves the cursor to Approve and clicks, and the step is marked signed, sent or booked. Use them as the reference for the real build that is filmed on set.
-- **Placeholders:** the live-action shots. They are graded, blocked-out stand-ins until footage is shot. See `public/wai/clinic/README.md` for filenames and briefs.
+**How it's made**
+- **Real footage:** the live-action shots are real people, taken from Mixkit's free-licence library. One doctor appears throughout: the consulting room, her desk, and the high-five with the girl and her mother. Run `./scripts/fetch-clinic-footage.sh` before rendering. See `public/wai/clinic/README.md` for the clip list and licence.
+- **Product screens** (`src/clinic/Screen.tsx`): each step is a draft marked "Draft · needs your approval". The doctor selects the wrong text and types the correction, which stays underlined and is logged as "Edited by you · 1 change". Then the doctor moves the cursor to Approve and clicks. Use them as the reference for the real build that is filmed on set.
+- **Logos:** a manufacturer logo on a laptop lid is blurred out, so no other company is shown.
 
 **Sound:** room tone plus keyboard, mouse, door and light-switch sounds, synced to the picture by `scripts/clinic-audio.ts`. There is no music and no voiceover.
 
@@ -94,12 +96,12 @@ npm run render:clinic   # rebuilds the sound beds, then renders all three cuts i
 
 | 60s | Shot | On-screen text |
 |---|---|---|
-| 0:00–0:10 | Window goes dark · corridor, light off · tidy desk · match cut to afternoon | 18:00 · 14:10 |
-| 0:10–0:22 | Mr Bell leaves → note draft → "twice daily" edited to "once daily" → Approve & sign | You read every line. |
-| 0:22–0:32 | Ms Nair leaves → referral: "A routine appointment is fine." edited to "Please see within two weeks." → Approve & send | You change what’s wrong. |
-| 0:32–0:41 | The child waves → message to parent: "the patient" edited to "Maya" → Approve & send | You approve every word. |
+| 0:00–0:10 | Windows go dark · a silhouette walks off into the sunset · the laptop lid closes · cut back to the consulting room at 14:10 | 18:00 · 14:10 |
+| 0:10–0:22 | The doctor turns back to the desk → note draft → "twice daily" edited to "once daily" → Approve & sign | You read every line. |
+| 0:22–0:32 | The doctor writes on a pad → referral: "A routine appointment is fine." edited to "Please see within two weeks." → Approve & send | You change what’s wrong. |
+| 0:32–0:41 | The doctor high-fives the girl → message to parent: "the patient" edited to "Maya" → Approve & send | You approve every word. |
 | 0:41–0:49 | Booking: Wed 25 Nov 14:30 edited to Fri 27 Nov 09:00 → Approve & book → today's list, all approved | |
-| 0:49–0:57 | Laptop closes · corridor, light off · doctor walks into the dusk | 18:00 |
+| 0:49–0:57 | The laptop closes · the doctor sits back · a silhouette walks on into the evening | 18:00 |
 | 0:57–1:00 | End card | Wai · Clinical assistant |
 
 The 30s and 9:16 cuts keep all four workflow steps, with each draft edited and approved in a single shot. Timings, shots and on-screen text are all in `src/clinic/timeline.ts`.

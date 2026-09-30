@@ -17,31 +17,45 @@ export type Light = 'dusk' | 'corridor' | 'amber' | 'day' | 'warm' | 'late';
 
 export type LiveId =
   | 'ext-window'
-  | 'corridor-switch'
+  | 'walk-away'
   | 'desk-1800'
-  | 'switch-on'
-  | 'bell-leaves'
-  | 'nair-leaves'
-  | 'kaur-leaves'
-  | 'desk-close'
-  | 'ext-exit';
+  | 'office-1410'
+  | 'back-to-desk'
+  | 'jots'
+  | 'high-five'
+  | 'laptop-close'
+  | 'lean-back'
+  | 'walk-home';
 
 export type Fx = 'windowOff' | 'lightOff' | 'lightOn' | 'door' | 'laptop' | 'none';
 
 /**
- * Live-action slots. Drop a clip at public/wai/clinic/<id>.mp4 and it replaces
- * the placeholder on the next render, graded to match.
+ * Live-action shots. Each plays real footage from public/wai/clinic/footage/<clip>.mp4
+ * (fetched by scripts/fetch-clinic-footage.sh), starting `start` seconds into the
+ * clip. `focus` is the horizontal centre (%) kept in frame for the 9:16 crop.
+ * `event` is the clip time (s) of a sound-worthy action (door, laptop lid).
+ * Without the file, a lit placeholder of the shot renders instead.
  */
-export const live: Record<LiveId, {brief: string; light: Light; fx: Fx}> = {
-  'ext-window': {brief: 'Exterior wide from across the street, locked off. One lit window goes dark.', light: 'dusk', fx: 'windowOff'},
-  'corridor-switch': {brief: 'Corridor, medium, slow handheld drift back. Coat over arm, hand to the switch, light off.', light: 'corridor', fx: 'lightOff'},
-  'desk-1800': {brief: 'Desk close-up, static, last amber light. Closed laptop, empty tray, pen squared.', light: 'amber', fx: 'none'},
-  'switch-on': {brief: 'Match cut: same hand, same switch. Light on, blinds open to hard afternoon light.', light: 'day', fx: 'lightOn'},
-  'bell-leaves': {brief: 'Consult room, medium wide. An older man leaves, the door clicks shut, the doctor turns back to the desk.', light: 'day', fx: 'door'},
-  'nair-leaves': {brief: 'Medium, handheld. A woman in her forties shakes hands and leaves. The doctor jots one word on a pad.', light: 'warm', fx: 'door'},
-  'kaur-leaves': {brief: 'Doorway, medium wide. A mother and child leave. The child waves, the doctor waves back.', light: 'warm', fx: 'door'},
-  'desk-close': {brief: 'Desk, medium, static, low sun. The laptop closes, the pen is squared.', light: 'late', fx: 'laptop'},
-  'ext-exit': {brief: 'Exterior wide at dusk, locked off. The window goes dark; the doctor walks out into the street.', light: 'dusk', fx: 'windowOff'},
+/** A soft blur over a third-party logo in the source clip (position and size in % of the clip frame, from clip time `from`). */
+export type Hide = {x: number; y: number; w: number; h: number; from?: number; tint?: string};
+
+// Manufacturer logo on the laptop lid once it is shut, blurred and tinted to the lid.
+const LID_LOGO: Hide = {x: 65.4, y: 58, w: 15, h: 12, from: 6.15, tint: 'rgba(118,132,146,0.4)'};
+
+export const live: Record<
+  LiveId,
+  {clip: string; start: number; focus: number; brief: string; light: Light; fx: Fx; event?: number; hide?: Hide[]}
+> = {
+  'ext-window': {clip: '22255', start: 0, focus: 50, brief: 'Windows across the building going dark at nightfall. Locked off.', light: 'dusk', fx: 'windowOff'},
+  'walk-away': {clip: '4629', start: 0, focus: 60, brief: 'Silhouette at sunset, walking away along the railing: the doctor, leaving on time.', light: 'dusk', fx: 'none'},
+  'desk-1800': {clip: '42653', start: 5.8, focus: 50, brief: 'The laptop lid comes down and stays shut.', light: 'amber', fx: 'none', hide: [LID_LOGO]},
+  'office-1410': {clip: '6434', start: 0, focus: 48, brief: 'The consulting room in afternoon light. The doctor at the desk.', light: 'day', fx: 'lightOn'},
+  'back-to-desk': {clip: '15048', start: 0.5, focus: 36, brief: 'The patient has gone. The doctor turns back to the monitor.', light: 'day', fx: 'door', event: 0.7},
+  'jots': {clip: '29975', start: 2, focus: 42, brief: 'Close on the doctor’s hand writing on a pad after the patient leaves.', light: 'warm', fx: 'none'},
+  'high-five': {clip: '6595', start: 6.8, focus: 40, brief: 'The doctor high-fives the girl as she and her mother get up to go.', light: 'warm', fx: 'none'},
+  'laptop-close': {clip: '42653', start: 4.3, focus: 50, brief: 'Hands on the keyboard, then the laptop lid closes.', light: 'late', fx: 'laptop', event: 6.4, hide: [LID_LOGO]},
+  'lean-back': {clip: '15048', start: 11, focus: 36, brief: 'Nothing left on the list. The doctor sits back from the desk.', light: 'late', fx: 'none'},
+  'walk-home': {clip: '4629', start: 3.2, focus: 62, brief: 'The silhouette walks on into the evening.', light: 'dusk', fx: 'none'},
 };
 
 // ---------------------------------------------------------------------------
@@ -180,14 +194,14 @@ export const typedChars = (edit: Edit, e: number) =>
 // Edit decision lists.
 
 type Spec =
-  | {kind: 'live'; id: LiveId}
+  | {kind: 'live'; id: LiveId; start: number}
   | {kind: 'screen'; doc: DocId; phase: Phase; framing: Framing; light: Light}
   | {kind: 'end'};
 
 export type Shot = Spec & {from: number; to: number; n: number};
 export type Super = {from: number; to: number; text: string};
 
-const L = (id: LiveId): Spec => ({kind: 'live', id});
+const L = (id: LiveId, start = live[id].start): Spec => ({kind: 'live', id, start});
 const S = (doc: DocId, phase: Phase, framing: Framing, light: Light): Spec => ({kind: 'screen', doc, phase, framing, light});
 const END: Spec = {kind: 'end'};
 
@@ -205,39 +219,39 @@ const supers = (list: [number, number, string][]): Super[] =>
 
 const master = build([
   [3, L('ext-window')],
-  [3, L('corridor-switch')],
+  [3, L('walk-away')],
   [2, L('desk-1800')],
-  [2, L('switch-on')],
-  [3, L('bell-leaves')],
+  [2, L('office-1410')],
+  [3, L('back-to-desk')],
   [3, S('note', 'read', 'ots', 'day')],
   [3, S('note', 'edit', 'ecu', 'day')],
   [3, S('note', 'approve', 'cu', 'day')],
-  [3, L('nair-leaves')],
+  [3, L('jots')],
   [4, S('referral', 'edit', 'ots', 'warm')],
   [3, S('referral', 'approve', 'ecu', 'warm')],
-  [3, L('kaur-leaves')],
+  [3, L('high-five')],
   [3, S('followup', 'edit', 'cu', 'warm')],
   [3, S('followup', 'approve', 'cu', 'warm')],
   [3, S('booking', 'edit', 'ots', 'late')],
   [3, S('booking', 'approve', 'ecu', 'late')],
   [2, S('list', 'read', 'cu', 'late')],
-  [3, L('desk-close')],
-  [3, L('corridor-switch')],
-  [2, L('ext-exit')],
+  [3, L('laptop-close')],
+  [3, L('lean-back')],
+  [2, L('walk-home')],
   [3, END],
 ]);
 
 const short = build([
-  [3, L('corridor-switch')],
-  [2, L('switch-on')],
-  [1, L('bell-leaves')],
+  [3, L('walk-away')],
+  [2, L('office-1410')],
+  [1, L('back-to-desk')],
   [4, S('note', 'both', 'ecu', 'day')],
   [5, S('referral', 'both', 'cu', 'warm')],
-  [1, L('kaur-leaves')],
+  [1, L('high-five', 7.9)],
   [4, S('followup', 'both', 'cu', 'warm')],
   [4, S('booking', 'both', 'cu', 'late')],
-  [1.5, L('desk-close')],
-  [1.5, L('ext-exit')],
+  [1.5, L('laptop-close', 5.3)],
+  [1.5, L('walk-home')],
   [3, END],
 ]);
 
@@ -279,11 +293,9 @@ export const soundEvents = (cut: Cut): SoundEvent[] => {
     const t0 = s.from / FPS;
     const dur = (s.to - s.from) / FPS;
     if (s.kind === 'live') {
-      const fx = live[s.id].fx;
-      const at = {windowOff: -1, lightOff: 0.6, lightOn: 0.3, door: 0.4, laptop: 0.45, none: -1}[fx];
-      if (at >= 0) {
-        const kind = fx === 'door' ? 'door' : fx === 'laptop' ? 'laptop' : 'switch';
-        out.push({t: t0 + at * dur, kind});
+      const {fx, event} = live[s.id];
+      if (event !== undefined && event >= s.start && event < s.start + dur) {
+        out.push({t: t0 + event - s.start, kind: fx === 'laptop' ? 'laptop' : 'door'});
       }
       continue;
     }

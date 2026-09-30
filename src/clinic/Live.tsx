@@ -1,8 +1,8 @@
-import {AbsoluteFill, getStaticFiles, interpolate, OffthreadVideo, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, getStaticFiles, interpolate, OffthreadVideo, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {fonts} from '../theme';
 import {Light, live, LiveId} from './timeline';
 
-const clipPath = (id: LiveId) => `wai/clinic/${id}.mp4`;
+const clipPath = (id: LiveId) => `wai/clinic/footage/${live[id].clip}.mp4`;
 const hasClip = (id: LiveId) => getStaticFiles().some((f) => f.name === clipPath(id));
 
 const clamp = (x: number) => Math.min(1, Math.max(0, x));
@@ -12,8 +12,9 @@ const step = (p: number, at: number, len = 0.06) => clamp((p - at) / len);
  * A live-action slot with the film's grade: warm, desaturated, soft blacks.
  * Until the clip exists it shows a lit placeholder of the shot plus its brief.
  */
-export const Live: React.FC<{id: LiveId; n: number; from: number; to: number; width: number; height: number}> = ({
+export const Live: React.FC<{id: LiveId; start: number; n: number; from: number; to: number; width: number; height: number}> = ({
   id,
+  start,
   n,
   from,
   to,
@@ -21,9 +22,10 @@ export const Live: React.FC<{id: LiveId; n: number; from: number; to: number; wi
   height,
 }) => {
   const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
   const p = clamp((frame - from) / (to - from));
   // Handheld-but-steady drift; exteriors are locked off.
-  const locked = id === 'ext-window' || id === 'ext-exit' || id === 'desk-1800';
+  const locked = id === 'ext-window' || id === 'walk-away' || id === 'walk-home' || id === 'desk-1800';
   const dx = locked ? 0 : Math.sin(frame / 43) * 6;
   const dy = locked ? 0 : Math.sin(frame / 31 + 2) * 4;
   const push = locked ? 1 : interpolate(p, [0, 1], [1.02, 1.05]);
@@ -31,7 +33,7 @@ export const Live: React.FC<{id: LiveId; n: number; from: number; to: number; wi
     <AbsoluteFill style={{overflow: 'hidden', background: '#14110E'}}>
       <AbsoluteFill style={{transform: `translate(${dx}px, ${dy}px) scale(${push})`, filter: 'saturate(0.78) sepia(0.12) contrast(1.02)'}}>
         {hasClip(id) ? (
-          <OffthreadVideo src={staticFile(clipPath(id))} muted style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+          <Clip id={id} start={start} from={from} t={start + (frame - from) / fps} width={width} height={height} />
         ) : (
           <Placeholder id={id} p={p} width={width} height={height} />
         )}
@@ -41,6 +43,48 @@ export const Live: React.FC<{id: LiveId; n: number; from: number; to: number; wi
       <AbsoluteFill style={{background: 'rgba(40,30,22,0.06)'}} />
       {hasClip(id) ? null : <Slate id={id} n={n} vertical={height > width} />}
     </AbsoluteFill>
+  );
+};
+
+// Source clips are 16:9. Cover-fit them by hand so logo patches stay locked to the picture.
+const SRC_W = 1280;
+const SRC_H = 720;
+
+const Clip: React.FC<{id: LiveId; start: number; from: number; t: number; width: number; height: number}> = ({id, start, from, t, width, height}) => {
+  const {fps} = useVideoConfig();
+  const k = Math.max(width / SRC_W, height / SRC_H);
+  const w = SRC_W * k;
+  const h = SRC_H * k;
+  const {focus, hide = []} = live[id];
+  // Keep the focus point centred when cropping, without running past the clip edge.
+  const left = Math.min(0, Math.max(width - w, width / 2 - (focus / 100) * w));
+  return (
+    <div style={{position: 'absolute', left, top: (height - h) / 2, width: w, height: h}}>
+      {/* The clip's own clock starts at the shot's first frame. */}
+      <Sequence from={from} layout="none">
+        <OffthreadVideo src={staticFile(clipPath(id))} trimBefore={Math.round(start * fps)} muted style={{width: '100%', height: '100%'}} />
+      </Sequence>
+      {hide
+        .filter((z) => t >= (z.from ?? 0))
+        .map((z, i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: `${z.x - z.w / 2}%`,
+              top: `${z.y - z.h / 2}%`,
+              width: `${z.w}%`,
+              height: `${z.h}%`,
+              borderRadius: '50%',
+              background: z.tint ?? 'transparent',
+              backdropFilter: 'blur(22px) saturate(0.4)',
+              WebkitBackdropFilter: 'blur(22px) saturate(0.4)',
+              maskImage: 'radial-gradient(closest-side, #000 30%, rgba(0,0,0,0) 100%)',
+              WebkitMaskImage: 'radial-gradient(closest-side, #000 30%, rgba(0,0,0,0) 100%)',
+            }}
+          />
+        ))}
+    </div>
   );
 };
 
@@ -56,7 +100,7 @@ const Slate: React.FC<{id: LiveId; n: number; vertical: boolean}> = ({id, n, ver
     }}
   >
     <div style={{fontSize: vertical ? 22 : 20, letterSpacing: 3, textTransform: 'uppercase', fontWeight: 600}}>
-      Live action · shot {String(n).padStart(2, '0')} · {id}
+      Live action · shot {String(n).padStart(2, '0')} · {id} · clip {live[id].clip} missing
     </div>
     <div style={{fontSize: vertical ? 28 : 24, marginTop: 8, maxWidth: 1100, lineHeight: 1.4}}>{live[id].brief}</div>
   </div>
@@ -80,7 +124,7 @@ const Placeholder: React.FC<{id: LiveId; p: number; width: number; height: numbe
 
   if (light === 'dusk') {
     const off = step(p, 0.45);
-    const walker = id === 'ext-exit' ? clamp((p - 0.5) / 0.5) : -1;
+    const walker = id === 'walk-home' ? clamp((p - 0.5) / 0.5) : -1;
     const bw = Math.min(W * 0.7, 1100);
     return (
       <AbsoluteFill style={{background: 'linear-gradient(180deg, #2C3645 0%, #4C5663 55%, #5A5A5C 70%, #26272A 100%)'}}>
@@ -132,7 +176,7 @@ const Placeholder: React.FC<{id: LiveId; p: number; width: number; height: numbe
   // Interiors: consult room / desk, window light from the left through blinds.
   const on = fx === 'lightOn' ? step(p, 0.3, 0.05) : 1;
   const blinds = fx === 'lightOn' ? interpolate(p, [0.35, 0.9], [0.2, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) : 1;
-  const desk = id === 'desk-1800' || id === 'desk-close' || id === 'switch-on';
+  const desk = id === 'desk-1800' || id === 'laptop-close' || id === 'lean-back';
   const door = fx === 'door' ? clamp((p - 0.25) / 0.2) : 0;
   const lid = fx === 'laptop' ? clamp((p - 0.25) / 0.25) : id === 'desk-1800' ? 1 : 0;
   return (

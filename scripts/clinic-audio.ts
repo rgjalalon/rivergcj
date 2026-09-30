@@ -45,7 +45,7 @@ const build = (cut: Exclude<Cut, 'vertical'>) => {
     if (ev.kind === 'key') burst(out, ev.t + j, 0.035, 0.09 + rand() * 0.04, 180 + rand() * 60, 0.55);
     if (ev.kind === 'mouse') burst(out, ev.t, 0.02, 0.14, 900, 0.8);
     if (ev.kind === 'switch') burst(out, ev.t, 0.03, 0.2, 700, 0.7);
-    if (ev.kind === 'laptop') burst(out, ev.t + 0.35, 0.12, 0.16, 90, 0.2);
+    if (ev.kind === 'laptop') burst(out, ev.t, 0.12, 0.16, 90, 0.2);
     if (ev.kind === 'door') {
       burst(out, ev.t + 0.2, 0.18, 0.2, 70, 0.12);
       burst(out, ev.t + 0.24, 0.03, 0.12, 1200, 0.8);
